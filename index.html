@@ -1,450 +1,520 @@
-<!DOCTYPE html>
-<html lang="en">
+    <!DOCTYPE html>
+<html lang="en" data-theme="midnight">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patrick Henry High School | Patriots</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
-        
-        :root {
-            --green: #006400;
-            --gold: #FFD700;
-            --light-green: #228B22;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Roboto', system-ui, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9f5e9 100%);
-        }
-        
-        header {
-            background: rgba(255,255,255,0.98);
-            backdrop-filter: blur(16px);
-            color: var(--green);
-            padding: 1.1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 25px rgba(0, 100, 0, 0.08);
-            border-bottom: 1px solid rgba(0,100,0,0.08);
-        }
-        
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-        
-        .logo {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.75rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-        
-        .logo span {
-            color: var(--gold);
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-        }
-        
-        .nav-links a {
-            color: var(--green);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .nav-links a:hover {
-            color: var(--gold);
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 0;
-            background-color: var(--gold);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        .hero {
-            height: 100vh;
-            background: linear-gradient(rgba(0,100,0,0.75), rgba(0,100,0,0.65)), url('https://picsum.photos/id/1015/2000/1200') center/cover no-repeat;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            margin-top: 78px;
-        }
-        
-        .hero-content {
-            max-width: 800px;
-            padding: 2rem;
-        }
-        
-        .hero h1 {
-            font-family: 'Inter', sans-serif;
-            font-size: 3.8rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.25);
-            letter-spacing: -1px;
-        }
-        
-        .hero p {
-            font-size: 1.35rem;
-            margin-bottom: 2rem;
-        }
-        
-        .btn {
-            display: inline-block;
-            background: var(--gold);
-            color: var(--green);
-            padding: 16px 40px;
-            border-radius: 9999px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(255,215,0,0.25);
-        }
-        
-        .btn:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 30px rgba(255,215,0,0.35);
-        }
-        
-        section { padding: 6rem 0; }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
-        h2 {
-            font-family: 'Inter', sans-serif;
-            font-size: 2.6rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 3rem;
-            color: var(--green);
-            letter-spacing: -0.5px;
-        }
-        
-        .about { background: white; }
-        
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-        
-        .about-text {
-            font-size: 1.1rem;
-        }
-        
-        .about-text p {
-            margin-bottom: 1.5rem;
-        }
-        
-        .features {
-            background: #f8f9fa;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .feature-card {
-            background: white;
-            padding: 3rem 2.5rem;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        
-        .feature-card h3 {
-            color: var(--green);
-            margin: 1.2rem 0;
-            font-size: 1.5rem;
-        }
-        
-        .signup-section {
-            background: linear-gradient(135deg, var(--green), #004d00);
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .form-container {
-            max-width: 620px;
-            margin: 0 auto;
-            background: rgba(255,255,255,0.97);
-            color: #333;
-            padding: 3.5rem;
-            border-radius: 28px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.12);
-        }
-        
-        form {
-            display: grid;
-            gap: 1.6rem;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--green);
-        }
-        
-        input {
-            width: 100%;
-            padding: 16px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 16px;
-            font-size: 1.05rem;
-            transition: all 0.3s ease;
-        }
-        
-        input:focus {
-            outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 0 4px rgba(255,215,0,0.15);
-        }
-        
-        .submit-btn {
-            background: var(--gold);
-            color: var(--green);
-            border: none;
-            padding: 18px 40px;
-            font-size: 1.15rem;
-            font-weight: 600;
-            border-radius: 9999px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.25);
-            margin-top: 1rem;
-        }
-        
-        .submit-btn:hover {
-            transform: scale(1.03);
-            box-shadow: 0 15px 35px rgba(255,215,0,0.35);
-        }
-        
-        .error {
-            color: #ff4444;
-            font-size: 0.9rem;
-            display: none;
-        }
-        
-        footer {
-            background: var(--green);
-            color: white;
-            text-align: center;
-            padding: 3.5rem 0;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welcome</title>
+
+<!-- Shared styles: lock screen AND the about:blank site -->
+<style id="base">
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap');
+:root{--bg:#0a0e1c;--text:#eef1ff;--muted:#9aa3c7;--glass:rgba(255,255,255,.07);--edge:rgba(255,255,255,.15);--a:#5eead4;--b:#a78bfa;--on:#0a0e1c}
+/* ---- THEMES ---- */
+[data-theme=ocean]{--bg:#041320;--a:#38bdf8;--b:#3b82f6;--on:#041320}
+[data-theme=sunset]{--bg:#180a13;--a:#fb923c;--b:#f43f5e;--on:#180a13}
+[data-theme=forest]{--bg:#06130d;--a:#4ade80;--b:#14b8a6;--on:#06130d}
+[data-theme=henry]{--bg:#03160b;--a:#C5B358;--b:#1f8a4c;--on:#03160b;--muted:#a9b79a;--glass:rgba(197,179,88,.07);--edge:rgba(197,179,88,.28)}
+[data-theme=rose]{--bg:#150a1c;--a:#f472b6;--b:#c084fc;--on:#150a1c}
+[data-theme=slate]{--bg:#0d0f12;--a:#e2e8f0;--b:#64748b;--on:#0d0f12}
+@property --h{syntax:'<number>';inherits:true;initial-value:0}
+@keyframes hue{to{--h:360}}
+[data-theme=rainbow]{--bg:#0b0b12;--a:hsl(var(--h) 90% 65%);--b:hsl(calc(var(--h) + 140) 90% 65%);--on:#0b0b12;animation:hue 14s linear infinite}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+[hidden]{display:none!important}
+body{font-family:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;transition:background .4s}
+body::before,body::after{content:"";position:fixed;width:46vmax;height:46vmax;border-radius:50%;filter:blur(90px);opacity:.4;z-index:-1;animation:drift 22s ease-in-out infinite alternate}
+body::before{background:var(--b);top:-18vmax;left:-12vmax}
+body::after{background:var(--a);bottom:-22vmax;right:-14vmax;animation-delay:-8s}
+@keyframes drift{to{transform:translate(8vmax,6vmax) scale(1.15)}}
+.glass{background:var(--glass);border:1px solid var(--edge);backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%);box-shadow:0 20px 50px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12);border-radius:24px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--a);outline-offset:3px}
+svg.i{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<!-- Lock screen only -->
+<style>
+.lock{min-height:100%;display:grid;place-items:center;padding:24px}
+.lock .glass{width:min(380px,100%);padding:40px 32px;text-align:center}
+.lock h1{font-size:1.5rem;font-weight:600;margin-bottom:8px}
+.lock p{color:var(--muted);font-size:.9rem;margin-bottom:26px}
+.lock input{width:100%;padding:14px 16px;border-radius:14px;text-align:center;letter-spacing:.35em;font:inherit;background:rgba(255,255,255,.06);border:1px solid var(--edge);color:var(--text);transition:border-color .2s,box-shadow .2s}
+.lock input:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 4px rgba(255,255,255,.08)}
+.lock button{width:100%;margin-top:14px;padding:14px;border:0;border-radius:14px;font-weight:600;background:linear-gradient(135deg,var(--a),var(--b));color:var(--on);transition:transform .15s,filter .2s}
+.lock button:hover{filter:brightness(1.1)}
+.lock button:active{transform:scale(.98)}
+.lock .err{height:1.2em;margin-top:14px;font-size:.85rem;color:#fda4af}
+.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-5px)}}
+</style>
 </head>
+
 <body>
-    <header>
-        <nav>
-            <div class="logo">Patrick Henry <span>Patriots</span></div>
-            <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#academics">Academics</a></li>
-                <li><a href="#signup">Join Us</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Welcome to Patrick Henry High School</h1>
-            <p>San Diego's Premier Patriots Community • Established 1968</p>
-            <a href="#signup" class="btn">Sign Up Today</a>
-        </div>
-    </section>
+<!-- ============ LOCK SCREEN ============ -->
+<main class="lock">
+  <div class="glass" id="card">
+    <h1>Enter access code</h1>
+    <p>Type your code to continue.</p>
+    <input id="code" type="password" autocomplete="off" autofocus aria-label="Access code">
+    <button id="go">Unlock</button>
+    <div class="err" id="err" role="alert"></div>
+  </div>
+</main>
 
-    <section id="about" class="about">
-        <div class="container">
-            <h2>About Our School</h2>
-            <div class="about-grid">
-                <div class="about-text">
-                    <p>Patrick Henry High School, located in the heart of San Diego, is a vibrant community of over 2,500 students. Named after the great American patriot Patrick Henry, we embody the spirit of liberty, excellence, and dedication to education.</p>
-                    <p>Our beautiful 57-acre campus features state-of-the-art facilities including advanced science labs, performing arts theater, and athletic fields. With a proud tradition since 1968, we continue to rank among the top schools in the nation.</p>
-                    <p>Colors: Forest Green, Athletic Gold, and White • Mascot: Patriots</p>
-                </div>
-                <div>
-                    <img src="https://picsum.photos/id/1015/600/400" alt="Patrick Henry High School Campus" style="width:100%; border-radius:24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- ============ THE REAL SITE (loaded into about:blank) ============ -->
+<template id="app">
+<style>
+body{height:auto;min-height:100vh;display:flex;flex-direction:column}
+.top{position:sticky;top:16px;z-index:10;margin:16px auto 0;width:min(1040px,calc(100% - 32px));display:flex;align-items:center;justify-content:space-between;padding:10px 12px 10px 22px;border-radius:999px}
+.brand{font-weight:700;font-size:1.05rem;background:none;border:0}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:999px;border:1px solid var(--edge);background:rgba(255,255,255,.1);font-weight:600;font-size:.88rem;transition:background .2s,opacity .3s,transform .3s}
+.btn:hover{background:rgba(255,255,255,.2)}
+.btn.hidden{opacity:0;pointer-events:none;transform:translateX(8px)}
+main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px 0 40px}
+.page{display:none}
+.page.active{display:block;animation:in .45s cubic-bezier(.2,.8,.2,1)}
+.page.leaving{display:block;animation:out .25s ease forwards;pointer-events:none}
+@keyframes in{from{opacity:0;transform:scale(.97) translateY(14px);filter:blur(6px)}}
+@keyframes out{to{opacity:0;transform:scale(1.03);filter:blur(6px)}}
+.hero{text-align:center;padding:36px 0 42px}
+.hero h1{font-size:clamp(2.2rem,6vw,3.8rem);font-weight:700;letter-spacing:-.03em;line-height:1.05}
+.hero p{color:var(--muted);margin-top:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.tile{padding:28px 24px;text-align:left;display:flex;flex-direction:column;gap:12px;transition:transform .25s,border-color .25s,background .25s}
+.tile:hover{transform:translateY(-4px);border-color:var(--a);background:rgba(255,255,255,.1)}
+.tile b{font-size:1.1rem;font-weight:600}
+.tile .d{color:var(--muted);font-size:.85rem}
+.ico{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;border:1px solid var(--edge);color:var(--a);background:linear-gradient(135deg,color-mix(in srgb,var(--a) 22%,transparent),color-mix(in srgb,var(--b) 22%,transparent))}
+.ico svg.i{width:26px;height:26px}
+.page h2{font-size:clamp(1.6rem,4vw,2.3rem);letter-spacing:-.02em;margin-bottom:6px}
+.sub{color:var(--muted);margin-bottom:26px}
+.hint{color:var(--muted);font-size:.85rem;margin:20px 0 14px;text-align:center}
+.viewer{padding:14px}
+.vtitle{font-weight:600;margin:2px 6px 12px}
+.viewer iframe{display:block;width:100%;height:70vh;min-height:340px;border:0;border-radius:14px;background:#000}
+.vbar{display:flex;gap:10px;justify-content:center;margin-top:14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.card{position:relative;padding:22px;min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;cursor:pointer;transition:transform .2s,border-color .2s}
+.card:hover{transform:translateY(-3px)}
+.card small{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card.last{border-color:var(--a)}
+.card.last::after{content:"Last opened";font-size:.72rem;color:var(--a);margin-top:6px}
+.card.add{align-items:center;justify-content:center;border-style:dashed;color:var(--muted)}
+.card .rm{position:absolute;top:8px;right:12px;background:none;border:0;color:var(--muted);font-size:1.2rem}
+.notes{width:100%;min-height:50vh;padding:20px;resize:vertical;font:inherit;line-height:1.6;color:var(--text)}
+.notes:focus{outline:none;border-color:var(--a)}
+.themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-bottom:26px}
+.sw{display:flex;align-items:center;gap:12px;padding:14px 16px;text-align:left;font-size:.9rem}
+.sw i{width:28px;height:28px;border-radius:50%;flex:none;border:1px solid rgba(255,255,255,.3)}
+.sw.sel{border-color:var(--a);box-shadow:0 0 0 2px var(--a)}
+.foot{text-align:center;font-size:.7rem;color:var(--muted);opacity:.7;padding:0 0 16px}
+.panel{padding:22px;margin-bottom:26px}
+.panel h3,.sec{font-size:1.1rem;font-weight:600}
+.sec{margin:4px 0 14px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.field{flex:1;min-width:140px;padding:11px 16px;border-radius:999px;border:1px solid var(--edge);background:rgba(255,255,255,.06);color:var(--text);font:inherit}
+.field:focus{outline:none;border-color:var(--a)}
+.code{font-size:2.2rem;font-weight:700;letter-spacing:.3em;color:var(--a);margin-top:14px}
+.stat{color:var(--muted);font-size:.85rem;margin-top:10px}
+#remote{display:block;width:100%;max-height:70vh;border-radius:14px;background:#000;margin-top:14px}
+.log{max-height:200px;overflow:auto;margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.05);font-size:.88rem;line-height:1.5}
+.log p{margin:0 0 6px}.log b{color:var(--a)}
+.clock{font-size:clamp(3rem,12vw,6rem);font-weight:700;letter-spacing:-.02em;text-align:center;padding:24px 0 8px}
+@media (max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:460px){.grid{grid-template-columns:1fr}}
+</style>
 
-    <section id="academics" class="features">
-        <div class="container">
-            <h2>Why Patrick Henry?</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <h3>🎓 Academics</h3>
-                    <p>19 AP courses, rigorous curriculum, and specialized academies in Teaching and Engineering.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>🏆 Athletics</h3>
-                    <p>Championship teams in soccer, badminton, tennis, and more. Go Patriots!</p>
-                </div>
-                <div class="feature-card">
-                    <h3>🎨 Arts</h3>
-                    <p>Thriving drama, band, choral, and visual arts programs.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- Icon set: drawn with the theme's colors -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-games" viewBox="0 0 24 24"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.98 3.59C2.6 9.42 2 14.46 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.41-1.41A2 2 0 0 1 9.83 16h4.34a2 2 0 0 1 1.41.59L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.55-.6-6.58-.69-7.26A4 4 0 0 0 17.32 5z"/></symbol>
+  <symbol id="i-proxies" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
+  <symbol id="i-notes" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol>
+  <symbol id="i-movies" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18M3 7.5h4M3 12h18M3 16.5h4M17 3v18M17 7.5h4M17 16.5h4"/></symbol>
+  <symbol id="i-tools" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M2 14h4M10 8h4M18 16h4"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+  <symbol id="i-sketch" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+  <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-max" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+</svg>
 
-    <section id="signup" class="signup-section">
-        <div class="container">
-            <h2 style="color: white; margin-bottom: 1rem;">Sign Up for Patrick Henry High</h2>
-            <p style="text-align: center; max-width: 600px; margin: 0 auto 3rem; font-size: 1.1rem; opacity: 0.95;">Complete the form below to join our community. All fields are required.</p>
-            
-            <div class="form-container">
-                <form id="signupForm">
-                    <div>
-                        <label for="firstName">First Name</label>
-                        <input type="text" id="firstName" required>
-                        <span class="error" id="firstNameError">First name is required</span>
-                    </div>
-                    <div>
-                        <label for="lastName">Last Name</label>
-                        <input type="text" id="lastName" required>
-                        <span class="error" id="lastNameError">Last name is required</span>
-                    </div>
-                    <div>
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" required>
-                        <span class="error" id="phoneError">Phone number is required</span>
-                    </div>
-                    <div>
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" required>
-                        <span class="error" id="emailError">Valid email is required</span>
-                    </div>
-                    <div>
-                        <label for="studentId">Student ID or Grade Level</label>
-                        <input type="text" id="studentId" placeholder="e.g. Incoming 9th Grade" required>
-                        <span class="error" id="studentIdError">This field is required</span>
-                    </div>
-                    
-                    <button type="submit" class="submit-btn">Submit & Join the Patriots</button>
-                </form>
-            </div>
-        </div>
-    </section>
+<header class="top glass">
+  <button class="brand" id="brand" data-go="home">Home</button>
+  <button class="btn hidden" id="homeBtn" data-go="home"><svg class="i"><use href="#i-home"/></svg>Home</button>
+</header>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2026 Patrick Henry High School • 6702 Wandermere Drive, San Diego, CA 92120</p>
-            <p style="margin-top: 0.5rem; opacity: 0.9;">Liberty • Excellence • Patriot Pride</p>
-        </div>
-    </footer>
+<main class="stage" id="stage">
+  <section class="page" id="home">
+    <div class="hero"><h1>What do you want to do?</h1><p>Pick a section to get started.</p></div>
+    <div class="grid">
+      <button class="tile glass" data-go="games"><span class="ico"><svg class="i"><use href="#i-games"/></svg></span><b>Games</b><span class="d">Play in your browser</span></button>
+      <button class="tile glass" data-go="proxies"><span class="ico"><svg class="i"><use href="#i-proxies"/></svg></span><b>Proxies</b><span class="d">Open sites through a proxy</span></button>
+      <button class="tile glass" data-go="share"><span class="ico"><svg class="i"><use href="#i-share"/></svg></span><b>Screen Sharing</b><span class="d">Share a screen and chat</span></button>
+      <button class="tile glass" data-go="notes"><span class="ico"><svg class="i"><use href="#i-notes"/></svg></span><b>Notes</b><span class="d">Jot things down, auto-saved</span></button>
+      <button class="tile glass" data-go="movies"><span class="ico"><svg class="i"><use href="#i-movies"/></svg></span><b>Movies</b><span class="d">Watch and browse</span></button>
+      <button class="tile glass" data-go="tools"><span class="ico"><svg class="i"><use href="#i-tools"/></svg></span><b>Tools</b><span class="d">Quick utilities</span></button>
+      <button class="tile glass" data-go="timer"><span class="ico"><svg class="i"><use href="#i-timer"/></svg></span><b>Timer</b><span class="d">Count down and stay on track</span></button>
+      <button class="tile glass" data-go="sketch"><span class="ico"><svg class="i"><use href="#i-sketch"/></svg></span><b>Sketch</b><span class="d">Draw and save your art</span></button>
+      <button class="tile glass" data-go="settings"><span class="ico"><svg class="i"><use href="#i-settings"/></svg></span><b>Settings</b><span class="d">Themes and saved data</span></button>
+    </div>
+  </section>
 
-    <script>
-        const form = document.getElementById('signupForm');
-        
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            document.querySelectorAll('.error').forEach(el => el.style.display = 'none');
-            
-            let isValid = true;
-            
-            const firstName = document.getElementById('firstName').value.trim();
-            if (!firstName) { document.getElementById('firstNameError').style.display = 'block'; isValid = false; }
-            
-            const lastName = document.getElementById('lastName').value.trim();
-            if (!lastName) { document.getElementById('lastNameError').style.display = 'block'; isValid = false; }
-            
-            const phone = document.getElementById('phone').value.trim();
-            if (!phone) { document.getElementById('phoneError').style.display = 'block'; isValid = false; }
-            
-            const email = document.getElementById('email').value.trim();
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!email || !emailRegex.test(email)) { document.getElementById('emailError').style.display = 'block'; isValid = false; }
-            
-            const studentId = document.getElementById('studentId').value.trim();
-            if (!studentId) { document.getElementById('studentIdError').style.display = 'block'; isValid = false; }
-            
-            if (isValid) {
-                const successMsg = document.createElement('div');
-                successMsg.style.position = 'fixed';
-                successMsg.style.top = '50%';
-                successMsg.style.left = '50%';
-                successMsg.style.transform = 'translate(-50%, -50%)';
-                successMsg.style.background = '#006400';
-                successMsg.style.color = 'white';
-                successMsg.style.padding = '25px 50px';
-                successMsg.style.borderRadius = '20px';
-                successMsg.style.zIndex = '10000';
-                successMsg.style.fontSize = '1.25rem';
-                successMsg.style.boxShadow = '0 20px 40px rgba(0,0,0,0.2)';
-                successMsg.textContent = 'Welcome, Patriot! Redirecting...';
-                document.body.appendChild(successMsg);
-                
-                // Open the target URL inside an about:blank context in the same tab
-                setTimeout(() => {
-                    // Replace current page with about:blank and then load the target
-                    window.location.replace('about:blank');
-                    setTimeout(() => {
-                        window.location.replace('https://realmadapi.pages.dev/');
-                    }, 80);
-                }, 1100);
-            }
-        });
-        
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                if (this.getAttribute('href') !== '#') {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) target.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
-    </script>
+  <section class="page" id="notes">
+    <h2>Notes</h2><p class="sub" id="noteStatus">Everything you type is saved automatically.</p>
+    <textarea class="notes glass" id="noteBox" placeholder="Start typing..."></textarea>
+  </section>
+
+  <section class="page" id="timer">
+    <h2>Timer</h2><p class="sub">Set the minutes and press start. Your last setting is saved.</p>
+    <div class="panel glass"><div class="clock" id="clock">05:00</div>
+      <div class="row" style="justify-content:center"><input class="field" id="tmin" type="number" min="1" max="999" style="flex:none;width:110px;text-align:center" aria-label="Minutes"><button class="btn" id="tgo">Start</button><button class="btn" id="trs">Reset</button></div></div>
+  </section>
+
+  <section class="page" id="share">
+    <h2>Screen Sharing</h2><p class="sub">Create a room and give the code to someone, or type a code to watch their screen. Chat opens once you are connected.</p>
+    <div class="panel glass">
+      <div class="row" style="margin-top:0">
+        <button class="btn" id="shMk">Create room</button>
+        <input class="field" id="shIn" maxlength="5" placeholder="Room code" aria-label="Room code" style="text-transform:uppercase;flex:none;width:150px">
+        <button class="btn" id="shJn">Join room</button>
+        <button class="btn" id="shStop" hidden>Stop</button>
+      </div>
+      <div class="code" id="shCode" hidden></div>
+      <p class="stat" id="shMsg"></p>
+      <video id="remote" controls playsinline muted hidden></video>
+      <div id="chat" hidden>
+        <div class="log" id="chatLog"></div>
+        <div class="row"><input class="field" id="chatIn" maxlength="300" placeholder="Type a message" aria-label="Chat message"><button class="btn" id="chatSend">Send</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="sketch">
+    <h2>Sketch</h2><p class="sub">Draw with your mouse or finger. Your drawing is saved automatically.</p>
+    <div class="panel glass">
+      <canvas id="cv" width="900" height="520" style="display:block;width:100%;border-radius:14px;touch-action:none;cursor:crosshair"></canvas>
+      <div class="row"><input type="color" id="skc" value="#5eead4" aria-label="Pen color" style="width:46px;height:40px;border:0;background:none;padding:0"><input type="range" id="sks" min="1" max="30" value="4" aria-label="Brush size"><button class="btn" id="skx">Clear</button><button class="btn" id="skd">Save image</button></div>
+    </div>
+  </section>
+
+  <section class="page" id="settings">  <section class="page" id="settings">
+    <h2>Settings</h2><p class="sub">Your theme is saved and will be here when you come back.</p>
+    <div class="themes" id="themes"></div>
+    <button class="btn" id="reset">Reset all saved data</button>
+  </section>
+</main>
+
+<footer class="foot">mad &copy;</footer>
+
+<script>
+(function(){
+  /* ---- Save system (localStorage, with safe fallback) ---- */
+  var S={
+    get:function(k,d){try{var v=localStorage.getItem('mad_'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
+    set:function(k,v){try{localStorage.setItem('mad_'+k,JSON.stringify(v))}catch(e){}},
+    clear:function(){try{Object.keys(localStorage).forEach(function(k){if(k.indexOf('mad_')===0)localStorage.removeItem(k)})}catch(e){}}
+  };
+
+  /* ---- EDIT ME: default links for each section ---- */
+  var SECTIONS={
+    games:{title:'Games',sub:'Pick a game to play. Scroll down to switch to another one.',items:[
+      {n:'UBG Hyper',d:'Game hub',u:'https://ubghyper.github.io/'}
+    ]},
+    proxies:{title:'Proxies',sub:'Add a proxy link, then open it here.',items:[]},
+    movies:{title:'Movies',sub:'Add a link, then open it here.',items:[]},
+    tools:{title:'Tools',sub:'Add a link, then open it here.',items:[]}
+  };
+  var THEMES=[
+    ['midnight','Midnight','#5eead4','#a78bfa'],
+    ['ocean','Ocean','#38bdf8','#3b82f6'],
+    ['sunset','Sunset','#fb923c','#f43f5e'],
+    ['forest','Forest','#4ade80','#14b8a6'],
+    ['henry','Patrick Henry','#C5B358','#1f8a4c'],
+    ['rose','Rose','#f472b6','#c084fc'],
+    ['slate','Slate','#e2e8f0','#64748b'],
+    ['rainbow','Rainbow','','','conic-gradient(#ff5f6d,#ffc371,#fff56d,#5dff8f,#5dc7ff,#b06dff,#ff5f6d)']
+  ];
+  var NAMES={home:'Home',games:'Games',proxies:'Proxies',share:'Screen Sharing',notes:'Notes',movies:'Movies',tools:'Tools',sketch:'Sketch',timer:'Timer',settings:'Settings'};
+  function $(i){return document.getElementById(i)}
+
+  var stage=document.getElementById('stage'), homeBtn=document.getElementById('homeBtn');
+  var custom=S.get('custom',{}), current='home', busy=false;
+
+  /* ---- Section pages with embed viewer ---- */
+  function build(id){
+    var c=SECTIONS[id], p=document.createElement('section');
+    p.className='page'; p.id=id;
+    p.innerHTML='<h2>'+c.title+'</h2><p class="sub">'+c.sub+'</p>'+
+      '<div class="viewer glass" hidden><div class="vtitle"></div><iframe allow="fullscreen; autoplay; gamepad; clipboard-write" referrerpolicy="no-referrer"></iframe>'+
+      '<div class="vbar"><button class="btn" data-act="close"><svg class="i"><use href="#i-x"/></svg>Close</button>'+
+      '<button class="btn" data-act="full"><svg class="i"><use href="#i-max"/></svg>Fullscreen</button></div></div>'+
+      '<p class="hint" hidden>Scroll down to switch to another one</p><div class="cards"></div>';
+    stage.appendChild(p); render(id);
+  }
+  function render(id){
+    var box=document.querySelector('#'+id+' .cards'), last=S.get('last_'+id,'');
+    box.textContent='';
+    var list=SECTIONS[id].items.map(function(x){return{it:x}});
+    (custom[id]||[]).forEach(function(x,i){list.push({it:x,ci:i})});
+    list.forEach(function(o){
+      var c=document.createElement('div');
+      c.className='card glass'+(o.it.n===last?' last':''); c.tabIndex=0; c.setAttribute('role','button');
+      c.innerHTML='<b></b><small></small>';
+      c.children[0].textContent=o.it.n; c.children[1].textContent=o.it.d||o.it.u;
+      c.onclick=function(){openItem(id,o.it)};
+      c.onkeydown=function(e){if(e.key==='Enter')openItem(id,o.it)};
+      if(o.ci!==undefined){
+        var x=document.createElement('button'); x.className='rm'; x.textContent='\u00d7'; x.title='Remove';
+        x.onclick=function(e){e.stopPropagation();custom[id].splice(o.ci,1);S.set('custom',custom);render(id)};
+        c.appendChild(x);
+      }
+      box.appendChild(c);
+    });
+    var a=document.createElement('div');
+    a.className='card glass add'; a.tabIndex=0; a.setAttribute('role','button');
+    a.innerHTML='<svg class="i"><use href="#i-plus"/></svg><b>Add link</b>';
+    a.onclick=function(){
+      var n=prompt('Name:'); if(!n)return;
+      var u=prompt('Link (https://...):'); if(!u)return;
+      if(!/^https?:\/\//i.test(u))u='https://'+u;
+      (custom[id]=custom[id]||[]).push({n:n,u:u,d:'Added by you'});
+      S.set('custom',custom); render(id);
+    };
+    a.onkeydown=function(e){if(e.key==='Enter')a.onclick()};
+    box.appendChild(a);
+  }
+  function openItem(id,it){
+    var p=document.getElementById(id), v=p.querySelector('.viewer');
+    v.hidden=false; p.querySelector('.hint').hidden=false;
+    v.querySelector('.vtitle').textContent=it.n;
+    v.querySelector('iframe').src=it.u;
+    v._it=it; S.set('last_'+id,it.n); render(id);
+    v.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  function fullscreen(it){
+    var w=window.open('about:blank','_blank'); if(!w)return alert('Allow pop-ups to use fullscreen.');
+    w.document.open();
+    w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+document.title+'</title><style>html,body{margin:0;height:100%;background:#000}iframe{border:0;width:100%;height:100%}</style></head><body></body></html>');
+    w.document.close();
+    var f=w.document.createElement('iframe'); f.allow='fullscreen; autoplay; gamepad; clipboard-write'; f.src=it.u;
+    w.document.body.appendChild(f);
+  }
+
+  /* ---- Navigation ---- */
+  function show(id){
+    document.getElementById(current).classList.remove('active');
+    document.getElementById(id).classList.add('active');
+    homeBtn.classList.toggle('hidden',id==='home'); current=id; $('brand').textContent=NAMES[id];
+  }
+  function go(id){
+    if(busy||id===current)return; busy=true;
+    var from=document.getElementById(current);
+    from.classList.remove('active'); from.classList.add('leaving');
+    homeBtn.classList.toggle('hidden',id==='home');
+    setTimeout(function(){
+      from.classList.remove('leaving');
+      document.getElementById(id).classList.add('active');
+      current=id; busy=false; S.set('page',id); $('brand').textContent=NAMES[id]; window.scrollTo({top:0});
+    },250);
+  }
+  document.addEventListener('click',function(e){
+    var g=e.target.closest('[data-go]'); if(g)return go(g.getAttribute('data-go'));
+    var b=e.target.closest('[data-act]'); if(!b)return;
+    var v=b.closest('.viewer');
+    if(b.dataset.act==='close'){v.querySelector('iframe').src='about:blank';v.hidden=true;var h=v.parentNode.querySelector('.hint');if(h)h.hidden=true}
+    else if(v._it)fullscreen(v._it);
+  });
+
+  /* ---- Themes ---- */
+  var themeBox=document.getElementById('themes');
+  function setTheme(id){
+    document.documentElement.dataset.theme=id; S.set('theme',id);
+    [].forEach.call(themeBox.children,function(b){b.classList.toggle('sel',b.dataset.t===id)});
+  }
+  THEMES.forEach(function(t){
+    var b=document.createElement('button'); b.className='sw glass'; b.dataset.t=t[0];
+    b.innerHTML='<i style="background:'+(t[4]||'linear-gradient(135deg,'+t[2]+','+t[3]+')')+'"></i><span>'+t[1]+'</span>';
+    b.onclick=function(){setTheme(t[0])}; themeBox.appendChild(b);
+  });
+
+  /* ---- Notes (autosave) ---- */
+  var nb=document.getElementById('noteBox'), ns=document.getElementById('noteStatus'), nt;
+  nb.value=S.get('notes','');
+  nb.addEventListener('input',function(){
+    clearTimeout(nt); ns.textContent='Saving...';
+    nt=setTimeout(function(){S.set('notes',nb.value);ns.textContent='Saved.'},400);
+  });
+
+  document.getElementById('reset').onclick=function(){
+    if(!confirm('Clear your theme, notes and added links?'))return;
+    S.clear(); custom={}; nb.value=''; skBg(); setTheme('midnight');
+    Object.keys(SECTIONS).forEach(render);
+  };
+
+  /* ---- Screen sharing + chat (WebRTC via PeerJS cloud) ---- */
+  var sh={peer:null,stream:null,conns:[],conn:null};
+  function msg(t){$('shMsg').textContent=t}
+  function busy(on){$('shMk').disabled=$('shJn').disabled=on;$('shStop').hidden=!on}
+  function say(from,text){
+    var l=$('chatLog'),p=document.createElement('p'),b=document.createElement('b');
+    b.textContent=from+': '; p.appendChild(b); p.appendChild(document.createTextNode(text));
+    l.appendChild(p); l.scrollTop=l.scrollHeight;
+  }
+  function relay(from,text){say(from,text);sh.conns.forEach(function(c){if(c.open)c.send({from:from,text:text})})}
+  function loadPeer(cb){
+    if(window.Peer)return cb();
+    var sc=document.createElement('script');
+    sc.src='https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js';
+    sc.onload=cb; sc.onerror=function(){stopShare('Could not load the connection library. Check your internet.')};
+    document.head.appendChild(sc);
+  }
+  function stopShare(m){
+    if(sh.stream){sh.stream.getTracks().forEach(function(t){t.stop()});sh.stream=null}
+    if(sh.peer){try{sh.peer.destroy()}catch(e){}sh.peer=null}
+    sh.conns=[]; sh.conn=null;
+    var v=$('remote'); v.srcObject=null; v.hidden=true; $('shCode').hidden=true;
+    $('chat').hidden=true; $('chatLog').textContent=''; busy(false); msg(m||'');
+  }
+  function host(st){
+    var code=Math.random().toString(36).slice(2,7).toUpperCase(), n=0, vn=0;
+    var p=new Peer('madroom-'+code); sh.peer=p;
+    p.on('open',function(){$('shCode').hidden=false;$('shCode').textContent=code;$('chat').hidden=false;msg('Room ready. Give this code to the other person.')});
+    p.on('call',function(c){c.answer(st);n++;msg(n+' watching');c.on('close',function(){n--;msg(n+' watching')})});
+    p.on('connection',function(c){
+      c.label='Viewer '+(++vn); sh.conns.push(c);
+      c.on('open',function(){relay('System',c.label+' joined')});
+      c.on('data',function(t){relay(c.label,String(t).slice(0,300))});
+      c.on('close',function(){sh.conns=sh.conns.filter(function(x){return x!==c});relay('System',c.label+' left')});
+    });
+    p.on('error',function(e){if(e.type==='unavailable-id'){p.destroy();host(st)}else stopShare('Connection error: '+e.type)});
+  }
+  $('shMk').onclick=function(){
+    busy(true); msg('Choose a screen, window or tab to share...');
+    navigator.mediaDevices.getDisplayMedia({video:true,audio:true}).then(function(st){
+      sh.stream=st; st.getVideoTracks()[0].onended=function(){stopShare('Sharing stopped.')};
+      msg('Connecting...'); loadPeer(function(){host(st)});
+    }).catch(function(){stopShare('Sharing was cancelled or is not supported in this browser.')});
+  };
+  $('shJn').onclick=function(){
+    var code=$('shIn').value.trim().toUpperCase(); if(!code)return msg('Type a room code first.');
+    busy(true); msg('Joining...');
+    loadPeer(function(){
+      var p=new Peer(); sh.peer=p;
+      p.on('open',function(){
+        var cv=document.createElement('canvas'); cv.width=cv.height=2; cv.getContext('2d').fillRect(0,0,2,2);
+        var c=p.call('madroom-'+code,cv.captureStream(1));
+        var dc=p.connect('madroom-'+code); sh.conn=dc;
+        dc.on('data',function(m){say(m.from,m.text)});
+        var t=setTimeout(function(){stopShare('No room found with that code.')},12000);
+        c.on('stream',function(s){clearTimeout(t);var v=$('remote');v.hidden=false;v.srcObject=s;v.play();$('chat').hidden=false;msg('Connected. Use the video controls to unmute.')});
+        c.on('close',function(){stopShare('The host stopped sharing.')});
+      });
+      p.on('error',function(e){stopShare(e.type==='peer-unavailable'?'No room found with that code.':'Connection error: '+e.type)});
+    });
+  };
+  $('shStop').onclick=function(){stopShare('')};
+  function sendChat(){
+    var i=$('chatIn'),t=i.value.trim(); if(!t)return; i.value='';
+    if(sh.conn){if(sh.conn.open)sh.conn.send(t)}else relay('Host',t);
+  }
+  $('chatSend').onclick=sendChat;
+  $('chatIn').onkeydown=function(e){if(e.key==='Enter')sendChat()};
+
+  /* ---- Sketch (autosaves) ---- */
+  var cv=$('cv'),cx=cv.getContext('2d'),dr=false;
+  function skBg(){cx.fillStyle='#10131c';cx.fillRect(0,0,cv.width,cv.height)}
+  skBg();
+  var saved=S.get('sketch','');
+  if(saved){var im=new Image();im.onload=function(){cx.drawImage(im,0,0)};im.src=saved}
+  function pt(e){var r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height]}
+  cv.onpointerdown=function(e){
+    dr=true; cv.setPointerCapture(e.pointerId); var q=pt(e);
+    cx.beginPath(); cx.moveTo(q[0],q[1]); cx.lineCap=cx.lineJoin='round';
+    cx.strokeStyle=$('skc').value; cx.lineWidth=$('sks').value; cx.lineTo(q[0]+.01,q[1]); cx.stroke();
+  };
+  cv.onpointermove=function(e){if(!dr)return;var q=pt(e);cx.lineTo(q[0],q[1]);cx.stroke()};
+  cv.onpointerup=function(){if(!dr)return;dr=false;S.set('sketch',cv.toDataURL())};
+  $('skx').onclick=function(){skBg();S.set('sketch','')};
+  $('skd').onclick=function(){var a=document.createElement('a');a.download='sketch.png';a.href=cv.toDataURL();a.click()};
+
+  /* ---- Timer ---- */
+  var tm=null,left=0;
+  function fmt(x){var m=Math.floor(x/60),r=x%60;return (m<10?'0':'')+m+':'+(r<10?'0':'')+r}
+  function tset(){left=Math.max(1,parseInt($('tmin').value)||5)*60;S.set('tmin',left/60);$('clock').textContent=fmt(left)}
+  $('tmin').value=S.get('tmin',5); tset();
+  $('tmin').onchange=function(){if(!tm)tset()};
+  $('tgo').onclick=function(){
+    if(tm){clearInterval(tm);tm=null;this.textContent='Start';return}
+    if(left<=0)tset();
+    this.textContent='Pause';
+    tm=setInterval(function(){
+      left--; $('clock').textContent=fmt(left);
+      if(left<=0){clearInterval(tm);tm=null;$('tgo').textContent='Start';$('clock').textContent="Time's up!"}
+    },1000);
+  };
+  $('trs').onclick=function(){clearInterval(tm);tm=null;$('tgo').textContent='Start';tset()};
+
+  /* ---- Start up ---- */
+  Object.keys(SECTIONS).forEach(build);
+  var t0=S.get('theme','midnight'); setTheme(THEMES.some(function(t){return t[0]===t0})?t0:'midnight');
+  var start=S.get('page','home');
+  show(document.getElementById(start)?start:'home');
+})();
+</script>
+</template>
+
+<script>
+/* ================= SETTINGS ================= */
+var ACCESS_CODE = "1234";          // <-- change this to your code
+var TAB_TITLE   = "Home";          // title shown on the about:blank tab
+
+/* ================= LOGIC ================= */
+var input = document.getElementById('code');
+var err   = document.getElementById('err');
+var card  = document.getElementById('card');
+
+// Use the saved theme on the lock screen too
+function savedTheme(){
+  try{ return JSON.parse(localStorage.getItem('mad_theme')) || 'midnight'; }catch(e){ return 'midnight'; }
+}
+document.documentElement.dataset.theme = savedTheme();
+
+function buildSite(){
+  return '<!DOCTYPE html><html lang="en" data-theme="' + savedTheme() + '"><head><meta charset="UTF-8">' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1">' +
+    '<title>' + TAB_TITLE + '</title><style>' +
+    document.getElementById('base').textContent +
+    '</style></head><body>' +
+    document.getElementById('app').innerHTML +
+    '</body></html>';
+}
+
+function unlock(){
+  if (input.value !== ACCESS_CODE){
+    err.textContent = 'Wrong code. Try again.';
+    card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+    input.value = ''; input.focus();
+    return;
+  }
+  var html = buildSite();
+  var w = window.open('about:blank', '_blank');
+  if (w){
+    w.document.open(); w.document.write(html); w.document.close();
+    input.value = ''; err.textContent = '';
+  } else {
+    // Popup blocked: show the site right here instead
+    document.open(); document.write(html); document.close();
+  }
+}
+
+document.getElementById('go').addEventListener('click', unlock);
+input.addEventListener('keydown', function(e){ if (e.key === 'Enter') unlock(); });
+</script>
 </body>
 </html>
