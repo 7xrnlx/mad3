@@ -65,7 +65,7 @@ svg.i{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.9;
   </div>
 </main>
 
-<!-- ============ THE REAL SITE (loaded into about:blank) ============ -->
+<!-- ============ THE USER SITE (loaded into about:blank) ============ -->
 <template id="app">
 <style>
 body{height:auto;min-height:100vh;display:flex;flex-direction:column}
@@ -190,13 +190,13 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
   <section class="page" id="settings">
     <h2>Settings</h2><p class="sub">Your theme is saved and will be here when you come back.</p>
     <div class="themes" id="themes"></div>
-    <h3 class="sec">Chat text color</h3>
-    <div class="row" style="margin:0 0 26px"><input type="color" id="ccol" value="#eef1ff" aria-label="Chat text color" style="width:46px;height:40px;border:0;background:none;padding:0"><span class="stat" id="cprev" style="margin:0">Sample message in your color</span><button class="btn" id="cres">Default</button></div>
+    <h3 class="sec">Chat name color</h3>
+    <div class="row" style="margin:0 0 26px"><input type="color" id="ccol" value="#eef1ff" aria-label="Chat name color" style="width:46px;height:40px;border:0;background:none;padding:0"><span class="stat" id="cprev" style="margin:0">Sample message</span><button class="btn" id="cres">Default</button></div>
     <button class="btn" id="reset">Reset all saved data</button>
   </section>
 </main>
 
-<footer class="foot">mad &copy;<div class="ver">0.01v</div></footer>
+<footer class="foot">mad &copy;<div class="ver">0.02v</div></footer>
 
 <script>
 (function(){
@@ -206,6 +206,9 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
     set:function(k,v){try{localStorage.setItem('mad_'+k,JSON.stringify(v))}catch(e){}},
     clear:function(){try{Object.keys(localStorage).forEach(function(k){if(k.indexOf('mad_')===0)localStorage.removeItem(k)})}catch(e){}}
   };
+
+  /* ---- Owner config (set from the Owner panel) ---- */
+  var CFG=window.__CFG||{};
 
   /* ---- EDIT ME: default links for each section ---- */
   var SOUNDBOARD=`<!DOCTYPE html><meta charset=utf-8><style>body{margin:0;background:#10131c;color:#fff;font-family:system-ui,sans-serif;padding:16px}h3{margin:0 0 12px}.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}button{padding:22px 8px;border:1px solid #ffffff33;border-radius:14px;background:#ffffff14;color:#fff;font:600 14px system-ui;cursor:pointer}button:active{background:#ffffff33}</style><h3>Mad Soundboard</h3><div class=g id=g></div><script>
@@ -291,7 +294,9 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
   function render(id){
     var box=document.querySelector('#'+id+' .cards'), last=S.get('last_'+id,'');
     box.textContent='';
-    var list=SECTIONS[id].items.map(function(x){return{it:x}});
+    var gone=((CFG.del||{})[id])||[];
+    var list=SECTIONS[id].items.filter(function(x){return gone.indexOf(x.n)<0}).map(function(x){return{it:x}});
+    ((CFG.links||{})[id]||[]).forEach(function(x){list.push({it:x})});
     (custom[id]||[]).forEach(function(x,i){list.push({it:x,ci:i})});
     list.forEach(function(o){
       var c=document.createElement('div');
@@ -387,7 +392,7 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
 
   document.getElementById('reset').onclick=function(){
     if(!confirm('Clear your theme, notes and added links?'))return;
-    S.clear(); custom={}; nb.value=''; chatColor=''; $('ccol').value='#eef1ff'; $('cprev').style.color=''; G.msgs=[]; G.seen={}; gRender(); setTheme('midnight');
+    S.clear(); custom={}; nb.value=''; chatColor=''; $('ccol').value='#eef1ff'; paintPrev(); G.msgs=[]; G.seen={}; gRender(); setTheme('midnight');
     Object.keys(SECTIONS).forEach(render);
   };
 
@@ -436,7 +441,7 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
     }
     function say(f,t,col){
       var l=E('Log'),q=document.createElement('p'),b=document.createElement('b'),x=document.createElement('span');
-      b.textContent=f+': '; x.textContent=t; if(okColor(col))x.style.color=col;
+      b.textContent=f+': '; x.textContent=t; if(okColor(col))b.style.color=col;
       q.appendChild(b); q.appendChild(x);
       l.appendChild(q); l.scrollTop=l.scrollHeight;
     }
@@ -588,7 +593,7 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
     G.msgs.forEach(function(m){
       var p=document.createElement('p'),t=document.createElement('small'),b=document.createElement('b'),x=document.createElement('span');
       t.textContent=new Date(m.time*1000).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' ';
-      b.textContent=m.n+': '; x.textContent=m.t; if(okColor(m.c))x.style.color=m.c;
+      b.textContent=m.n+': '; x.textContent=m.t; if(okColor(m.c))b.style.color=m.c;
       p.appendChild(t); p.appendChild(b); p.appendChild(x); l.appendChild(p);
     });
     if(low)l.scrollTop=l.scrollHeight;
@@ -627,59 +632,157 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
     [].forEach.call(document.querySelectorAll('.nm'),function(x){if(x!==e.target)x.value=e.target.value});
   });
 
-  /* ---- Chat text color setting ---- */
+  /* ---- Chat name color setting ---- */
   var cc=$('ccol'), cp=$('cprev');
-  function paintPrev(){cp.style.color=chatColor||'';cp.textContent='Sample message in your color'}
+  function paintPrev(){
+    cp.textContent='';
+    var b=document.createElement('b'); b.textContent='YourName: '; if(chatColor)b.style.color=chatColor;
+    cp.appendChild(b); cp.appendChild(document.createTextNode('Sample message'));
+  }
   cc.value=chatColor||'#eef1ff'; paintPrev();
   cc.oninput=function(){
-    if(!okColor(cc.value)){cp.style.color='';cp.textContent='Too dark to read on the chat background. Pick a lighter color.';return}
+    if(!okColor(cc.value)){cp.textContent='Too dark to read on the chat background. Pick a lighter color.';return}
     chatColor=cc.value; S.set('chatcolor',chatColor); paintPrev();
   };
   $('cres').onclick=function(){chatColor='';S.set('chatcolor','');cc.value='#eef1ff';paintPrev()};
 
   /* ---- Start up ---- */
   Object.keys(SECTIONS).forEach(build);
-  var t0=S.get('theme','midnight'); setTheme(THEMES.some(function(t){return t[0]===t0})?t0:'midnight');
+  var t0=S.get('theme',CFG.theme||'midnight'); setTheme(THEMES.some(function(t){return t[0]===t0})?t0:'midnight');
   var start=S.get('page','home');
   show(document.getElementById(start)?start:'home');
+
+  /* ---- Apply owner config ---- */
+  if(CFG.msg){var an=document.createElement('p');an.textContent=CFG.msg;an.style.cssText='margin-top:14px;color:var(--a);font-weight:600';document.querySelector('#home .hero').appendChild(an)}
+  (CFG.hide||[]).forEach(function(id){var t=document.querySelector('.tile[data-go="'+id+'"]');if(t)t.hidden=true});
+  if(CFG.ver)document.querySelector('.ver').textContent=CFG.ver;
+})();
+</script>
+</template>
+
+<!-- ============ THE OWNER PANEL (separate page, separate password) ============ -->
+<template id="owner">
+<style>
+body{height:auto;padding:24px}
+.w{width:min(860px,100%);margin:0 auto;display:grid;gap:18px}
+.w h1{font-size:1.8rem}.w h3{margin-bottom:12px;font-size:1.05rem}
+.box{padding:22px}.box p,.note{color:var(--muted);font-size:.85rem;margin-top:10px}
+.r{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.f{flex:1;min-width:130px;padding:11px 16px;border-radius:999px;border:1px solid var(--edge);background:rgba(255,255,255,.06);color:var(--text);font:inherit}
+select.f option{color:#000}
+textarea.f{border-radius:14px;min-height:110px;width:100%}
+.b{padding:10px 20px;border-radius:999px;border:1px solid var(--edge);background:rgba(255,255,255,.1);font-weight:600;font-size:.88rem}
+.b:hover{background:rgba(255,255,255,.2)}
+.ck{display:flex;gap:6px;align-items:center;font-size:.9rem}
+</style>
+<div class="w">
+<h1>Owner panel</h1><p class="note" id="st">Changes save on this device. Use Export at the bottom to apply them to everyone.</p>
+
+<div class="box glass"><h3>Site settings</h3>
+<div class="r"><input class="f" id="msg" placeholder="Announcement banner on home page"></div>
+<div class="r"><input class="f" id="ttl" placeholder="Tab title"><input class="f" id="ver" placeholder="Version text (e.g. 0.02v)"></div>
+<div class="r"><input class="f" id="uc" placeholder="User access code (blank = default)"><select class="f" id="th"></select></div>
+<div class="r"><button class="b" id="save1">Save settings</button></div></div>
+
+<div class="box glass"><h3>Sections shown to users</h3><div class="r" id="secs"></div></div>
+
+<div class="box glass"><h3>Links</h3>
+<div class="r"><select class="f" id="ls"><option>games</option><option>proxies</option><option>ai</option><option>movies</option><option>tools</option></select>
+<input class="f" id="ln" placeholder="Name"><input class="f" id="lu" placeholder="https://..."></div>
+<div class="r"><button class="b" id="addl">Add link</button><button class="b" id="hidel">Hide default link with this name</button><button class="b" id="unh">Unhide all</button></div>
+<div id="links"></div><p id="dels"></p></div>
+
+<div class="box glass"><h3>Global chat</h3>
+<div class="r"><input class="f" id="ot" maxlength="300" placeholder="Post as OWNER"><button class="b" id="say">Post</button></div>
+<div class="r"><button class="b" id="clr">Clear chat history on this device</button></div></div>
+
+<div class="box glass"><h3>Export config</h3>
+<textarea class="f" id="exp" readonly></textarea>
+<div class="r"><button class="b" id="cp">Copy</button><button class="b" id="rst">Reset owner config</button></div>
+<p>Paste the copied text into <b>DEFAULT_CFG</b> in your file to apply it for everyone.</p></div>
+</div>
+<script>
+(function(){
+var K='madowner_cfg',C=JSON.parse(JSON.stringify(window.__CFG||{})),$=function(i){return document.getElementById(i)};
+var SEC=['games','proxies','share','notes','movies','tools','ai','chat','settings'],TH=['midnight','ocean','sunset','forest','henry','rose','slate','rainbow'];
+function norm(){C.hide=C.hide||[];C.links=C.links||{};C.del=C.del||{}}
+function fill(){$('msg').value=C.msg||'';$('ttl').value=C.title||'';$('ver').value=C.ver||'';$('uc').value=C.ucode||'';$('th').value=C.theme||'midnight'}
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x)e.textContent=x;return e}
+function paint(){
+ var s=$('secs');s.textContent='';
+ SEC.forEach(function(id){var l=el('label','ck'),c=el('input');c.type='checkbox';c.checked=C.hide.indexOf(id)<0;
+  c.onchange=function(){C.hide=C.hide.filter(function(x){return x!==id});if(!c.checked)C.hide.push(id);save()};
+  l.appendChild(c);l.appendChild(document.createTextNode(id));s.appendChild(l)});
+ var L=$('links');L.textContent='';
+ Object.keys(C.links).forEach(function(id){C.links[id].forEach(function(x,i){
+  var r=el('div','r'),d=el('button','b','Remove');d.onclick=function(){C.links[id].splice(i,1);save()};
+  r.appendChild(el('span','',id+': '+x.n+' - '+x.u));r.appendChild(d);L.appendChild(r)})});
+ var h=Object.keys(C.del).filter(function(id){return C.del[id].length}).map(function(id){return id+': '+C.del[id].join(', ')});
+ $('dels').textContent=h.length?'Hidden defaults - '+h.join(' | '):'';
+ $('exp').value=JSON.stringify(C);
+}
+function save(m){try{localStorage.setItem(K,JSON.stringify(C))}catch(e){}$('st').textContent=m||'Saved. Reopen the user site to see it.';paint()}
+TH.forEach(function(t){var o=el('option','',t);o.value=t;$('th').appendChild(o)});
+norm();fill();paint();
+$('save1').onclick=function(){C.msg=$('msg').value.trim();C.title=$('ttl').value.trim();C.ver=$('ver').value.trim();C.ucode=$('uc').value.trim();C.theme=$('th').value;
+ try{localStorage.setItem('mad_theme',JSON.stringify(C.theme))}catch(e){}document.documentElement.dataset.theme=C.theme;save()};
+$('addl').onclick=function(){var id=$('ls').value,n=$('ln').value.trim(),u=$('lu').value.trim();if(!n||!u)return;
+ if(!/^https?:\/\//i.test(u))u='https://'+u;(C.links[id]=C.links[id]||[]).push({n:n,u:u,d:'Added by owner'});$('ln').value=$('lu').value='';save()};
+$('hidel').onclick=function(){var id=$('ls').value,n=$('ln').value.trim();if(!n)return;(C.del[id]=C.del[id]||[]).push(n);$('ln').value='';save()};
+$('unh').onclick=function(){C.del={};save()};
+$('say').onclick=function(){var t=$('ot').value.trim();if(!t)return;
+ fetch('https://ntfy.sh/mad-global-chat-9xq4k2',{method:'POST',body:JSON.stringify({n:'OWNER',t:t.slice(0,300),c:'#C5B358'})})
+ .then(function(){$('ot').value='';$('st').textContent='Posted to global chat.'}).catch(function(){$('st').textContent='Could not post.'})};
+$('clr').onclick=function(){try{localStorage.removeItem('mad_gchat')}catch(e){}$('st').textContent='Cleared saved chat on this device.'};
+$('cp').onclick=function(){$('exp').select();try{navigator.clipboard.writeText($('exp').value)}catch(e){}$('st').textContent='Copied.'};
+$('rst').onclick=function(){if(!confirm('Reset owner config?'))return;try{localStorage.removeItem(K)}catch(e){}C={};norm();fill();save('Reset.')};
 })();
 </script>
 </template>
 
 <script>
 /* ================= SETTINGS ================= */
-var ACCESS_CODE = "1234";          // <-- change this to your code
+var USER_CODE   = "Player1234";    // regular user / tester code
+var OWNER_CODE  = "Maddex2012";    // opens the Owner panel
 var TAB_TITLE   = "Home";          // title shown on the about:blank tab
+var DEFAULT_CFG = {};              // paste the Owner panel's exported config here to apply it to everyone
 
 /* ================= LOGIC ================= */
 var input = document.getElementById('code');
 var err   = document.getElementById('err');
 var card  = document.getElementById('card');
 
-// Use the saved theme on the lock screen too
 function savedTheme(){
   try{ return JSON.parse(localStorage.getItem('mad_theme')) || 'midnight'; }catch(e){ return 'midnight'; }
 }
+function getCfg(){
+  try{ var c = JSON.parse(localStorage.getItem('madowner_cfg')); if (c) return c; }catch(e){}
+  return DEFAULT_CFG;
+}
 document.documentElement.dataset.theme = savedTheme();
 
-function buildSite(){
+function buildSite(id){
+  var cfg = getCfg();
   return '<!DOCTYPE html><html lang="en" data-theme="' + savedTheme() + '"><head><meta charset="UTF-8">' +
     '<meta name="viewport" content="width=device-width, initial-scale=1">' +
-    '<title>' + TAB_TITLE + '</title><style>' +
+    '<title>' + (id === 'owner' ? 'Owner' : (cfg.title || TAB_TITLE)) + '</title><style>' +
     document.getElementById('base').textContent +
-    '</style></head><body>' +
-    document.getElementById('app').innerHTML +
+    '</style></head><body><script>window.__CFG=' + JSON.stringify(cfg).replace(/</g, '\\u003c') + ';<\/script>' +
+    document.getElementById(id).innerHTML +
     '</body></html>';
 }
 
 function unlock(){
-  if (input.value !== ACCESS_CODE){
+  var v = input.value, id = null;
+  if (v === OWNER_CODE) id = 'owner';
+  else if (v === (getCfg().ucode || USER_CODE)) id = 'app';
+  if (!id){
     err.textContent = 'Wrong code. Try again.';
     card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
     input.value = ''; input.focus();
     return;
   }
-  var html = buildSite();
+  var html = buildSite(id);
   var w = window.open('about:blank', '_blank');
   if (w){
     w.document.open(); w.document.write(html); w.document.close();
