@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-theme="midnight">
 <head>
 <meta charset="UTF-8">
@@ -18,11 +18,12 @@
 [data-theme=slate]{--bg:#0d0f12;--a:#e2e8f0;--b:#64748b;--on:#0d0f12}
 @property --h{syntax:'<number>';inherits:true;initial-value:0}
 @keyframes hue{to{--h:360}}
-[data-theme=rainbow]{--bg:#0b0b12;--a:hsl(var(--h) 90% 65%);--b:hsl(calc(var(--h) + 140) 90% 65%);--on:#0b0b12;animation:hue 14s linear infinite}
+[data-theme=rainbow]{--bg:#0b0b12;--a:hsl(var(--h) 90% 65%);--b:hsl(calc(var(--h) + 140) 90% 65%);--on:#0b0b12;animation:hue 14s steps(70) infinite}
 *{box-sizing:border-box;margin:0}
 html,body{height:100%}
 [hidden]{display:none!important}
-body{font-family:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;transition:background .4s}
+html{scrollbar-gutter:stable}
+body{font-family:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);overflow-x:clip;transition:background .4s}
 body::before,body::after{content:"";position:fixed;width:46vmax;height:46vmax;border-radius:50%;filter:blur(90px);opacity:.4;z-index:-1;animation:drift 22s ease-in-out infinite alternate}
 body::before{background:var(--b);top:-18vmax;left:-12vmax}
 body::after{background:var(--a);bottom:-22vmax;right:-14vmax;animation-delay:-8s}
@@ -75,10 +76,10 @@ body{height:auto;min-height:100vh;display:flex;flex-direction:column}
 .btn.hidden{opacity:0;pointer-events:none;transform:translateX(8px)}
 main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px 0 40px}
 .page{display:none}
-.page.active{display:block;animation:in .45s cubic-bezier(.2,.8,.2,1)}
-.page.leaving{display:block;animation:out .25s ease forwards;pointer-events:none}
-@keyframes in{from{opacity:0;transform:scale(.97) translateY(14px);filter:blur(6px)}}
-@keyframes out{to{opacity:0;transform:scale(1.03);filter:blur(6px)}}
+.page.active{display:block;animation:in .3s ease}
+.page.leaving{display:block;animation:out .18s ease forwards;pointer-events:none}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+@keyframes out{to{opacity:0}}
 .hero{text-align:center;padding:36px 0 42px}
 .hero h1{font-size:clamp(2.2rem,6vw,3.8rem);font-weight:700;letter-spacing:-.03em;line-height:1.05}
 .hero p{color:var(--muted);margin-top:14px}
@@ -106,10 +107,12 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
 .card .rm{position:absolute;top:8px;right:12px;background:none;border:0;color:var(--muted);font-size:1.2rem}
 .notes{width:100%;min-height:50vh;padding:20px;resize:vertical;font:inherit;line-height:1.6;color:var(--text)}
 .notes:focus{outline:none;border-color:var(--a)}
-.themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-bottom:26px}
-.sw{display:flex;align-items:center;gap:12px;padding:14px 16px;text-align:left;font-size:.9rem}
+.themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:24px}
+.sw{display:flex;align-items:center;gap:12px;padding:14px 16px;text-align:left;font-size:.9rem;border-radius:16px;border:1px solid var(--edge);background:rgba(255,255,255,.06);transition:border-color .2s,background .2s}
+.sw:hover{background:rgba(255,255,255,.12)}
 .sw i{width:28px;height:28px;border-radius:50%;flex:none;border:1px solid rgba(255,255,255,.3)}
-.sw.sel{border-color:var(--a);box-shadow:0 0 0 2px var(--a)}
+.sw.sel{border-color:var(--a);background:rgba(255,255,255,.12)}
+.sw.sel::after{content:"\2713";margin-left:auto;color:var(--a);font-weight:700}
 .foot{text-align:center;font-size:.7rem;color:var(--muted);opacity:.7;padding:0 0 16px}
 .panel{padding:22px;margin-bottom:26px}
 .panel h3,.sec{font-size:1.1rem;font-weight:600}
@@ -120,9 +123,15 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
 .code{font-size:2.2rem;font-weight:700;letter-spacing:.3em;color:var(--a);margin-top:14px}
 .stat{color:var(--muted);font-size:.85rem;margin-top:10px}
 #remote{display:block;width:100%;max-height:70vh;border-radius:14px;background:#000;margin-top:14px}
-.log{max-height:200px;overflow:auto;margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.05);font-size:.88rem;line-height:1.5}
-.log p{margin:0 0 6px}.log b{color:var(--a)}
-.clock{font-size:clamp(3rem,12vw,6rem);font-weight:700;letter-spacing:-.02em;text-align:center;padding:24px 0 8px}
+.log{height:240px;overflow:auto;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.05);font-size:.88rem;line-height:1.5;margin-bottom:10px}
+.log p{margin:0 0 6px;word-break:break-word}.log b{color:var(--a)}
+.rm{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px}
+.scr{position:relative;flex:2 1 420px;min-width:0;aspect-ratio:16/9;border-radius:14px;background:#000;border:1px solid var(--edge);overflow:hidden;display:grid;place-items:center;text-align:center}
+.scr.mini{aspect-ratio:auto;min-height:150px;flex:1 1 100%}
+.scr video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.ov{padding:20px;color:var(--muted);font-size:.95rem}
+.rm>div:last-child{flex:1 1 260px;min-width:0}
+.scr.mini~div{flex-basis:100%}
 @media (max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:460px){.grid{grid-template-columns:1fr}}
 </style>
@@ -136,8 +145,8 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
   <symbol id="i-tools" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></symbol>
   <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M2 14h4M10 8h4M18 16h4"/></symbol>
   <symbol id="i-share" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
-  <symbol id="i-sketch" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
-  <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></symbol>
+  <symbol id="i-ai" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.7 1.8 1.8.7-1.8.7L19 20l-.7-1.8-1.8-.7 1.8-.7z"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
   <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
   <symbol id="i-max" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></symbol>
@@ -159,8 +168,8 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
       <button class="tile glass" data-go="notes"><span class="ico"><svg class="i"><use href="#i-notes"/></svg></span><b>Notes</b><span class="d">Jot things down, auto-saved</span></button>
       <button class="tile glass" data-go="movies"><span class="ico"><svg class="i"><use href="#i-movies"/></svg></span><b>Movies</b><span class="d">Watch and browse</span></button>
       <button class="tile glass" data-go="tools"><span class="ico"><svg class="i"><use href="#i-tools"/></svg></span><b>Tools</b><span class="d">Quick utilities</span></button>
-      <button class="tile glass" data-go="timer"><span class="ico"><svg class="i"><use href="#i-timer"/></svg></span><b>Timer</b><span class="d">Count down and stay on track</span></button>
-      <button class="tile glass" data-go="sketch"><span class="ico"><svg class="i"><use href="#i-sketch"/></svg></span><b>Sketch</b><span class="d">Draw and save your art</span></button>
+      <button class="tile glass" data-go="ai"><span class="ico"><svg class="i"><use href="#i-ai"/></svg></span><b>AI</b><span class="d">Open your favorite AI sites</span></button>
+      <button class="tile glass" data-go="chat"><span class="ico"><svg class="i"><use href="#i-chat"/></svg></span><b>Chat</b><span class="d">Chat with a friend using a code</span></button>
       <button class="tile glass" data-go="settings"><span class="ico"><svg class="i"><use href="#i-settings"/></svg></span><b>Settings</b><span class="d">Themes and saved data</span></button>
     </div>
   </section>
@@ -170,38 +179,8 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
     <textarea class="notes glass" id="noteBox" placeholder="Start typing..."></textarea>
   </section>
 
-  <section class="page" id="timer">
-    <h2>Timer</h2><p class="sub">Set the minutes and press start. Your last setting is saved.</p>
-    <div class="panel glass"><div class="clock" id="clock">05:00</div>
-      <div class="row" style="justify-content:center"><input class="field" id="tmin" type="number" min="1" max="999" style="flex:none;width:110px;text-align:center" aria-label="Minutes"><button class="btn" id="tgo">Start</button><button class="btn" id="trs">Reset</button></div></div>
-  </section>
-
-  <section class="page" id="share">
-    <h2>Screen Sharing</h2><p class="sub">Create a room and give the code to someone, or type a code to watch their screen. Chat opens once you are connected.</p>
-    <div class="panel glass">
-      <div class="row" style="margin-top:0">
-        <button class="btn" id="shMk">Create room</button>
-        <input class="field" id="shIn" maxlength="5" placeholder="Room code" aria-label="Room code" style="text-transform:uppercase;flex:none;width:150px">
-        <button class="btn" id="shJn">Join room</button>
-        <button class="btn" id="shStop" hidden>Stop</button>
-      </div>
-      <div class="code" id="shCode" hidden></div>
-      <p class="stat" id="shMsg"></p>
-      <video id="remote" controls playsinline muted hidden></video>
-      <div id="chat" hidden>
-        <div class="log" id="chatLog"></div>
-        <div class="row"><input class="field" id="chatIn" maxlength="300" placeholder="Type a message" aria-label="Chat message"><button class="btn" id="chatSend">Send</button></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="page" id="sketch">
-    <h2>Sketch</h2><p class="sub">Draw with your mouse or finger. Your drawing is saved automatically.</p>
-    <div class="panel glass">
-      <canvas id="cv" width="900" height="520" style="display:block;width:100%;border-radius:14px;touch-action:none;cursor:crosshair"></canvas>
-      <div class="row"><input type="color" id="skc" value="#5eead4" aria-label="Pen color" style="width:46px;height:40px;border:0;background:none;padding:0"><input type="range" id="sks" min="1" max="30" value="4" aria-label="Brush size"><button class="btn" id="skx">Clear</button><button class="btn" id="skd">Save image</button></div>
-    </div>
-  </section>
+  <section class="page" id="share"></section>
+  <section class="page" id="chat"></section>
 
   <section class="page" id="settings">  <section class="page" id="settings">
     <h2>Settings</h2><p class="sub">Your theme is saved and will be here when you come back.</p>
@@ -227,6 +206,7 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
       {n:'UBG Hyper',d:'Game hub',u:'https://ubghyper.github.io/'}
     ]},
     proxies:{title:'Proxies',sub:'Add a proxy link, then open it here.',items:[]},
+    ai:{title:'AI',sub:'Add an AI site you use, then open it here. Some sites block being embedded.',items:[]},
     movies:{title:'Movies',sub:'Add a link, then open it here.',items:[]},
     tools:{title:'Tools',sub:'Add a link, then open it here.',items:[]}
   };
@@ -240,7 +220,7 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
     ['slate','Slate','#e2e8f0','#64748b'],
     ['rainbow','Rainbow','','','conic-gradient(#ff5f6d,#ffc371,#fff56d,#5dff8f,#5dc7ff,#b06dff,#ff5f6d)']
   ];
-  var NAMES={home:'Home',games:'Games',proxies:'Proxies',share:'Screen Sharing',notes:'Notes',movies:'Movies',tools:'Tools',sketch:'Sketch',timer:'Timer',settings:'Settings'};
+  var NAMES={home:'Home',games:'Games',proxies:'Proxies',share:'Screen Sharing',notes:'Notes',movies:'Movies',tools:'Tools',ai:'AI',chat:'Chat',settings:'Settings'};
   function $(i){return document.getElementById(i)}
 
   var stage=document.getElementById('stage'), homeBtn=document.getElementById('homeBtn');
@@ -321,7 +301,7 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
       from.classList.remove('leaving');
       document.getElementById(id).classList.add('active');
       current=id; busy=false; S.set('page',id); $('brand').textContent=NAMES[id]; window.scrollTo({top:0});
-    },250);
+    },180);
   }
   document.addEventListener('click',function(e){
     var g=e.target.closest('[data-go]'); if(g)return go(g.getAttribute('data-go'));
@@ -338,7 +318,7 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
     [].forEach.call(themeBox.children,function(b){b.classList.toggle('sel',b.dataset.t===id)});
   }
   THEMES.forEach(function(t){
-    var b=document.createElement('button'); b.className='sw glass'; b.dataset.t=t[0];
+    var b=document.createElement('button'); b.className='sw'; b.dataset.t=t[0];
     b.innerHTML='<i style="background:'+(t[4]||'linear-gradient(135deg,'+t[2]+','+t[3]+')')+'"></i><span>'+t[1]+'</span>';
     b.onclick=function(){setTheme(t[0])}; themeBox.appendChild(b);
   });
@@ -353,112 +333,184 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
 
   document.getElementById('reset').onclick=function(){
     if(!confirm('Clear your theme, notes and added links?'))return;
-    S.clear(); custom={}; nb.value=''; skBg(); setTheme('midnight');
+    S.clear(); custom={}; nb.value=''; setTheme('midnight');
     Object.keys(SECTIONS).forEach(render);
   };
 
-  /* ---- Screen sharing + chat (WebRTC via PeerJS cloud) ---- */
-  var sh={peer:null,stream:null,conns:[],conn:null};
-  function msg(t){$('shMsg').textContent=t}
-  function busy(on){$('shMk').disabled=$('shJn').disabled=on;$('shStop').hidden=!on}
-  function say(from,text){
-    var l=$('chatLog'),p=document.createElement('p'),b=document.createElement('b');
-    b.textContent=from+': '; p.appendChild(b); p.appendChild(document.createTextNode(text));
-    l.appendChild(p); l.scrollTop=l.scrollHeight;
+  /* ---- Rooms: screen sharing + chat (WebRTC via PeerJS cloud) ---- */
+  function roomHTML(p,screen,title,sub){
+    var d=function(x){return ' id="'+p+x+'"'};
+    return '<h2>'+title+'</h2><p class="sub">'+sub+'</p><div class="panel glass">'+
+      '<div class="row" style="margin-top:0">'+
+      '<input class="field"'+d('Name')+' maxlength="20" placeholder="Your name" aria-label="Your name" style="flex:none;width:140px">'+
+      '<button class="btn"'+d('Mk')+'>Create code</button>'+
+      '<input class="field"'+d('In')+' maxlength="5" placeholder="Enter code" aria-label="Room code" style="flex:none;width:130px;text-transform:uppercase">'+
+      '<button class="btn"'+d('Jn')+'>Join</button>'+
+      (screen?'<button class="btn"'+d('Sh')+' hidden>Share my screen</button>':'')+
+      '<button class="btn"'+d('Lv')+' hidden>Leave</button></div>'+
+      '<p class="stat"'+d('Msg')+'></p>'+
+      '<div class="rm"><div class="scr'+(screen?'':' mini')+'">'+
+        (screen?'<video'+d('Vid')+' playsinline autoplay muted controls hidden></video>':'')+
+        '<div class="ov"'+d('Ov')+'><div class="code"'+d('Code')+'></div><div'+d('Txt')+'></div></div></div>'+
+        '<div'+d('Chat')+' hidden><div class="log"'+d('Log')+'></div>'+
+        '<div class="row" style="margin-top:0"><input class="field"'+d('ChatIn')+' maxlength="300" placeholder="Type a message" aria-label="Chat message"><button class="btn"'+d('Send')+'>Send</button></div></div>'+
+      '</div></div>';
   }
-  function relay(from,text){say(from,text);sh.conns.forEach(function(c){if(c.open)c.send({from:from,text:text})})}
-  function loadPeer(cb){
-    if(window.Peer)return cb();
-    var sc=document.createElement('script');
-    sc.src='https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js';
-    sc.onload=cb; sc.onerror=function(){stopShare('Could not load the connection library. Check your internet.')};
-    document.head.appendChild(sc);
-  }
-  function stopShare(m){
-    if(sh.stream){sh.stream.getTracks().forEach(function(t){t.stop()});sh.stream=null}
-    if(sh.peer){try{sh.peer.destroy()}catch(e){}sh.peer=null}
-    sh.conns=[]; sh.conn=null;
-    var v=$('remote'); v.srcObject=null; v.hidden=true; $('shCode').hidden=true;
-    $('chat').hidden=true; $('chatLog').textContent=''; busy(false); msg(m||'');
-  }
-  function host(st){
-    var code=Math.random().toString(36).slice(2,7).toUpperCase(), n=0, vn=0;
-    var p=new Peer('madroom-'+code); sh.peer=p;
-    p.on('open',function(){$('shCode').hidden=false;$('shCode').textContent=code;$('chat').hidden=false;msg('Room ready. Give this code to the other person.')});
-    p.on('call',function(c){c.answer(st);n++;msg(n+' watching');c.on('close',function(){n--;msg(n+' watching')})});
-    p.on('connection',function(c){
-      c.label='Viewer '+(++vn); sh.conns.push(c);
-      c.on('open',function(){relay('System',c.label+' joined')});
-      c.on('data',function(t){relay(c.label,String(t).slice(0,300))});
-      c.on('close',function(){sh.conns=sh.conns.filter(function(x){return x!==c});relay('System',c.label+' left')});
-    });
-    p.on('error',function(e){if(e.type==='unavailable-id'){p.destroy();host(st)}else stopShare('Connection error: '+e.type)});
-  }
-  $('shMk').onclick=function(){
-    busy(true); msg('Choose a screen, window or tab to share...');
-    navigator.mediaDevices.getDisplayMedia({video:true,audio:true}).then(function(st){
-      sh.stream=st; st.getVideoTracks()[0].onended=function(){stopShare('Sharing stopped.')};
-      msg('Connecting...'); loadPeer(function(){host(st)});
-    }).catch(function(){stopShare('Sharing was cancelled or is not supported in this browser.')});
-  };
-  $('shJn').onclick=function(){
-    var code=$('shIn').value.trim().toUpperCase(); if(!code)return msg('Type a room code first.');
-    busy(true); msg('Joining...');
-    loadPeer(function(){
-      var p=new Peer(); sh.peer=p;
-      p.on('open',function(){
-        var cv=document.createElement('canvas'); cv.width=cv.height=2; cv.getContext('2d').fillRect(0,0,2,2);
-        var c=p.call('madroom-'+code,cv.captureStream(1));
-        var dc=p.connect('madroom-'+code); sh.conn=dc;
-        dc.on('data',function(m){say(m.from,m.text)});
-        var t=setTimeout(function(){stopShare('No room found with that code.')},12000);
-        c.on('stream',function(s){clearTimeout(t);var v=$('remote');v.hidden=false;v.srcObject=s;v.play();$('chat').hidden=false;msg('Connected. Use the video controls to unmute.')});
-        c.on('close',function(){stopShare('The host stopped sharing.')});
+
+  function room(p,screen,prefix){
+    var E=function(x){return $(p+x)};
+    var peer=null,isHost=false,ready=false,conns=[],hc=null,stream=null,calls=[],remote=null,sharing=null,code='',to=null;
+    var ALPHA='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+    function msg(t){E('Msg').textContent=t||''}
+    function me(){return E('Name').value.trim().slice(0,20)||(isHost?'Host':'Guest')}
+    function ui(){
+      var inRoom=!!peer&&ready, c='', t;
+      E('Mk').disabled=E('Jn').disabled=!!peer; E('Lv').hidden=!peer; E('Chat').hidden=!inRoom;
+      if(!peer)t=screen?'Create a code, or type a code to join a room.':'Create a code, or type a code to join a chat.';
+      else if(!ready)t='Connecting...';
+      else if(isHost&&!conns.length){c=code;t='Waiting for someone to join. Give them this code.'}
+      else if(screen){c=isHost?code:'';t=stream?'You are sharing your screen.':(sharing?sharing+' is sharing their screen...':'Nobody is sharing their screen currently.')}
+      else{c=isHost?code:'';t='Connected. Say hi in the chat.'}
+      E('Code').textContent=c; E('Txt').textContent=t;
+      if(screen){
+        var showV=!!remote&&!stream&&!!sharing;
+        E('Vid').hidden=!showV; E('Ov').hidden=showV;
+        E('Sh').hidden=!inRoom; E('Sh').textContent=stream?'Stop sharing':'Share my screen';
+      }
+    }
+    function say(f,t){
+      var l=E('Log'),q=document.createElement('p'),b=document.createElement('b');
+      b.textContent=f+': '; q.appendChild(b); q.appendChild(document.createTextNode(t));
+      l.appendChild(q); l.scrollTop=l.scrollHeight;
+    }
+    function bc(m,x){conns.forEach(function(c){if(c!==x&&c.open)c.send(m)})}
+    function up(m){if(isHost)bc(m);else if(hc&&hc.open)hc.send(m)}
+    function sys(t){say('System',t);bc({t:'sys',text:t})}
+    function closeCalls(){calls.forEach(function(c){try{c.close()}catch(e){}});calls=[]}
+    function setRemote(s){
+      remote=s;
+      if(screen){var v=E('Vid');v.srcObject=s||null;if(s)v.play().catch(function(){})}
+      ui();
+    }
+    function callOut(id,s){if(peer)calls.push(peer.call(id,s))}
+
+    function onCall(c){
+      c.answer();
+      c.on('stream',function(s){
+        if(remote===s)return;
+        setRemote(s);
+        if(isHost)conns.forEach(function(x){if(x.peer!==c.peer&&x.open)callOut(x.peer,s)});
       });
-      p.on('error',function(e){stopShare(e.type==='peer-unavailable'?'No room found with that code.':'Connection error: '+e.type)});
-    });
-  };
-  $('shStop').onclick=function(){stopShare('')};
-  function sendChat(){
-    var i=$('chatIn'),t=i.value.trim(); if(!t)return; i.value='';
-    if(sh.conn){if(sh.conn.open)sh.conn.send(t)}else relay('Host',t);
+    }
+    function onData(m,c){
+      if(m.t==='chat'){say(m.from,m.text);if(isHost)bc(m,c)}
+      else if(m.t==='sys')say('System',m.text);
+      else if(m.t==='share'){
+        sharing=m.by; if(c)c.sharer=!!m.by; if(isHost)bc(m,c);
+        if(!m.by){if(!stream)closeCalls();setRemote(null)}else ui();
+        msg(m.by?m.by+' is sharing their screen.':'Screen sharing stopped.');
+      }
+    }
+    function onConn(c){
+      c.on('data',function(m){
+        if(m.t==='hi'){c.name=String(m.name||'Guest').slice(0,20);sys(c.name+' joined')}
+        else onData(m,c);
+      });
+      c.on('open',function(){
+        conns.push(c); ui();
+        if(sharing)c.send({t:'share',by:sharing});
+        if(stream)callOut(c.peer,stream);else if(remote)callOut(c.peer,remote);
+      });
+      c.on('close',function(){
+        if(!peer)return;
+        conns=conns.filter(function(x){return x!==c});
+        sys((c.name||'Someone')+' left');
+        if(c.sharer){sharing=null;closeCalls();setRemote(null);bc({t:'share',by:null})}
+        ui();
+      });
+    }
+
+    function load(cb){
+      if(window.Peer)return cb();
+      var urls=['https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js','https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js'],i=0;
+      (function next(){
+        var sc=document.createElement('script'); sc.src=urls[i]; sc.onload=cb;
+        sc.onerror=function(){if(++i<urls.length)next();else leave('Could not load the connection library. Check your internet.')};
+        document.head.appendChild(sc);
+      })();
+    }
+    function create(){
+      E('Mk').disabled=E('Jn').disabled=true; msg('Creating your code...');
+      load(function(){
+        code=''; for(var i=0;i<5;i++)code+=ALPHA.charAt(Math.floor(Math.random()*ALPHA.length));
+        isHost=true; var pr=new Peer(prefix+code); peer=pr; ui();
+        to=setTimeout(function(){leave('Could not reach the connection server. Check your internet and try again.')},12000);
+        pr.on('open',function(){clearTimeout(to);ready=true;msg('Code created. Give it to the other person.');ui()});
+        pr.on('connection',onConn); pr.on('call',onCall);
+        pr.on('error',function(e){
+          clearTimeout(to);
+          if(e.type==='unavailable-id'){peer=null;pr.destroy();create()}else leave('Connection error: '+e.type);
+        });
+      });
+    }
+    function join(){
+      var c0=E('In').value.trim().toUpperCase(); if(!c0)return msg('Type a code first.');
+      E('Mk').disabled=E('Jn').disabled=true; msg('Joining...');
+      load(function(){
+        isHost=false; code=c0; var pr=new Peer(); peer=pr; ui();
+        to=setTimeout(function(){leave('No room found with that code.')},12000);
+        pr.on('open',function(){
+          hc=pr.connect(prefix+code,{reliable:true});
+          hc.on('open',function(){clearTimeout(to);ready=true;hc.send({t:'hi',name:me()});msg('Joined room '+code+'.');ui()});
+          hc.on('data',function(m){onData(m)});
+          hc.on('close',function(){if(peer)leave('The host closed the room.')});
+        });
+        pr.on('call',onCall);
+        pr.on('error',function(e){clearTimeout(to);leave(e.type==='peer-unavailable'?'No room found with that code.':'Connection error: '+e.type)});
+      });
+    }
+    function leave(m){
+      clearTimeout(to);
+      if(stream){stream.getTracks().forEach(function(t){t.stop()});stream=null}
+      var pr=peer; peer=null; try{if(pr)pr.destroy()}catch(e){}
+      ready=false; isHost=false; conns=[]; hc=null; calls=[]; remote=null; sharing=null;
+      if(screen)E('Vid').srcObject=null;
+      E('Log').textContent=''; ui(); msg(m||'');
+    }
+
+    function share(){
+      if(stream)return stopShare();
+      if(sharing)return msg('Someone is already sharing. Wait until they stop.');
+      if(!navigator.mediaDevices||!navigator.mediaDevices.getDisplayMedia)return msg('Screen sharing is not supported here. Try a desktop browser.');
+      navigator.mediaDevices.getDisplayMedia({video:true,audio:true}).then(function(s){
+        stream=s; sharing=me(); s.getVideoTracks()[0].onended=stopShare; setRemote(null);
+        if(isHost)conns.forEach(function(c){if(c.open)callOut(c.peer,s)});else callOut(prefix+code,s);
+        up({t:'share',by:sharing}); msg('You are sharing your screen.'); ui();
+      }).catch(function(e){msg(e&&e.name==='NotAllowedError'?'Sharing was cancelled or blocked by the browser.':'Could not start sharing.')});
+    }
+    function stopShare(){
+      if(!stream)return;
+      stream.getTracks().forEach(function(t){t.stop()}); stream=null; closeCalls(); sharing=null;
+      up({t:'share',by:null}); msg('You stopped sharing.'); ui();
+    }
+    function chat(){
+      var i=E('ChatIn'),t=i.value.trim(); if(!t||!peer||!ready)return; i.value='';
+      var m={t:'chat',from:me(),text:t}; say(m.from,t); up(m);
+    }
+
+    E('Name').value=S.get('name',''); E('Name').oninput=function(){S.set('name',this.value)};
+    E('Mk').onclick=create; E('Jn').onclick=join;
+    E('Lv').onclick=function(){leave('You left.')};
+    if(screen)E('Sh').onclick=share;
+    E('Send').onclick=chat;
+    E('ChatIn').onkeydown=function(e){if(e.key==='Enter')chat()};
+    E('In').onkeydown=function(e){if(e.key==='Enter')join()};
+    ui();
   }
-  $('chatSend').onclick=sendChat;
-  $('chatIn').onkeydown=function(e){if(e.key==='Enter')sendChat()};
-
-  /* ---- Sketch (autosaves) ---- */
-  var cv=$('cv'),cx=cv.getContext('2d'),dr=false;
-  function skBg(){cx.fillStyle='#10131c';cx.fillRect(0,0,cv.width,cv.height)}
-  skBg();
-  var saved=S.get('sketch','');
-  if(saved){var im=new Image();im.onload=function(){cx.drawImage(im,0,0)};im.src=saved}
-  function pt(e){var r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height]}
-  cv.onpointerdown=function(e){
-    dr=true; cv.setPointerCapture(e.pointerId); var q=pt(e);
-    cx.beginPath(); cx.moveTo(q[0],q[1]); cx.lineCap=cx.lineJoin='round';
-    cx.strokeStyle=$('skc').value; cx.lineWidth=$('sks').value; cx.lineTo(q[0]+.01,q[1]); cx.stroke();
-  };
-  cv.onpointermove=function(e){if(!dr)return;var q=pt(e);cx.lineTo(q[0],q[1]);cx.stroke()};
-  cv.onpointerup=function(){if(!dr)return;dr=false;S.set('sketch',cv.toDataURL())};
-  $('skx').onclick=function(){skBg();S.set('sketch','')};
-  $('skd').onclick=function(){var a=document.createElement('a');a.download='sketch.png';a.href=cv.toDataURL();a.click()};
-
-  /* ---- Timer ---- */
-  var tm=null,left=0;
-  function fmt(x){var m=Math.floor(x/60),r=x%60;return (m<10?'0':'')+m+':'+(r<10?'0':'')+r}
-  function tset(){left=Math.max(1,parseInt($('tmin').value)||5)*60;S.set('tmin',left/60);$('clock').textContent=fmt(left)}
-  $('tmin').value=S.get('tmin',5); tset();
-  $('tmin').onchange=function(){if(!tm)tset()};
-  $('tgo').onclick=function(){
-    if(tm){clearInterval(tm);tm=null;this.textContent='Start';return}
-    if(left<=0)tset();
-    this.textContent='Pause';
-    tm=setInterval(function(){
-      left--; $('clock').textContent=fmt(left);
-      if(left<=0){clearInterval(tm);tm=null;$('tgo').textContent='Start';$('clock').textContent="Time's up!"}
-    },1000);
-  };
-  $('trs').onclick=function(){clearInterval(tm);tm=null;$('tgo').textContent='Start';tset()};
+  $('share').innerHTML=roomHTML('sh',true,'Screen Sharing','Create a code and give it to someone, or enter their code. Once you are both in, either of you can share a screen.');
+  $('chat').innerHTML=roomHTML('ch',false,'Chat','Create a code and give it to a friend, or enter their code to start chatting.');
+  room('sh',true,'madroom-'); room('ch',false,'madchat-');
 
   /* ---- Start up ---- */
   Object.keys(SECTIONS).forEach(build);
