@@ -132,6 +132,11 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
 .ov{padding:20px;color:var(--muted);font-size:.95rem}
 .rm>div:last-child{flex:1 1 260px;min-width:0}
 .scr.mini~div{flex-basis:100%}
+.ver{font-size:.65rem;margin-top:2px;opacity:.8}
+.tabs{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.tabs .btn.sel{border-color:var(--a);background:rgba(255,255,255,.2)}
+.log.tall{height:360px}
+.log small{color:var(--muted);font-size:.7rem}
 @media (max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:460px){.grid{grid-template-columns:1fr}}
 </style>
@@ -182,14 +187,16 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
   <section class="page" id="share"></section>
   <section class="page" id="chat"></section>
 
-  <section class="page" id="settings">  <section class="page" id="settings">
+  <section class="page" id="settings">
     <h2>Settings</h2><p class="sub">Your theme is saved and will be here when you come back.</p>
     <div class="themes" id="themes"></div>
+    <h3 class="sec">Chat text color</h3>
+    <div class="row" style="margin:0 0 26px"><input type="color" id="ccol" value="#eef1ff" aria-label="Chat text color" style="width:46px;height:40px;border:0;background:none;padding:0"><span class="stat" id="cprev" style="margin:0">Sample message in your color</span><button class="btn" id="cres">Default</button></div>
     <button class="btn" id="reset">Reset all saved data</button>
   </section>
 </main>
 
-<footer class="foot">mad &copy;</footer>
+<footer class="foot">mad &copy;<div class="ver">0.01v</div></footer>
 
 <script>
 (function(){
@@ -201,14 +208,52 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
   };
 
   /* ---- EDIT ME: default links for each section ---- */
+  var SOUNDBOARD=`<!DOCTYPE html><meta charset=utf-8><style>body{margin:0;background:#10131c;color:#fff;font-family:system-ui,sans-serif;padding:16px}h3{margin:0 0 12px}.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}button{padding:22px 8px;border:1px solid #ffffff33;border-radius:14px;background:#ffffff14;color:#fff;font:600 14px system-ui;cursor:pointer}button:active{background:#ffffff33}</style><h3>Mad Soundboard</h3><div class=g id=g></div><script>
+var C;function A(){return C||(C=new (window.AudioContext||window.webkitAudioContext)())}
+function tone(t,f,d,v,s){var c=A(),o=c.createOscillator(),g=c.createGain(),n=c.currentTime+(s||0);o.type=t;o.frequency.setValueAtTime(f[0],n);if(f[1])o.frequency.exponentialRampToValueAtTime(f[1],n+d);g.gain.setValueAtTime(v||.3,n);g.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(g);g.connect(c.destination);o.start(n);o.stop(n+d)}
+function noise(d,v,hp){var c=A(),b=c.createBuffer(1,c.sampleRate*d,c.sampleRate),x=b.getChannelData(0),i;for(i=0;i<x.length;i++)x[i]=Math.random()*2-1;var s=c.createBufferSource(),g=c.createGain(),f=c.createBiquadFilter();f.type='highpass';f.frequency.value=hp||800;s.buffer=b;g.gain.setValueAtTime(v||.4,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);s.connect(f);f.connect(g);g.connect(c.destination);s.start()}
+var P={
+'Air horn':function(){[440,554,659].forEach(function(f){tone('sawtooth',[f,f*.98],.9,.15)})},
+'Laser':function(){tone('square',[1800,150],.35,.2)},
+'Coin':function(){tone('square',[988],.08,.2);tone('square',[1319],.4,.2,.08)},
+'Kick':function(){tone('sine',[160,40],.3,.8)},
+'Snare':function(){noise(.2,.5,1200);tone('triangle',[220,120],.12,.3)},
+'Buzzer':function(){tone('sawtooth',[120],.6,.35)},
+'Sad trombone':function(){tone('sawtooth',[311,293],.35,.2);tone('sawtooth',[293,277],.35,.2,.4);tone('sawtooth',[277,261],.35,.2,.8);tone('sawtooth',[261,196],.9,.2,1.2)},
+'Boing':function(){tone('sine',[200,900],.35,.4)},
+'Applause':function(){noise(1.6,.35,2500)},
+'Ding':function(){tone('sine',[1568],1,.4)}
+};
+Object.keys(P).forEach(function(k){var b=document.createElement('button');b.textContent=k;b.onclick=P[k];document.getElementById('g').appendChild(b)});
+<\/script>`;
   var SECTIONS={
-    games:{title:'Games',sub:'Pick a game to play. Scroll down to switch to another one.',items:[
-      {n:'UBG Hyper',d:'Game hub',u:'https://ubghyper.github.io/'}
+    games:{title:'Games',sub:'Pick a game to play. Scroll down to switch. These are placeholders; a site that blocks embedding will show blank.',items:[
+      {n:'UBG Hyper',d:'Game hub',u:'https://ubghyper.github.io/'},
+      {n:'2048',d:'Placeholder: sliding number puzzle',u:'https://gabrielecirulli.github.io/2048/'},
+      {n:'Hextris',d:'Placeholder: hexagon puzzle',u:'https://hextris.io/'},
+      {n:'Clumsy Bird',d:'Placeholder: flappy-style arcade',u:'https://ellisonleao.github.io/clumsy-bird/'},
+      {n:'Cubiks 2048',d:'Placeholder: 3D 2048',u:'https://kshitij-banerjee.github.io/Cubiks-2048/'},
+      {n:'HexGL',d:'Placeholder: futuristic racing',u:'https://hexgl.bkcore.com/play/'},
+      {n:'Classic Pool',d:'Placeholder: pool game',u:'https://henshmi.github.io/Classic-Pool-Game/'}
     ]},
-    proxies:{title:'Proxies',sub:'Add a proxy link, then open it here.',items:[]},
-    ai:{title:'AI',sub:'Add an AI site you use, then open it here. Some sites block being embedded.',items:[]},
-    movies:{title:'Movies',sub:'Add a link, then open it here.',items:[]},
-    tools:{title:'Tools',sub:'Add a link, then open it here.',items:[]}
+    proxies:{title:'Proxies',sub:'Open a proxy site here. These are placeholders, and many proxies block being embedded.',items:[
+      {n:'Hide.me',d:'Placeholder: free web proxy',u:'https://hide.me/en/proxy'},
+      {n:'CroxyProxy',d:'Placeholder: free web proxy',u:'https://www.croxyproxy.com/'},
+      {n:'ProxySite',d:'Placeholder: free web proxy',u:'https://www.proxysite.com/'},
+      {n:'Proxyium',d:'Placeholder: free web proxy',u:'https://proxyium.com/'},
+      {n:'KProxy',d:'Placeholder: free web proxy',u:'https://kproxy.com/'},
+      {n:'4everproxy',d:'Placeholder: free web proxy',u:'https://www.4everproxy.com/'}
+    ]},
+    ai:{title:'AI',sub:'Open an AI chat here. Some sites block being embedded or need cookies.',items:[
+      {n:'HuggingChat',d:'Free open-source models',u:'https://huggingface.co/chat/'},
+      {n:'Open Source LLM Chat',d:'Qwen 2.5 demo on Hugging Face',u:'https://ai-researcher-2024-opensource.hf.space'}
+    ]},
+    movies:{title:'Movies',sub:'Coming soon.',items:[]},
+    tools:{title:'Tools',sub:'Pick a tool. Mad Soundboard is built in and works offline.',items:[
+      {n:'Mad Soundboard',d:'Built in, works offline',doc:SOUNDBOARD},
+      {n:'Myinstants',d:'Placeholder: online soundboard',u:'https://www.myinstants.com/'},
+      {n:'101 Soundboards',d:'Placeholder: online soundboards',u:'https://www.101soundboards.com/'}
+    ]}
   };
   var THEMES=[
     ['midnight','Midnight','#5eead4','#a78bfa'],
@@ -222,6 +267,12 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
   ];
   var NAMES={home:'Home',games:'Games',proxies:'Proxies',share:'Screen Sharing',notes:'Notes',movies:'Movies',tools:'Tools',ai:'AI',chat:'Chat',settings:'Settings'};
   function $(i){return document.getElementById(i)}
+  var chatColor=S.get('chatcolor','');
+  function okColor(c){
+    if(!/^#[0-9a-f]{6}$/i.test(c||''))return false;
+    var r=parseInt(c.substr(1,2),16),g=parseInt(c.substr(3,2),16),b=parseInt(c.substr(5,2),16);
+    return r*.3+g*.59+b*.11>=70;
+  }
 
   var stage=document.getElementById('stage'), homeBtn=document.getElementById('homeBtn');
   var custom=S.get('custom',{}), current='home', busy=false;
@@ -273,7 +324,8 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
     var p=document.getElementById(id), v=p.querySelector('.viewer');
     v.hidden=false; p.querySelector('.hint').hidden=false;
     v.querySelector('.vtitle').textContent=it.n;
-    v.querySelector('iframe').src=it.u;
+    var fr=v.querySelector('iframe');
+    if(it.doc){fr.removeAttribute('src');fr.srcdoc=it.doc}else{fr.removeAttribute('srcdoc');fr.src=it.u}
     v._it=it; S.set('last_'+id,it.n); render(id);
     v.scrollIntoView({behavior:'smooth',block:'start'});
   }
@@ -282,7 +334,7 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
     w.document.open();
     w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+document.title+'</title><style>html,body{margin:0;height:100%;background:#000}iframe{border:0;width:100%;height:100%}</style></head><body></body></html>');
     w.document.close();
-    var f=w.document.createElement('iframe'); f.allow='fullscreen; autoplay; gamepad; clipboard-write'; f.src=it.u;
+    var f=w.document.createElement('iframe'); f.allow='fullscreen; autoplay; gamepad; clipboard-write'; if(it.doc)f.srcdoc=it.doc;else f.src=it.u;
     w.document.body.appendChild(f);
   }
 
@@ -290,7 +342,7 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
   function show(id){
     document.getElementById(current).classList.remove('active');
     document.getElementById(id).classList.add('active');
-    homeBtn.classList.toggle('hidden',id==='home'); current=id; $('brand').textContent=NAMES[id];
+    homeBtn.classList.toggle('hidden',id==='home'); current=id; $('brand').textContent=NAMES[id]; if(id==='chat')gStart();
   }
   function go(id){
     if(busy||id===current)return; busy=true;
@@ -300,14 +352,16 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
     setTimeout(function(){
       from.classList.remove('leaving');
       document.getElementById(id).classList.add('active');
-      current=id; busy=false; S.set('page',id); $('brand').textContent=NAMES[id]; window.scrollTo({top:0});
+      current=id; busy=false; S.set('page',id); $('brand').textContent=NAMES[id]; if(id==='chat')gStart(); window.scrollTo({top:0});
     },180);
   }
   document.addEventListener('click',function(e){
     var g=e.target.closest('[data-go]'); if(g)return go(g.getAttribute('data-go'));
+    var tb=e.target.closest('[data-tab]');
+    if(tb){['gl','pv'].forEach(function(k){$('tab-'+k).hidden=(k!==tb.dataset.tab)});[].forEach.call(tb.parentNode.children,function(x){x.classList.toggle('sel',x===tb)});return}
     var b=e.target.closest('[data-act]'); if(!b)return;
     var v=b.closest('.viewer');
-    if(b.dataset.act==='close'){v.querySelector('iframe').src='about:blank';v.hidden=true;var h=v.parentNode.querySelector('.hint');if(h)h.hidden=true}
+    if(b.dataset.act==='close'){var fr=v.querySelector('iframe');fr.removeAttribute('srcdoc');fr.src='about:blank';v.hidden=true;var h=v.parentNode.querySelector('.hint');if(h)h.hidden=true}
     else if(v._it)fullscreen(v._it);
   });
 
@@ -333,16 +387,17 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
 
   document.getElementById('reset').onclick=function(){
     if(!confirm('Clear your theme, notes and added links?'))return;
-    S.clear(); custom={}; nb.value=''; setTheme('midnight');
+    S.clear(); custom={}; nb.value=''; chatColor=''; $('ccol').value='#eef1ff'; $('cprev').style.color=''; G.msgs=[]; G.seen={}; gRender(); setTheme('midnight');
     Object.keys(SECTIONS).forEach(render);
   };
 
   /* ---- Rooms: screen sharing + chat (WebRTC via PeerJS cloud) ---- */
   function roomHTML(p,screen,title,sub){
+    var head=title?'<h2>'+title+'</h2><p class="sub">'+sub+'</p>':'';
     var d=function(x){return ' id="'+p+x+'"'};
-    return '<h2>'+title+'</h2><p class="sub">'+sub+'</p><div class="panel glass">'+
+    return head+'<div class="panel glass">'+
       '<div class="row" style="margin-top:0">'+
-      '<input class="field"'+d('Name')+' maxlength="20" placeholder="Your name" aria-label="Your name" style="flex:none;width:140px">'+
+      '<input class="field nm"'+d('Name')+' maxlength="20" placeholder="Your name" aria-label="Your name" style="flex:none;width:140px">'+
       '<button class="btn"'+d('Mk')+'>Create code</button>'+
       '<input class="field"'+d('In')+' maxlength="5" placeholder="Enter code" aria-label="Room code" style="flex:none;width:130px;text-transform:uppercase">'+
       '<button class="btn"'+d('Jn')+'>Join</button>'+
@@ -379,9 +434,10 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
         E('Sh').hidden=!inRoom; E('Sh').textContent=stream?'Stop sharing':'Share my screen';
       }
     }
-    function say(f,t){
-      var l=E('Log'),q=document.createElement('p'),b=document.createElement('b');
-      b.textContent=f+': '; q.appendChild(b); q.appendChild(document.createTextNode(t));
+    function say(f,t,col){
+      var l=E('Log'),q=document.createElement('p'),b=document.createElement('b'),x=document.createElement('span');
+      b.textContent=f+': '; x.textContent=t; if(okColor(col))x.style.color=col;
+      q.appendChild(b); q.appendChild(x);
       l.appendChild(q); l.scrollTop=l.scrollHeight;
     }
     function bc(m,x){conns.forEach(function(c){if(c!==x&&c.open)c.send(m)})}
@@ -404,7 +460,7 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
       });
     }
     function onData(m,c){
-      if(m.t==='chat'){say(m.from,m.text);if(isHost)bc(m,c)}
+      if(m.t==='chat'){say(m.from,m.text,m.col);if(isHost)bc(m,c)}
       else if(m.t==='sys')say('System',m.text);
       else if(m.t==='share'){
         sharing=m.by; if(c)c.sharer=!!m.by; if(isHost)bc(m,c);
@@ -496,10 +552,10 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
     }
     function chat(){
       var i=E('ChatIn'),t=i.value.trim(); if(!t||!peer||!ready)return; i.value='';
-      var m={t:'chat',from:me(),text:t}; say(m.from,t); up(m);
+      var m={t:'chat',from:me(),text:t,col:chatColor}; say(m.from,t,chatColor); up(m);
     }
 
-    E('Name').value=S.get('name',''); E('Name').oninput=function(){S.set('name',this.value)};
+    E('Name').value=S.get('name','');
     E('Mk').onclick=create; E('Jn').onclick=join;
     E('Lv').onclick=function(){leave('You left.')};
     if(screen)E('Sh').onclick=share;
@@ -509,8 +565,77 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
     ui();
   }
   $('share').innerHTML=roomHTML('sh',true,'Screen Sharing','Create a code and give it to someone, or enter their code. Once you are both in, either of you can share a screen.');
-  $('chat').innerHTML=roomHTML('ch',false,'Chat','Create a code and give it to a friend, or enter their code to start chatting.');
+  $('chat').innerHTML='<h2>Chat</h2><p class="sub">Talk with everyone in the global chat, or make a private room with a code.</p>'+
+    '<div class="tabs"><button class="btn sel" data-tab="gl">Global chat</button><button class="btn" data-tab="pv">Private room</button></div>'+
+    '<div id="tab-gl"><div class="panel glass"><div class="row" style="margin-top:0"><input class="field nm" id="gName" maxlength="20" placeholder="Your name" aria-label="Your name" style="flex:none;width:160px"><span class="stat" id="gStat" style="margin:0">Open this tab to connect.</span></div>'+
+    '<div class="log tall" id="gLog" style="margin-top:14px"></div>'+
+    '<div class="row" style="margin-top:0"><input class="field" id="gIn" maxlength="300" placeholder="Message everyone..." aria-label="Message"><button class="btn" id="gSend">Send</button></div>'+
+    '<p class="stat">This chat is public: anyone using this site can read and post. Be kind. Messages are saved on this device, and the server keeps about 12 hours of history.</p></div></div>'+
+    '<div id="tab-pv" hidden>'+roomHTML('ch',false,'','')+'</div>';
   room('sh',true,'madroom-'); room('ch',false,'madchat-');
+
+  /* ---- Global chat (ntfy.sh public topic + saved history) ---- */
+  var GTOPIC='mad-global-chat-9xq4k2', G={es:null,msgs:S.get('gchat',[]),seen:{},timer:null,lastSend:0};
+  G.msgs.forEach(function(m){G.seen[m.id]=1});
+  function gName(){
+    var n=$('gName').value.trim().slice(0,20); if(n)return n;
+    var id=S.get('gid',0); if(!id){id=1000+Math.floor(Math.random()*9000);S.set('gid',id)}
+    return 'Guest'+id;
+  }
+  function gRender(){
+    var l=$('gLog'), low=l.scrollTop+l.clientHeight>=l.scrollHeight-40;
+    l.textContent='';
+    G.msgs.forEach(function(m){
+      var p=document.createElement('p'),t=document.createElement('small'),b=document.createElement('b'),x=document.createElement('span');
+      t.textContent=new Date(m.time*1000).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' ';
+      b.textContent=m.n+': '; x.textContent=m.t; if(okColor(m.c))x.style.color=m.c;
+      p.appendChild(t); p.appendChild(b); p.appendChild(x); l.appendChild(p);
+    });
+    if(low)l.scrollTop=l.scrollHeight;
+  }
+  function gAdd(m){
+    if(G.seen[m.id])return; G.seen[m.id]=1;
+    G.msgs.push(m); G.msgs.sort(function(a,b){return a.time-b.time});
+    if(G.msgs.length>300)G.msgs=G.msgs.slice(-300);
+    clearTimeout(G.timer); G.timer=setTimeout(function(){S.set('gchat',G.msgs);gRender()},60);
+  }
+  function gStart(){
+    if(G.es||!window.EventSource)return;
+    $('gStat').textContent='Connecting...';
+    var es=new EventSource('https://ntfy.sh/'+GTOPIC+'/sse?since=all'); G.es=es;
+    es.onopen=function(){$('gStat').textContent='Live'};
+    es.onerror=function(){$('gStat').textContent='Reconnecting...'};
+    es.onmessage=function(e){
+      var d,o; try{d=JSON.parse(e.data);o=JSON.parse(d.message)}catch(x){return}
+      if(d.event!=='message'||!o||typeof o.t!=='string'||typeof o.n!=='string')return;
+      gAdd({id:d.id,time:d.time,n:o.n.slice(0,20),t:o.t.slice(0,300),c:typeof o.c==='string'?o.c:''});
+    };
+  }
+  function gSend(){
+    var i=$('gIn'),t=i.value.trim(); if(!t)return;
+    if(Date.now()-G.lastSend<1500){$('gStat').textContent='Slow down a little...';return}
+    G.lastSend=Date.now(); i.value='';
+    fetch('https://ntfy.sh/'+GTOPIC,{method:'POST',body:JSON.stringify({n:gName(),t:t.slice(0,300),c:chatColor})})
+      .catch(function(){$('gStat').textContent='Could not send. Check your internet.'});
+  }
+  $('gName').value=S.get('name',''); gRender();
+  $('gSend').onclick=gSend;
+  $('gIn').onkeydown=function(e){if(e.key==='Enter')gSend()};
+  document.addEventListener('input',function(e){
+    if(!e.target.classList||!e.target.classList.contains('nm'))return;
+    S.set('name',e.target.value);
+    [].forEach.call(document.querySelectorAll('.nm'),function(x){if(x!==e.target)x.value=e.target.value});
+  });
+
+  /* ---- Chat text color setting ---- */
+  var cc=$('ccol'), cp=$('cprev');
+  function paintPrev(){cp.style.color=chatColor||'';cp.textContent='Sample message in your color'}
+  cc.value=chatColor||'#eef1ff'; paintPrev();
+  cc.oninput=function(){
+    if(!okColor(cc.value)){cp.style.color='';cp.textContent='Too dark to read on the chat background. Pick a lighter color.';return}
+    chatColor=cc.value; S.set('chatcolor',chatColor); paintPrev();
+  };
+  $('cres').onclick=function(){chatColor='';S.set('chatcolor','');cc.value='#eef1ff';paintPrev()};
 
   /* ---- Start up ---- */
   Object.keys(SECTIONS).forEach(build);
