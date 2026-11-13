@@ -46,8 +46,9 @@ svg.i{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.9;
 .lock button{width:100%;margin-top:14px;padding:14px;border:0;border-radius:14px;font-weight:600;background:linear-gradient(135deg,var(--a),var(--b));color:var(--on);transition:transform .15s,filter .2s}
 .lock button:hover{filter:brightness(1.1)}
 .lock button:active{transform:scale(.98)}
-.lock .err{height:1.2em;margin-top:14px;font-size:.85rem;color:#fda4af}
+.lock .err{min-height:1.2em;margin-top:14px;font-size:.85rem;color:#fda4af}
 .lock .show{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-size:.85rem;color:var(--muted);cursor:pointer}.lock .show input{width:auto;padding:0;letter-spacing:normal}.lock #user{margin-bottom:12px}
+.lock .tabs2{display:flex;gap:8px;margin-bottom:22px}.lock .tabs2 button{flex:1;margin:0;padding:10px;background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--edge);font-size:.85rem}.lock .tabs2 button.sel{background:linear-gradient(135deg,var(--a),var(--b));color:var(--on);border-color:transparent}
 .shake{animation:shake .4s}
 @keyframes shake{25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-5px)}}
 </style>
@@ -58,12 +59,13 @@ svg.i{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.9;
 <!-- ============ LOCK SCREEN ============ -->
 <main class="lock">
   <div class="glass" id="card">
-    <h1>Sign in</h1>
-    <p>Enter your username and password.</p>
+    <div class="tabs2"><button id="tIn" class="sel">Welcome back</button><button id="tUp">Create account</button></div>
+    <h1 id="lh">Welcome back</h1>
+    <p id="lp">Sign in to jump back in.</p>
     <input id="user" type="text" autocomplete="username" maxlength="20" placeholder="Username" autofocus aria-label="Username">
     <input id="code" type="password" autocomplete="current-password" placeholder="Password" aria-label="Password">
     <label class="show"><input type="checkbox" id="showpw"> Show password</label>
-    <button id="go">Sign in</button>
+    <button id="go">Let's go</button>
     <div class="err" id="err" role="alert"></div>
   </div>
 </main>
@@ -146,7 +148,7 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
 .ovf h2{font-size:clamp(1.5rem,5vw,2.4rem)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:101;padding:14px 22px;max-width:min(90vw,460px);text-align:center}
 .chatoff #share .panel,.chatoff #chat .panel{pointer-events:none;opacity:.45}
-.ctag{color:var(--a);font-size:.72rem;font-weight:700;margin-right:6px}
+.ctag{display:inline-block;background:linear-gradient(135deg,var(--a),var(--b));color:var(--on);font-size:.62rem;font-weight:700;letter-spacing:.08em;padding:2px 8px;border-radius:999px;margin-right:8px;vertical-align:middle}
 @media (max-width:600px){.top{top:8px;margin-top:8px;padding:8px 8px 8px 16px}main.stage{padding:24px 0 28px}.hero{padding:16px 0 24px}.tile{padding:20px 18px}.viewer iframe{height:60dvh;min-height:280px}.cards{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}.panel{padding:16px}.btn{padding:9px 14px}.code{font-size:1.7rem;letter-spacing:.2em}.log.tall{height:300px}.themes{grid-template-columns:1fr 1fr}}
 </style>
 
@@ -230,7 +232,6 @@ h2{margin:0}.m{color:#9aa3c7;font-size:.85rem;margin:0}
 </style>
 <div id="home" class="c"><h2>skrribl io <span class="m">(CUSTOM)</span></h2>
 <p class="m">Draw and guess with friends. One person creates a room code, everyone else joins with it.</p>
-<input class="f" id="nm" maxlength="16" placeholder="Your name">
 <button class="b" id="mk">Create room</button>
 <div class="row"><input class="f" id="jc" maxlength="5" placeholder="Room code" style="text-transform:uppercase"><button class="b" id="jn">Join</button></div>
 <p class="m" id="er" style="color:#fda4af"></p></div>
@@ -255,8 +256,7 @@ function newH(){return{players:{},order:[],round:1,rounds:3,time:80,turn:0,word:
 var H=newH();
 function show(id){['home','lobby','game'].forEach(function(x){$(x).hidden=x!==id})}
 function err(t){$('er').textContent=t}
-try{$('nm').value=parent.__K.user||''}catch(e){}
-function nm(){return $('nm').value.trim().slice(0,16)||'Player'}
+function nm(){try{return String(parent.__K.user||'Player').slice(0,16)}catch(e){return 'Player'}}
 function pn(id){for(var i=0;i<players.length;i++)if(players[i].id===id)return players[i].n;return 'Someone'}
 function parseWords(t){return t.split(String.fromCharCode(10)).join(',').split(',').map(function(w){return w.trim().toLowerCase()}).filter(function(w){return w&&w.length<=24})}
 function load(cb){if(window.Peer)return cb();var u=['https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js','https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js'],i=0;(function n(){var s=document.createElement('script');s.src=u[i];s.onload=cb;s.onerror=function(){if(++i<u.length)n();else err('Could not load the connection library.')};document.head.appendChild(s)})()}
@@ -357,6 +357,166 @@ $('jc').onkeydown=function(e){if(e.key==='Enter')join()};
 </script></template>
 
 
+<template id="wmdoc"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:#10131c;color:#fff;font:14px system-ui,sans-serif;display:grid;justify-items:center;padding:8px}
+.t{display:flex;justify-content:space-between;width:min(100%,360px);padding:4px 2px;font-weight:600}
+#c{width:min(100%,360px);height:auto;aspect-ratio:360/540;background:#1b2036;border-radius:14px;touch-action:none;display:block}
+#o{position:fixed;inset:0;background:#000b;display:grid;place-content:center;text-align:center;gap:12px}
+button{padding:10px 18px;border:0;border-radius:12px;background:#5eead4;color:#0a0e1c;font:700 14px system-ui;cursor:pointer}</style>
+<div class="t"><span>Score <b id="s">0</b></span><span>Next <b id="nx"></b></span><span>Best <b id="b">0</b></span></div>
+<canvas id="c" width="360" height="540"></canvas>
+<div id="o" hidden><h2>Game over</h2><p>Score: <b id="fs"></b></p><button id="r">Play again</button></div>
+<script>
+var $=function(i){return document.getElementById(i)},c=$('c'),x=c.getContext('2d'),W=360,H=540,LINE=95;
+var R=[13,18,23,29,36,44,53,63,74,86,100],E=['🍒','🍓','🍇','🍊','🍎','🍐','🍑','🍍','🥭','🍈','🍉'];
+var C=['#e11d48','#f43f5e','#8b5cf6','#fb923c','#ef4444','#a3e635','#fdba74','#facc15','#fbbf24','#86efac','#22c55e'];
+var balls,score,best=0,over,cur,nxt,cd,mx=W/2,ot=0;
+try{best=+localStorage.getItem('wmbest')||0}catch(e){}
+function rl(){return Math.random()*5|0}
+function ui(){$('s').textContent=score;$('b').textContent=best;$('nx').textContent=E[nxt]}
+function reset(){balls=[];score=0;over=false;cd=0;ot=0;cur=rl();nxt=rl();ui();$('o').hidden=true}
+function drop(){if(over||cd>0)return;balls.push({x:Math.max(R[cur],Math.min(W-R[cur],mx)),y:R[cur]+4,vx:0,vy:0,l:cur,r:R[cur],age:0,dead:false});cur=nxt;nxt=rl();cd=30;ui()}
+function end(){over=true;if(score>best){best=score;try{localStorage.setItem('wmbest',best)}catch(e){}}$('fs').textContent=score;ui();$('o').hidden=false}
+function step(){var news=[];
+ balls.forEach(function(b){b.age++;b.vy+=.4;b.x+=b.vx;b.y+=b.vy;b.vx*=.995;b.vy*=.995;
+  if(b.x<b.r){b.x=b.r;b.vx*=-.3}if(b.x>W-b.r){b.x=W-b.r;b.vx*=-.3}if(b.y>H-b.r){b.y=H-b.r;b.vy*=-.2;b.vx*=.98}});
+ for(var it=0;it<3;it++)for(var i=0;i<balls.length;i++)for(var j=i+1;j<balls.length;j++){
+  var a=balls[i],d2=balls[j];if(a.dead||d2.dead)continue;
+  var dx=d2.x-a.x,dy=d2.y-a.y,d=Math.sqrt(dx*dx+dy*dy),m=a.r+d2.r;
+  if(d<m&&d>.001){
+   if(a.l===d2.l&&a.l<10){a.dead=d2.dead=true;var l=a.l+1;score+=l*10+10;
+    news.push({x:(a.x+d2.x)/2,y:(a.y+d2.y)/2,vx:(a.vx+d2.vx)/2,vy:(a.vy+d2.vy)/2,l:l,r:R[l],age:0,dead:false});ui()}
+   else{var o=(m-d)/2,nx=dx/d,ny=dy/d;a.x-=nx*o;a.y-=ny*o;d2.x+=nx*o;d2.y+=ny*o;
+    var rv=(d2.vx-a.vx)*nx+(d2.vy-a.vy)*ny;if(rv<0){a.vx+=nx*rv*.5;a.vy+=ny*rv*.5;d2.vx-=nx*rv*.5;d2.vy-=ny*rv*.5}}}}
+ balls=balls.filter(function(b){return!b.dead}).concat(news);
+ var up=balls.some(function(b){return b.age>90&&b.y-b.r<LINE});ot=up?ot+1:0;if(ot>150)end();if(cd>0)cd--}
+function ball(px,py,l){x.fillStyle=C[l];x.beginPath();x.arc(px,py,R[l],0,7);x.fill();x.font=(R[l]*1.15)+'px serif';x.textAlign='center';x.textBaseline='middle';x.fillText(E[l],px,py+R[l]*.06)}
+function draw(){x.clearRect(0,0,W,H);x.strokeStyle='#ff5f6d88';x.setLineDash([6,6]);x.beginPath();x.moveTo(0,LINE);x.lineTo(W,LINE);x.stroke();x.setLineDash([]);
+ if(!over&&cd<=0){x.globalAlpha=.55;ball(Math.max(R[cur],Math.min(W-R[cur],mx)),32,cur);x.globalAlpha=1}
+ balls.forEach(function(b){ball(b.x,b.y,b.l)})}
+function setx(e){var r=c.getBoundingClientRect();mx=(e.clientX-r.left)/r.width*W}
+c.onpointermove=setx;c.onpointerdown=setx;c.onpointerup=function(e){setx(e);drop()};
+$('r').onclick=reset;
+function loop(){if(!over)step();draw();requestAnimationFrame(loop)}
+reset();loop();
+</script></template>
+<template id="gpdoc"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:#10131c;color:#fff;font:14px system-ui,sans-serif;padding:12px}
+button,input,select{font:inherit}
+.b{padding:10px 16px;border:1px solid #fff3;border-radius:12px;background:#ffffff18;color:#fff;cursor:pointer;font-weight:600}.b:hover{background:#ffffff30}
+.f{padding:10px 12px;border:1px solid #fff3;border-radius:12px;background:#ffffff10;color:#fff;width:100%}
+.c{max-width:440px;margin:4vh auto;display:grid;gap:10px}h2{margin:0}.m{color:#9aa3c7;font-size:.85rem;margin:0}
+.row{display:flex;gap:8px;flex-wrap:wrap}.p{padding:5px 8px;border-radius:8px;background:#ffffff0d}
+#dc{width:100%;aspect-ratio:4/3;background:#fff;border-radius:12px;touch-action:none;display:block}
+.sw{width:26px;height:26px;border-radius:50%;border:2px solid #fff6;cursor:pointer;padding:0}
+.it{padding:10px;border-radius:12px;background:#ffffff0d;margin-bottom:8px}.it img{width:100%;border-radius:8px;background:#fff;display:block;margin-top:6px}
+</style>
+<div id="home" class="c"><h2>Gartic Phone <span class="m">(CUSTOM)</span></h2>
+<p class="m">Write a sentence, draw what the last person wrote, describe what the last person drew, and watch it all go wrong. Needs 3 or more players.</p>
+<button class="b" id="mk">Create room</button>
+<div class="row"><input class="f" id="jc" maxlength="5" placeholder="Room code" style="text-transform:uppercase;flex:1"><button class="b" id="jn">Join</button></div>
+<p class="m" id="er" style="color:#fda4af"></p></div>
+<div id="lobby" class="c" hidden><h2>Lobby</h2><p>Room code: <b id="rc" style="letter-spacing:.2em;font-size:1.4rem;color:#5eead4"></b></p><div id="pl" style="display:grid;gap:4px"></div>
+<div id="hs" style="display:grid;gap:8px"><label>Writing time (seconds)<select class="f" id="wt"><option>30</option><option selected>45</option><option>60</option></select></label>
+<label>Drawing time (seconds)<select class="f" id="dt"><option>40</option><option selected>60</option><option>90</option></select></label>
+<button class="b" id="st">Start game</button></div>
+<p class="m" id="wm">Waiting for the host to start...</p><p class="m" id="lm" style="color:#fda4af"></p><button class="b" id="lv">Leave</button></div>
+<div id="play" class="c" hidden style="max-width:520px"><h2 id="ph"></h2><p id="pp"></p><div id="pv"></div>
+<input class="f" id="ti" maxlength="100" hidden>
+<div id="dw" hidden><canvas id="dc" width="320" height="240"></canvas><div class="row" style="margin-top:8px;align-items:center"><span id="cols" class="row"></span><input type="range" id="sz" min="2" max="20" value="4"><button class="b" id="cl">Clear</button></div></div>
+<div class="row"><button class="b" id="sm">Submit</button><button class="b" id="sp" hidden>Surprise me</button></div><p class="m" id="tm"></p></div>
+<div id="end" class="c" hidden style="max-width:560px"><h2>The reveal</h2><div id="cs" class="row"></div><div id="chn"></div><button class="b" id="lv2">Leave</button></div>
+<script>
+var $=function(i){return document.getElementById(i)};
+var P=null,hc=null,isH=false,conns={},me={id:'',name:'Player'},players=[],task=null,tmr=null;
+try{me.name=String(parent.__K.user||'Player').slice(0,16)}catch(e){}
+var IDEAS=['a cat running a bakery','a dinosaur stuck in traffic','pirates at the dentist','a robot learning to dance','grandma on a skateboard','a sleepy volcano','penguins on vacation','a haunted pizza','a wizard doing taxes','two ducks in a rocket','a shark learning to swim','the moon eating spaghetti'];
+function newH(){return{players:{},order:[],n:0,step:0,chains:[],subs:{},gone:{},wt:45,dt:60,tm:null,phase:'lobby'}}
+var H=newH();
+function show(id){['home','lobby','play','end'].forEach(function(x){$(x).hidden=x!==id})}
+function err(t){$('er').textContent=t}
+function load(cb){if(window.Peer)return cb();var u=['https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js','https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js'],i=0;(function n(){var s=document.createElement('script');s.src=u[i];s.onload=cb;s.onerror=function(){if(++i<u.length)n();else err('Could not load the connection library.')};document.head.appendChild(s)})()}
+function rc(){var A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',c='';for(var i=0;i<5;i++)c+=A.charAt(Math.random()*A.length|0);return c}
+function send(m){if(isH)hostRecv('host',m);else if(hc&&hc.open)hc.send(m)}
+function toAll(m){Object.keys(conns).forEach(function(k){if(conns[k].open)conns[k].send(m)});recv(m)}
+function toOne(id,m){if(id==='host')recv(m);else if(conns[id]&&conns[id].open)conns[id].send(m)}
+function pn(id){var p=H.players[id];return p?p.n:'Player'}
+
+/* ---- drawing ---- */
+var dc=$('dc'),dx=dc.getContext('2d'),col='#000000',down=false,lp=null;
+function wipe(){dx.fillStyle='#fff';dx.fillRect(0,0,320,240)}wipe();
+['#000000','#e11d48','#f97316','#eab308','#22c55e','#3b82f6','#8b5cf6','#ffffff'].forEach(function(c){var b=document.createElement('button');b.className='sw';b.style.background=c;b.onclick=function(){col=c};$('cols').appendChild(b)});
+function pt(e){var r=dc.getBoundingClientRect();return[(e.clientX-r.left)/r.width*320,(e.clientY-r.top)/r.height*240]}
+function ln(e){var q=pt(e);dx.strokeStyle=col;dx.lineWidth=+$('sz').value;dx.lineCap='round';dx.beginPath();dx.moveTo(lp[0],lp[1]);dx.lineTo(q[0],q[1]);dx.stroke();lp=q}
+dc.onpointerdown=function(e){down=true;lp=pt(e);dc.setPointerCapture(e.pointerId);ln(e)};
+dc.onpointermove=function(e){if(down)ln(e)};dc.onpointerup=dc.onpointercancel=function(){down=false};
+$('cl').onclick=wipe;
+
+/* ---- host ---- */
+function syncP(){toAll({t:'pl',l:Object.keys(H.players).map(pn)})}
+function start(){if(Object.keys(H.players).length<3){$('lm').textContent='You need at least 3 players.';return}
+ $('lm').textContent='';H.order=Object.keys(H.players);H.n=H.order.length;H.chains=H.order.map(function(){return[]});
+ H.wt=+$('wt').value;H.dt=+$('dt').value;H.step=0;H.gone={};beginStep()}
+function beginStep(){H.subs={};H.phase='step';var k=H.step,ty=k===0?'write':(k%2?'draw':'guess'),tm=ty==='draw'?H.dt:H.wt;
+ H.order.forEach(function(id,i){var ci=(i+k)%H.n,pv=k?H.chains[ci][k-1]:null;
+  if(H.gone[id])return;
+  toOne(id,{t:'task',k:k,ty:ty,prev:pv?pv.v:'',pt:pv?pv.ty:'',time:tm,n:H.n})});
+ H.order.forEach(function(id){if(H.gone[id])sub(id,{by:pn(id),ty:'t',v:'(player left)'})});
+ clearTimeout(H.tm);H.tm=setTimeout(force,tm*1000+10000)}
+function sub(id,it){if(H.phase!=='step'||H.subs[id])return;var i=H.order.indexOf(id);if(i<0)return;
+ H.chains[(i+H.step)%H.n][H.step]=it;H.subs[id]=1;var c=Object.keys(H.subs).length;toAll({t:'wait',c:c,n:H.n});if(c>=H.n)next()}
+function force(){H.order.forEach(function(id){sub(id,{by:pn(id),ty:'t',v:'(no answer)'})})}
+function next(){clearTimeout(H.tm);H.step++;if(H.step>=H.n){H.phase='end';toAll({t:'end',ch:H.chains});return}beginStep()}
+function left(id){if(!H.players[id])return;if(H.phase==='lobby'){delete H.players[id];delete conns[id];syncP();return}
+ H.gone[id]=1;delete conns[id];sub(id,{by:pn(id),ty:'t',v:'(player left)'})}
+function hostRecv(id,m){
+ if(m.t==='join'){if(H.phase!=='lobby'){toOne(id,{t:'full'});return}H.players[id]={n:String(m.n||'Player').slice(0,16)};syncP();return}
+ if(m.t==='sub'&&H.phase==='step'&&m.k===H.step&&H.players[id]){var wantI=H.step%2===1,v=String(m.v||'');
+  if(wantI){if(v.indexOf('data:image/jpeg;base64,')!==0||v.length>250000)return sub(id,{by:pn(id),ty:'t',v:'(no drawing)'});return sub(id,{by:pn(id),ty:'i',v:v})}
+  sub(id,{by:pn(id),ty:'t',v:v.slice(0,100)||'(blank)'})}}
+
+/* ---- client ---- */
+function recv(m){var t=m.t;
+ if(t==='pl'){players=m.l;var e=$('pl');e.textContent='';players.forEach(function(n){var d=document.createElement('div');d.className='p';d.textContent=n;e.appendChild(d)});show('lobby')}
+ else if(t==='task')doTask(m)
+ else if(t==='wait'){if(task&&task.done)$('tm').textContent=m.c+' of '+m.n+' players are done'}
+ else if(t==='end')reveal(m.ch)
+ else if(t==='full'){leave();err('That game already started.')}}
+function doTask(m){task=m;task.done=0;show('play');var pv=$('pv');pv.textContent='';
+ $('ph').textContent='Round '+(m.k+1)+' of '+m.n;$('ti').value='';$('ti').hidden=m.ty==='draw';$('dw').hidden=m.ty!=='draw';$('sp').hidden=m.ty!=='write';$('sm').hidden=false;
+ if(m.ty==='write')$('pp').textContent='Write a sentence for the next person to draw. Be creative!';
+ else if(m.ty==='draw'){$('pp').textContent='Draw this: '+m.prev;wipe()}
+ else{$('pp').textContent='What is this drawing? Describe it in one sentence.';if(m.pt==='i'&&m.prev.indexOf('data:image/jpeg;base64,')===0){var im=document.createElement('img');im.src=m.prev;im.style.cssText='width:100%;border-radius:12px;background:#fff';pv.appendChild(im)}else pv.textContent=m.prev}
+ var s=m.time;clearInterval(tmr);$('tm').textContent=s+'s left';tmr=setInterval(function(){s--;$('tm').textContent=s+'s left';if(s<=0)submit()},1000)}
+function submit(){if(!task||task.done)return;task.done=1;clearInterval(tmr);
+ var v=task.ty==='draw'?dc.toDataURL('image/jpeg',.5):$('ti').value.trim();send({t:'sub',k:task.k,v:v});
+ $('ti').hidden=true;$('dw').hidden=true;$('sm').hidden=true;$('sp').hidden=true;$('pp').textContent='Submitted! Waiting for everyone else...';$('pv').textContent='';$('tm').textContent=''}
+$('sm').onclick=submit;$('ti').onkeydown=function(e){if(e.key==='Enter')submit()};
+$('sp').onclick=function(){$('ti').value=IDEAS[Math.random()*IDEAS.length|0]};
+function reveal(ch){show('end');clearInterval(tmr);var cs=$('cs');cs.textContent='';
+ ch.forEach(function(c,i){var b=document.createElement('button');b.className='b';b.textContent=((c[0]&&c[0].by)||'Player')+"'s story";b.onclick=function(){showChain(c)};cs.appendChild(b)});showChain(ch[0]||[])}
+function showChain(c){var e=$('chn');e.textContent='';c.forEach(function(it,i){var d=document.createElement('div');d.className='it';var l=document.createElement('div');l.className='m';
+ l.textContent=(it.by||'Player')+(i===0?' wrote:':(i%2?' drew:':' guessed:'));d.appendChild(l);
+ if(it.ty==='i'&&String(it.v).indexOf('data:image/jpeg;base64,')===0){var im=document.createElement('img');im.src=it.v;d.appendChild(im)}else{var t=document.createElement('div');t.textContent=it.v;d.appendChild(t)}e.appendChild(d)})}
+
+/* ---- connect ---- */
+function create(){load(function(){var code=rc();isH=true;me.id='host';P=new Peer('madgartic-'+code);
+ P.on('open',function(){H.players.host={n:me.name};$('rc').textContent=code;$('hs').hidden=false;$('wm').hidden=true;syncP()});
+ P.on('connection',function(c){c.on('open',function(){conns[c.peer]=c});c.on('data',function(m){hostRecv(c.peer,m)});c.on('close',function(){left(c.peer)})});
+ P.on('error',function(e){if(e.type==='unavailable-id'){P.destroy();create()}else err('Connection error: '+e.type)})})}
+function join(){var c=$('jc').value.trim().toUpperCase();if(!c)return err('Type a room code first.');err('Joining...');
+ load(function(){P=new Peer();P.on('open',function(id){me.id=id;hc=P.connect('madgartic-'+c,{reliable:true});
+  var to=setTimeout(function(){err('No room found with that code.')},12000);
+  hc.on('open',function(){clearTimeout(to);err('');$('rc').textContent=c;$('hs').hidden=true;$('wm').hidden=false;hc.send({t:'join',n:me.name})});
+  hc.on('data',recv);hc.on('close',function(){leave();err('The host closed the room.')})});
+ P.on('error',function(e){err(e.type==='peer-unavailable'?'No room found with that code.':'Connection error: '+e.type)})})}
+function leave(){clearInterval(tmr);clearTimeout(H.tm);try{P.destroy()}catch(e){}P=null;hc=null;conns={};H=newH();isH=false;task=null;show('home')}
+$('mk').onclick=create;$('jn').onclick=join;$('lv').onclick=leave;$('lv2').onclick=leave;$('st').onclick=start;
+$('jc').onkeydown=function(e){if(e.key==='Enter')join()};
+</script></template>
 <script>
 (function(){
   /* ---- Save system (localStorage, with safe fallback) ---- */
@@ -389,10 +549,12 @@ var P={
 };
 Object.keys(P).forEach(function(k){var b=document.createElement('button');b.textContent=k;b.onclick=P[k];document.getElementById('g').appendChild(b)});
 <\/script>`;
-  var SKRIB=document.getElementById('skribdoc').innerHTML;
+  var SKRIB=document.getElementById('skribdoc').innerHTML,WMG=document.getElementById('wmdoc').innerHTML,GPH=document.getElementById('gpdoc').innerHTML;
   var SECTIONS={
     games:{title:'Games',sub:'Pick a game to play. Scroll down to switch. These are placeholders; a site that blocks embedding will show blank.',items:[
       {n:'skrribl io',tag:'CUSTOM',d:'Online drawing game. Make a room code and add your own words.',doc:SKRIB},
+      {n:'Watermelon Go',tag:'CUSTOM',d:'Drop fruit, merge matches, make a watermelon.',doc:WMG},
+      {n:'Gartic Phone',tag:'CUSTOM',d:'Online: write, draw, describe, reveal. Needs 3+ players.',doc:GPH},
       {n:'UBG Hyper',d:'Game hub',u:'https://ubghyper.github.io/'},
       {n:'2048',d:'Placeholder: sliding number puzzle',u:'https://gabrielecirulli.github.io/2048/'},
       {n:'Hextris',d:'Placeholder: hexagon puzzle',u:'https://hextris.io/'},
@@ -472,7 +634,7 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
       c.className='card glass'+(o.it.n===last?' last':''); c.tabIndex=0; c.setAttribute('role','button');
       c.innerHTML='<b></b><small></small>';
       c.children[0].textContent=o.it.n; c.children[1].textContent=o.it.d||o.it.u;
-      if(o.it.tag){var tg=document.createElement('span');tg.className='ctag';tg.textContent='('+o.it.tag+')';c.children[0].insertBefore(tg,c.children[0].firstChild)}
+      if(o.it.tag){var tg=document.createElement('span');tg.className='ctag';tg.textContent=o.it.tag;c.children[0].insertBefore(tg,c.children[0].firstChild)}
       c.onclick=function(){openItem(id,o.it)};
       c.onkeydown=function(e){if(e.key==='Enter')openItem(id,o.it)};
       if(o.ci!==undefined){
@@ -517,7 +679,7 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
   function show(id){
     document.getElementById(current).classList.remove('active');
     document.getElementById(id).classList.add('active');
-    homeBtn.classList.toggle('hidden',id==='home'); current=id; $('brand').textContent=NAMES[id]; if(id==='chat')gStart();
+    homeBtn.classList.toggle('hidden',id==='home'); current=id; $('brand').textContent=NAMES[id]; if(id==='chat'){gStart();cnt()}
   }
   function go(id){
     if(busy||id===current)return; busy=true;
@@ -527,7 +689,7 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
     setTimeout(function(){
       from.classList.remove('leaving');
       document.getElementById(id).classList.add('active');
-      current=id; busy=false; S.set('page',id); $('brand').textContent=NAMES[id]; if(id==='chat')gStart(); window.scrollTo({top:0});
+      current=id; busy=false; S.set('page',id); hb(); $('brand').textContent=NAMES[id]; if(id==='chat'){gStart();cnt()} window.scrollTo({top:0});
     },180);
   }
   document.addEventListener('click',function(e){
@@ -577,7 +739,7 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
     var d=function(x){return ' id="'+p+x+'"'};
     return head+'<div class="panel glass">'+
       '<div class="row" style="margin-top:0">'+
-      '<input class="field nm"'+d('Name')+' maxlength="20" placeholder="Your name" aria-label="Your name" style="flex:none;width:140px">'+
+      ''+
       '<button class="btn"'+d('Mk')+'>Create code</button>'+
       '<input class="field"'+d('In')+' maxlength="5" placeholder="Enter code" aria-label="Room code" style="flex:none;width:130px;text-transform:uppercase">'+
       '<button class="btn"'+d('Jn')+'>Join</button>'+
@@ -598,7 +760,7 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
     var ALPHA='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
     function msg(t){E('Msg').textContent=t||''}
-    function me(){return E('Name').value.trim().slice(0,20)||(isHost?'Host':'Guest')}
+    function me(){return UN||(isHost?'Host':'Guest')}
     function ui(){
       var inRoom=!!peer&&ready, c='', t;
       E('Mk').disabled=E('Jn').disabled=!!peer; E('Lv').hidden=!peer; E('Chat').hidden=!inRoom;
@@ -735,8 +897,7 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
       var m={t:'chat',from:me(),text:t,col:chatColor}; say(m.from,t,chatColor); up(m);
     }
 
-    E('Name').value=(S.get('name','')||UN);
-    E('Mk').onclick=create; E('Jn').onclick=join;
+        E('Mk').onclick=create; E('Jn').onclick=join;
     E('Lv').onclick=function(){leave('You left.')};
     if(screen)E('Sh').onclick=share;
     E('Send').onclick=chat;
@@ -748,7 +909,7 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
   $('share').innerHTML=roomHTML('sh',true,'Screen Sharing','Create a code and give it to someone, or enter their code. Once you are both in, either of you can share a screen.');
   $('chat').innerHTML='<h2>Chat</h2><p class="sub">Talk with everyone in the global chat, or make a private room with a code.</p>'+
     '<div class="tabs"><button class="btn sel" data-tab="gl">Global chat</button><button class="btn" data-tab="pv">Private room</button></div>'+
-    '<div id="tab-gl"><div class="panel glass"><div class="row" style="margin-top:0"><input class="field nm" id="gName" maxlength="20" placeholder="Your name" aria-label="Your name" style="flex:none;width:160px"><span class="stat" id="gStat" style="margin:0">Open this tab to connect.</span></div>'+
+    '<div id="tab-gl"><div class="panel glass"><div class="row" style="margin-top:0"><span class="stat" id="gStat" style="margin:0">Open this tab to connect.</span><span class="stat" id="gCnt" style="margin:0 0 0 auto"></span></div>'+
     '<div class="log tall" id="gLog" style="margin-top:14px"></div>'+
     '<div class="row" style="margin-top:0"><input class="field" id="gIn" maxlength="300" placeholder="Message everyone..." aria-label="Message"><button class="btn" id="gImg">Image</button><button class="btn" id="gSend">Send</button></div>'+
     '<p class="stat">This chat is public: anyone using this site can read and post. Be kind. Messages are saved on this device, and the server keeps about 12 hours of history.</p></div></div>'+
@@ -758,11 +919,7 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
   /* ---- Global chat (ntfy.sh public topic + saved history) ---- */
   var GTOPIC='mad-global-chat-9xq4k2', G={es:null,msgs:S.get('gchat',[]),seen:{},timer:null,lastSend:0};
   G.msgs.forEach(function(m){G.seen[m.id]=1});
-  function gName(){
-    var n=$('gName').value.trim().slice(0,20); if(n)return n;
-    var id=S.get('gid',0); if(!id){id=1000+Math.floor(Math.random()*9000);S.set('gid',id)}
-    return 'Guest'+id;
-  }
+  function gName(){return UN||'Guest'}
   function gRender(){
     var l=$('gLog'), low=l.scrollTop+l.clientHeight>=l.scrollHeight-40;
     l.textContent='';
@@ -799,7 +956,7 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
     fetch('https://ntfy.sh/'+GTOPIC,{method:'POST',body:JSON.stringify({n:gName(),t:t.slice(0,300),c:chatColor})})
       .catch(function(){$('gStat').textContent='Could not send. Check your internet.'});
   }
-  $('gName').value=(S.get('name','')||UN); gRender();
+  gRender();
   $('gSend').onclick=gSend;
   $('gImg').onclick=function(){pickImg(function(b){
     if(Date.now()-G.lastSend<1500){$('gStat').textContent='Slow down a little...';return}
@@ -840,7 +997,7 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
   if(CFG.ver)document.querySelector('.ver').textContent=CFG.ver;
 
   /* ---- Live control (owner commands) + presence ---- */
-  var Q=window.__K||{},SID=Math.random().toString(36).slice(2,10),T0=Date.now()/1000-10,dead=0,B=0,bt=null,ovl=document.createElement('div');
+  var Q=window.__K||{},SID=Math.random().toString(36).slice(2,10),T0=Date.now()/1000-10,dead=0,B=0,TO=0,bt=null,ovl=document.createElement('div');
   ovl.className='ovf';ovl.hidden=true;document.body.appendChild(ovl);
   function block(h,t){ovl.textContent='';var b=document.createElement('div'),a=document.createElement('h2'),c=document.createElement('p');a.textContent=h;c.textContent=t||'';c.style.cssText='color:var(--muted);margin-top:10px';b.appendChild(a);b.appendChild(c);ovl.appendChild(b);ovl.hidden=false}
   function toast(t){var d=document.createElement('div');d.className='toast glass';d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},8000)}
@@ -853,12 +1010,14 @@ Object.keys(P).forEach(function(k){var b=document.createElement('button');b.text
     var live=d.time>=T0,k=o.k,me=String(Q.user).toLowerCase();
     if(k==='down')block('Site is down temporarily',o.t||'Please check back soon.');
     else if(k==='up')ovl.hidden=true;
-    else if(k==='ban'||k==='unban'){if(String(o.u)===me){B=k==='ban';clearTimeout(bt);bt=setTimeout(function(){if(B)kicked('Your username is banned.')},700)}}
+    else if(k==='ban'||k==='unban'||k==='timeout'||k==='untimeout'){if(String(o.u)===me){if(k==='ban')B=1;else if(k==='unban')B=0;else if(k==='timeout')TO=+o.until||0;else TO=0;clearTimeout(bt);bt=setTimeout(function(){if(B)kicked('Your account is banned.');else if(TO*1000>Date.now())kicked('You are timed out for '+Math.ceil((TO*1000-Date.now())/60000)+' more minute(s).')},700)}}
     else if(k==='lock'||k==='unlock')document.body.classList.toggle('chatoff',k==='lock');
     else if(k==='banner'){bn.textContent=o.t||'';bn.hidden=!o.t}
     else if(live&&k==='kick'&&(o.id==='*'||o.id===SID))kicked('The owner removed you from the site.');
     else if(live&&k==='popup')toast(String(o.t||'').slice(0,200))};
   hb();setInterval(hb,45000);addEventListener('pagehide',function(){hb(1)});
+  function cnt(){var e=$('gCnt');if(!e||!Q.pres)return;fetch('https://ntfy.sh/'+Q.pres+'/json?poll=1&since=3m').then(function(r){return r.text()}).then(function(t){var m={},n=Date.now()/1000;t.split(String.fromCharCode(10)).forEach(function(l){try{var d=JSON.parse(l);if(d.event!=='message')return;var o=JSON.parse(d.message);if(o&&o.id)m[o.id]={t:o.t,p:o.p,s:d.time}}catch(x){}});var a=0,c=0;Object.keys(m).forEach(function(i){var v=m[i];if(v.t===1&&n-v.s<130){a++;if(v.p==='chat')c++}});e.textContent=a+' online \u00b7 '+c+' in chat'}).catch(function(){})}
+  setInterval(function(){if(current==='chat'&&!dead)cnt()},20000);
 })();
 </script>
 </template>
@@ -895,13 +1054,18 @@ textarea.f{border-radius:14px;min-height:110px;width:100%}
 <div class="r"><input class="f" id="bm" maxlength="200" placeholder="Live banner on the home page"><button class="b" id="bset">Set banner</button><button class="b" id="bclr">Clear banner</button></div>
 <div class="r"><button class="b" id="clk">Lock chat and screen sharing</button><button class="b" id="ulk">Unlock</button></div></div>
 
+<div class="box glass"><h3>All accounts <span id="acnt" style="font-size:.85rem;color:var(--muted)"></span></h3>
+<div class="r"><select class="f" id="tmin" style="flex:none;width:auto"><option value="1">1 minute</option><option value="5">5 minutes</option><option value="15">15 minutes</option><option value="60">1 hour</option><option value="360">6 hours</option><option value="1440">1 day</option></select><span class="note" style="margin:0">Length used by the Timeout buttons.</span></div>
+<div id="al"></div>
+<p>Everyone who signed up appears here (it fills in while this panel is open). Reset password sets a new one for them. Accounts are saved to the Export box below, so paste it into DEFAULT_CFG to make them permanent.</p></div>
+
 <div class="box glass"><h3>Banned usernames</h3>
 <div class="r"><input class="f" id="bi" placeholder="Username to ban"><button class="b" id="bbtn">Ban</button></div><div id="bl"></div></div>
 
 <div class="box glass"><h3>Site settings</h3>
 <div class="r"><input class="f" id="msg" placeholder="Announcement banner on home page"></div>
 <div class="r"><input class="f" id="ttl" placeholder="Tab title"><input class="f" id="ver" placeholder="Version text (e.g. 0.03v)"></div>
-<div class="r"><input class="f" id="uc" placeholder="User access code (blank = default)"><select class="f" id="th"></select></div>
+<div class="r"><select class="f" id="th"></select></div>
 <div class="r"><button class="b" id="save1">Save settings</button></div></div>
 
 <div class="box glass"><h3>Sections shown to users</h3><div class="r" id="secs"></div></div>
@@ -926,7 +1090,7 @@ textarea.f{border-radius:14px;min-height:110px;width:100%}
 var K='madowner_cfg',C=JSON.parse(JSON.stringify(window.__CFG||{})),$=function(i){return document.getElementById(i)};
 var SEC=['games','proxies','share','notes','movies','tools','ai','chat','settings'],TH=['midnight','ocean','sunset','forest','henry','rose','slate','rainbow'];
 function norm(){C.hide=C.hide||[];C.links=C.links||{};C.del=C.del||{}}
-function fill(){$('msg').value=C.msg||'';$('ttl').value=C.title||'';$('ver').value=C.ver||'';$('uc').value=C.ucode||'';$('th').value=C.theme||'midnight'}
+function fill(){$('msg').value=C.msg||'';$('ttl').value=C.title||'';$('ver').value=C.ver||'';$('th').value=C.theme||'midnight'}
 function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x)e.textContent=x;return e}
 function paint(){
  var s=$('secs');s.textContent='';
@@ -944,7 +1108,7 @@ function paint(){
 function save(m){try{localStorage.setItem(K,JSON.stringify(C))}catch(e){}$('st').textContent=m||'Saved. Reopen the user site to see it.';paint()}
 TH.forEach(function(t){var o=el('option','',t);o.value=t;$('th').appendChild(o)});
 norm();fill();paint();
-$('save1').onclick=function(){C.msg=$('msg').value.trim();C.title=$('ttl').value.trim();C.ver=$('ver').value.trim();C.ucode=$('uc').value.trim();C.theme=$('th').value;
+$('save1').onclick=function(){C.msg=$('msg').value.trim();C.title=$('ttl').value.trim();C.ver=$('ver').value.trim();C.theme=$('th').value;
  try{localStorage.setItem('mad_theme',JSON.stringify(C.theme))}catch(e){}document.documentElement.dataset.theme=C.theme;save()};
 $('addl').onclick=function(){var id=$('ls').value,n=$('ln').value.trim(),u=$('lu').value.trim();if(!n||!u)return;
  if(!/^https?:\/\//i.test(u))u='https://'+u;(C.links[id]=C.links[id]||[]).push({n:n,u:u,d:'Added by owner'});$('ln').value=$('lu').value='';save()};
@@ -958,18 +1122,18 @@ $('cp').onclick=function(){$('exp').select();try{navigator.clipboard.writeText($
 $('rst').onclick=function(){if(!confirm('Reset owner config?'))return;try{localStorage.removeItem(K)}catch(e){}C={};norm();fill();save('Reset.')};
 
 /* ---- live commands ---- */
-var Q=window.__K||{},U={},bans=[],isDown=0;
+var Q=window.__K||{},U={},bans=[],tmo={},isDown=0;
 function ctl(o){o.key=Q.key;return fetch('https://ntfy.sh/'+Q.ctl,{method:'POST',body:JSON.stringify(o)}).then(function(){$('st').textContent='Command sent.'}).catch(function(){$('st').textContent='Could not send. Check your internet.'})}
 function sse(t,since,fn){try{var es=new EventSource('https://ntfy.sh/'+t+'/sse?since='+since);es.onmessage=function(e){try{var d=JSON.parse(e.data);if(d.event==='message')fn(d,JSON.parse(d.message))}catch(x){}}}catch(x){}}
 function drawU(){var L=$('ul'),n=Date.now()/1000,ids=Object.keys(U).filter(function(i){return n-U[i].s<130});L.textContent='';$('ucnt').textContent=ids.length+' active';
  ids.forEach(function(i){var u=U[i],r=el('div','r'),k=el('button','b','Kick'),b=el('button','b','Ban');
   k.onclick=function(){ctl({k:'kick',id:i})};b.onclick=function(){ctl({k:'ban',u:String(u.u).toLowerCase()});ctl({k:'kick',id:i})};
-  r.appendChild(el('span','',u.u+' | '+u.d+' | on '+u.p+' | '+Math.round(n-u.s)+'s ago'));r.appendChild(k);r.appendChild(b);L.appendChild(r)})}
+  r.appendChild(el('span','',u.u+' | '+u.d+' | on '+u.p+' | '+Math.round(n-u.s)+'s ago'));var t2=el('button','b','Timeout');t2.onclick=function(){ctl({k:'timeout',u:String(u.u).toLowerCase(),until:Math.floor(Date.now()/1000)+(+$('tmin').value)*60});ctl({k:'kick',id:i})};r.appendChild(k);r.appendChild(t2);r.appendChild(b);L.appendChild(r)})}
 function drawS(){$('stt').textContent=isDown?'Site is DOWN':'Site is LIVE';$('stt').style.color=isDown?'#fda4af':'#86efac';var L=$('bl');L.textContent='';
  bans.forEach(function(u){var r=el('div','r'),b=el('button','b','Unban');b.onclick=function(){ctl({k:'unban',u:u})};r.appendChild(el('span','',u));r.appendChild(b);L.appendChild(r)})}
 sse(Q.pres,'4m',function(d,o){if(!o||!o.id)return;if(o.t===0)delete U[o.id];else U[o.id]={u:o.u,p:o.p,d:o.d,s:d.time};drawU()});
-sse(Q.ctl,'all',function(d,o){if(!o||o.key!==Q.key)return;if(o.k==='down')isDown=1;else if(o.k==='up')isDown=0;else if(o.k==='ban'&&bans.indexOf(o.u)<0)bans.push(o.u);else if(o.k==='unban')bans=bans.filter(function(x){return x!==o.u});drawS()});
-setInterval(drawU,5000);drawS();drawU();
+sse(Q.ctl,'all',function(d,o){if(!o||o.key!==Q.key)return;if(o.k==='down')isDown=1;else if(o.k==='up')isDown=0;else if(o.k==='ban'&&bans.indexOf(o.u)<0)bans.push(o.u);else if(o.k==='unban')bans=bans.filter(function(x){return x!==o.u});else if(o.k==='timeout')tmo[o.u]=+o.until||0;else if(o.k==='untimeout')delete tmo[o.u];drawS();drawA()});
+setInterval(function(){drawU();drawA()},5000);drawS();drawU();
 $('dn').onclick=function(){ctl({k:'down',t:$('dm').value.trim().slice(0,200)})};
 $('up').onclick=function(){ctl({k:'up'})};
 $('kall').onclick=function(){if(confirm('Kick everyone off the site?'))ctl({k:'kick',id:'*'})};
@@ -978,25 +1142,44 @@ $('bset').onclick=function(){ctl({k:'banner',t:$('bm').value.trim().slice(0,200)
 $('bclr').onclick=function(){ctl({k:'banner',t:''});$('bm').value=''};
 $('clk').onclick=function(){ctl({k:'lock'})};$('ulk').onclick=function(){ctl({k:'unlock'})};
 $('bbtn').onclick=function(){var u=$('bi').value.trim().toLowerCase();if(u){ctl({k:'ban',u:u});$('bi').value=''}};
+
+/* ---- accounts ---- */
+var R={};try{R=JSON.parse(localStorage.getItem('madowner_accts')||'{}')}catch(e){}
+(window.__CFG.accounts||[]).forEach(function(a){if(!R[a.u])R[a.u]={d:a.d,h:a.h}});
+function saveR(){try{localStorage.setItem('madowner_accts',JSON.stringify(R))}catch(e){}C.accounts=Object.keys(R).map(function(k){return{u:k,d:R[k].d,h:R[k].h}});try{localStorage.setItem(K,JSON.stringify(C))}catch(e){}$('exp').value=JSON.stringify(C);drawA()}
+function acc(o){o.key=Q.key;return fetch('https://ntfy.sh/'+Q.acc,{method:'POST',body:JSON.stringify(o)}).catch(function(){})}
+function drawA(){var L=$('al'),n=Date.now()/1000,ks=Object.keys(R).sort();L.textContent='';$('acnt').textContent=ks.length+' accounts';
+ ks.forEach(function(k){var a=R[k],on=false,bn=bans.indexOf(k)>=0;
+  Object.keys(U).forEach(function(i){if(String(U[i].u).toLowerCase()===k&&n-U[i].s<130)on=true});
+  var r=el('div','r'),tag=bn?' [BANNED]':(tmo[k]>n?' [timed out, '+Math.ceil((tmo[k]-n)/60)+' min left]':'');
+  r.appendChild(el('span','',a.d+(on?' (online now)':'')+tag));
+  var b1=el('button','b',bn?'Unban':'Ban');b1.onclick=function(){ctl({k:bn?'unban':'ban',u:k})};
+  var b2=el('button','b','Timeout');b2.onclick=function(){ctl({k:'timeout',u:k,until:Math.floor(Date.now()/1000)+(+$('tmin').value)*60})};
+  var b3=el('button','b','Clear timeout');b3.onclick=function(){ctl({k:'untimeout',u:k})};
+  var b4=el('button','b','Reset password');b4.onclick=function(){var p=prompt('New password for '+a.d+' (4+ characters):');if(!p||p.length<4)return;hashPw(k,p).then(function(h){R[k].h=h;saveR();acc({k:'reset',u:k,h:h});$('st').textContent='Password reset for '+a.d+'.'})};
+  r.appendChild(b1);r.appendChild(b2);r.appendChild(b3);r.appendChild(b4);L.appendChild(r)})}
+sse(Q.acc,'all',function(d,o){if(!o||o.key!==Q.key)return;var k=String(o.u||'').toLowerCase();if(o.k==='acct'&&!R[k])R[k]={d:String(o.d||k).slice(0,20),h:o.h};else if(o.k==='reset'&&R[k])R[k].h=o.h;else return;saveR()});
+saveR();
 })();
 </script>
 </template>
 
 <script>
 /* ================= SETTINGS ================= */
-var USER_CODE   = "Player1234";    // regular user / tester password
-var OWNER_CODE  = "Maddex2012";    // opens the Owner panel
-var OWNER_USER  = "";              // optional: require this exact username for the owner (blank = any username)
+var OWNER_USER  = "mad";           // owner login (not case sensitive)
+var OWNER_PASS  = "maddex2012";    // owner password (not case sensitive)
 var TAB_TITLE   = "Home";          // title shown on the about:blank tab
 var DEFAULT_CFG = {};              // paste the Owner panel's exported config here to apply it to everyone
 /* shared channels between the owner panel and the site (keep these private) */
-var CTL_TOPIC = "mad-ctl-7h3k9w2pq", PRES_TOPIC = "mad-pres-7h3k9w2pq", CTL_KEY = "mk_4f9a1c7e2b";
+var CTL_TOPIC = "mad-ctl-7h3k9w2pq", PRES_TOPIC = "mad-pres-7h3k9w2pq", ACC_TOPIC = "mad-acc-7h3k9w2pq", CTL_KEY = "mk_4f9a1c7e2b";
+var RESERVED = ['mad','owner','system','admin','host','guest'];
 
 /* ================= LOGIC ================= */
-var input = document.getElementById('code');
+var input  = document.getElementById('code');
 var userIn = document.getElementById('user');
-var err   = document.getElementById('err');
-var card  = document.getElementById('card');
+var err    = document.getElementById('err');
+var card   = document.getElementById('card');
+var tIn = document.getElementById('tIn'), tUp = document.getElementById('tUp'), mode = 'in';
 
 function savedTheme(){
   try{ return JSON.parse(localStorage.getItem('mad_theme')) || 'midnight'; }catch(e){ return 'midnight'; }
@@ -1007,22 +1190,67 @@ function getCfg(){
 }
 document.documentElement.dataset.theme = savedTheme();
 
+/* passwords are never stored in plain text: only a hash (not case sensitive) */
+function cyrb(s){
+  var h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+  for (var i = 0, c; i < s.length; i++){ c = s.charCodeAt(i); h1 = Math.imul(h1 ^ c, 2654435761); h2 = Math.imul(h2 ^ c, 1597334677); }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return 'c' + (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
+}
+function hashPw(u, p){
+  var s = String(u).toLowerCase() + ':' + String(p).toLowerCase() + ':mad1';
+  try{
+    if (window.crypto && crypto.subtle && window.TextEncoder)
+      return crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)).then(function(b){
+        return Array.prototype.map.call(new Uint8Array(b), function(x){ return ('0' + x.toString(16)).slice(-2); }).join('');
+      });
+  }catch(e){}
+  return Promise.resolve(cyrb(s));
+}
+
 function buildSite(id, user){
   var cfg = getCfg();
-  var K = {ctl:CTL_TOPIC, pres:PRES_TOPIC, key:CTL_KEY, user:user};
-  var inj = 'window.__CFG=' + JSON.stringify(cfg) + ';window.__K=' + JSON.stringify(K) + ';';
+  var K = {ctl:CTL_TOPIC, pres:PRES_TOPIC, acc:ACC_TOPIC, key:CTL_KEY, user:user};
+  var esc = function(t){ return t.replace(/</g, '\\u003c'); };
+  var inj = 'window.__CFG=' + esc(JSON.stringify(cfg)) + ';window.__K=' + esc(JSON.stringify(K)) + ';' + cyrb.toString() + ';' + hashPw.toString() + ';';
   return '<!DOCTYPE html><html lang="en" data-theme="' + savedTheme() + '"><head><meta charset="UTF-8">' +
     '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">' +
     '<title>' + (id === 'owner' ? 'Owner' : (cfg.title || TAB_TITLE)) + '</title><style>' +
     document.getElementById('base').textContent +
-    '</style></head><body><script>' + inj.replace(/</g, '\\u003c') + '<\/script>' +
+    '</style></head><body><script>' + inj + '<\/script>' +
     document.getElementById(id).innerHTML +
     '</body></html>';
 }
 
-/* read the owner's saved commands (site down / bans) */
+function localAcc(){ try{ return JSON.parse(localStorage.getItem('madacc')) || {}; }catch(e){ return {}; } }
+
+/* all known accounts: this device, the owner's exported list, and the shared sign-up channel */
+function getAccts(cb){
+  var m = {}, L = localAcc(), done = false;
+  Object.keys(L).forEach(function(k){ m[k] = L[k]; });
+  (getCfg().accounts || []).forEach(function(a){ m[a.u] = {d:a.d, h:a.h}; });
+  function fin(){ if(!done){ done = true; cb(m); } }
+  setTimeout(fin, 5000);
+  fetch('https://ntfy.sh/' + ACC_TOPIC + '/json?poll=1&since=all')
+    .then(function(r){ return r.text(); })
+    .then(function(t){
+      t.split('\n').forEach(function(l){
+        try{
+          var d = JSON.parse(l), o = JSON.parse(d.message);
+          if (d.event !== 'message' || !o || o.key !== CTL_KEY) return;
+          var k = String(o.u || '').toLowerCase();
+          if (o.k === 'acct' && !m[k]) m[k] = {d:String(o.d || k).slice(0, 20), h:o.h};
+          else if (o.k === 'reset' && m[k]) m[k].h = o.h;
+        }catch(e){}
+      });
+      fin();
+    }).catch(fin);
+}
+
+/* owner commands saved on the channel: site down, bans, timeouts */
 function getState(cb){
-  var st = {down:0, msg:'', bans:[]}, done = false;
+  var st = {down:0, msg:'', bans:[], to:{}}, done = false;
   function fin(){ if(!done){ done = true; cb(st); } }
   setTimeout(fin, 5000);
   fetch('https://ntfy.sh/' + CTL_TOPIC + '/json?poll=1&since=all')
@@ -1036,44 +1264,86 @@ function getState(cb){
           else if (o.k === 'up') st.down = 0;
           else if (o.k === 'ban' && st.bans.indexOf(o.u) < 0) st.bans.push(o.u);
           else if (o.k === 'unban') st.bans = st.bans.filter(function(x){ return x !== o.u; });
+          else if (o.k === 'timeout') st.to[o.u] = +o.until || 0;
+          else if (o.k === 'untimeout') delete st.to[o.u];
         }catch(e){}
       });
       fin();
     }).catch(fin);
 }
 
+function msg(t, ok){ err.textContent = t; err.style.color = ok ? '#86efac' : ''; }
 function bad(m){
-  err.textContent = m;
+  msg(m);
   card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
   input.value = ''; input.focus();
 }
 
-function unlock(){
-  var u = userIn.value.trim().slice(0, 20), v = input.value, id = null;
-  if (u.length < 2){ err.textContent = 'Enter a username (2 to 20 characters).'; userIn.focus(); return; }
-  if (v === OWNER_CODE && (!OWNER_USER || u.toLowerCase() === OWNER_USER.toLowerCase())) id = 'owner';
-  else if (v === (getCfg().ucode || USER_CODE)) id = 'app';
-  if (!id) return bad('Wrong username or password. Try again.');
+function setMode(m){
+  mode = m;
+  tIn.classList.toggle('sel', m === 'in'); tUp.classList.toggle('sel', m === 'up');
+  document.getElementById('lh').textContent = m === 'in' ? 'Welcome back' : 'Create your account';
+  document.getElementById('lp').textContent = m === 'in' ? 'Sign in to jump back in.' : "Pick a username and password. Please don't reuse a password from anywhere else.";
+  userIn.placeholder = m === 'in' ? 'Username' : 'Username (recommended real name)';
+  input.autocomplete = m === 'in' ? 'current-password' : 'new-password';
+  document.getElementById('go').textContent = m === 'in' ? "Let's go" : 'Done';
+  msg('');
+}
 
-  var w = window.open('about:blank', '_blank');
-  function enter(){
-    var html = buildSite(id, u);
-    if (w){ w.document.open(); w.document.write(html); w.document.close(); }
-    else { document.open(); document.write(html); document.close(); }
-    input.value = ''; err.textContent = '';
-  }
-  if (id === 'owner') return enter();
-  err.textContent = 'Checking...';
-  getState(function(st){
-    if (st.down){ if (w) w.close(); err.textContent = 'Site is down temporarily.' + (st.msg ? ' ' + st.msg : ''); return; }
-    if (st.bans.indexOf(u.toLowerCase()) >= 0){ if (w) w.close(); err.textContent = 'This username is banned.'; return; }
-    enter();
+function enter(role, name, w){
+  var html = buildSite(role, name);
+  if (w){ w.document.open(); w.document.write(html); w.document.close(); }
+  else { document.open(); document.write(html); document.close(); }
+  input.value = ''; msg('');
+}
+
+function signUp(){
+  var u = userIn.value.trim(), p = input.value, k = u.toLowerCase();
+  if (!/^[A-Za-z0-9 ._-]{2,20}$/.test(u)) return msg('Username: 2 to 20 letters, numbers, spaces, . _ or -');
+  if (p.length < 4) return msg('Password needs at least 4 characters.');
+  if (k === OWNER_USER || RESERVED.indexOf(k) >= 0) return msg('That username is reserved. Pick another one.');
+  msg('Creating your account...');
+  getAccts(function(m){
+    if (m[k]) return msg('That username is taken. Try another one.');
+    hashPw(k, p).then(function(h){
+      var L = localAcc(); L[k] = {d:u, h:h};
+      try{ localStorage.setItem('madacc', JSON.stringify(L)); }catch(e){}
+      try{ fetch('https://ntfy.sh/' + ACC_TOPIC, {method:'POST', body:JSON.stringify({key:CTL_KEY, k:'acct', u:k, d:u, h:h})}).catch(function(){}); }catch(e){}
+      setMode('in'); userIn.value = u; input.value = ''; input.focus();
+      msg('Account created! Welcome aboard, ' + u + '. Sign in to get started.', true);
+    });
   });
 }
 
+function signIn(){
+  var u = userIn.value.trim().slice(0, 20), p = input.value, k = u.toLowerCase();
+  if (u.length < 2 || !p) return msg('Enter your username and password.');
+  var w = window.open('about:blank', '_blank');
+  function fail(m){ if (w) w.close(); bad(m); }
+  if (k === OWNER_USER && p.toLowerCase() === OWNER_PASS) return enter('owner', u, w);
+  msg('Checking...');
+  getAccts(function(m){
+    var a = m[k];
+    if (!a) return fail('Wrong username or password.');
+    hashPw(k, p).then(function(h){
+      if (h !== a.h) return fail('Wrong username or password.');
+      getState(function(st){
+        if (st.down){ if (w) w.close(); return msg('Site is down temporarily.' + (st.msg ? ' ' + st.msg : '')); }
+        if (st.bans.indexOf(k) >= 0){ if (w) w.close(); return msg('This account is banned.'); }
+        var left = (st.to[k] || 0) * 1000 - Date.now();
+        if (left > 0){ if (w) w.close(); return msg('You are timed out for ' + Math.ceil(left / 60000) + ' more minute(s).'); }
+        enter('app', a.d, w);
+      });
+    });
+  });
+}
+
+function submitForm(){ if (mode === 'up') signUp(); else signIn(); }
+tIn.addEventListener('click', function(){ setMode('in'); });
+tUp.addEventListener('click', function(){ setMode('up'); });
 document.getElementById('showpw').addEventListener('change', function(){ input.type = this.checked ? 'text' : 'password'; });
-document.getElementById('go').addEventListener('click', unlock);
-input.addEventListener('keydown', function(e){ if (e.key === 'Enter') unlock(); });
+document.getElementById('go').addEventListener('click', submitForm);
+input.addEventListener('keydown', function(e){ if (e.key === 'Enter') submitForm(); });
 userIn.addEventListener('keydown', function(e){ if (e.key === 'Enter') input.focus(); });
 </script>
 </body>
