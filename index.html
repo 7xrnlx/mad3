@@ -254,7 +254,7 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
   </section>
 </main>
 
-<footer class="foot">mad &copy;<div class="ver">0.06v</div></footer>
+<footer class="foot">mad &copy;<div class="ver">0.07v</div></footer>
 <template id="skribdoc"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 *{box-sizing:border-box}[hidden]{display:none!important}
@@ -901,14 +901,14 @@ small{color:#9aa3c7}
 <div class="ov" id="home"><div class="logo">CBrowser</div><p class="m">Search the web or open a link. Pages are fetched for you and shown here without scripts, so simple sites work best.</p><div class="tiles" id="tl"></div></div>
 <div class="ov" id="msg" hidden><div class="logo" style="font-size:1.6rem" id="mt">Could not load that page</div><p class="m" id="mb"></p><div class="row"><button class="pb on" id="rt">Try again</button><button class="pb" id="od">Open directly</button><button class="pb" id="mh">Home</button></div></div>
 <div class="ov" id="set" hidden><div class="st"><b>Settings</b>
-<small>Your own relay (optional, most reliable). Deploy the free CBrowser worker, then paste its link here, like https://cbrowser.yourname.workers.dev/?url=</small>
+<small>Relay override (optional). CBrowser already uses its built-in relay first. Paste a different relay link here to use that one instead, like https://name.workers.dev/?url=</small>
 <input id="rly" placeholder="https://.../?url=" autocomplete="off"><div class="row"><button class="pb on" id="sv">Save</button><button class="pb" id="cr">Clear</button><button class="pb" id="sc">Close</button></div>
 <small>Public relays are used when this is empty. They can be busy or blocked, and the site you open can see the relay, not you. Never sign in or type passwords through a public relay.</small></div></div>
 </div>
 <script>
 var $=function(i){return document.getElementById(i)};
 var SEARCH='https://html.duckduckgo.com/html/?q=';
-var RELAYS=['https://api.allorigins.win/raw?url=','https://api.codetabs.com/v1/proxy?quest=','https://corsproxy.io/?url='];
+var RELAYS=['https://wandering-cloud-9fe5.alex6bobby.workers.dev/?url=','https://api.allorigins.win/raw?url=','https://api.codetabs.com/v1/proxy?quest=','https://corsproxy.io/?url='];
 var QUICK=[['DuckDuckGo','https://html.duckduckgo.com/html/'],['Wikipedia','https://en.m.wikipedia.org/wiki/Main_Page'],['Hacker News','https://news.ycombinator.com/'],['NPR Text','https://text.npr.org/'],['CNN Lite','https://lite.cnn.com/'],['Example','https://example.com/']];
 var fr=$('fr'),hist=[],hi=-1,cur='',tok=0,ldT=null;
 function ls(k,v){try{if(v===undefined)return localStorage.getItem(k)||'';if(v)localStorage.setItem(k,v);else localStorage.removeItem(k)}catch(e){return ''}}
