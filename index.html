@@ -111,7 +111,7 @@ svg.i{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.9;
     <label class="show"><input type="checkbox" id="showpw"> Show password</label>
     <button id="go">Let's go</button>
     <div class="err" id="err" role="alert"></div>
-    <div class="lockfoot">mad &middot; <span id="lver">0.12v</span></div>
+    <div class="lockfoot">mad &middot; <span id="lver">0.13v</span></div>
   </div>
 </main>
 
@@ -242,6 +242,7 @@ main.stage{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
 .ovf h2{font-size:clamp(1.5rem,5vw,2.4rem)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:101;padding:14px 22px;max-width:min(90vw,460px);text-align:center}
 .chatoff #share .panel,.chatoff #chat .panel{pointer-events:none;opacity:.45}.trl{position:fixed;inset:0;z-index:150;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(0,0,0,.9);text-align:center;padding:16px;cursor:pointer}.trl img{max-width:94vw;max-height:80vh;border-radius:12px;object-fit:contain}.trl h2{font-size:clamp(1.4rem,5vw,2.4rem)}
+.ctag.broken{background:linear-gradient(135deg,#fb7185,#e11d48);color:#fff}
 .ctag{display:inline-block;background:linear-gradient(135deg,var(--a),var(--b));color:var(--on);font-size:.62rem;font-weight:700;letter-spacing:.08em;padding:2px 8px;border-radius:999px;margin-right:8px;vertical-align:middle}
 @media (max-width:600px){.top{top:8px;margin-top:8px;padding:8px 8px 8px 16px}main.stage{padding:24px 0 28px}.hero{padding:16px 0 24px}.tile{padding:20px 18px}.viewer iframe{height:60dvh;min-height:280px}.cards{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}.panel{padding:16px}.btn{padding:9px 14px}.code{font-size:1.7rem;letter-spacing:.2em}.log.tall{height:300px}.themes{grid-template-columns:1fr 1fr}}
 </style>
@@ -322,7 +323,7 @@ main.stage{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
   </section>
 </main>
 
-<footer class="foot">mad &copy;<div class="ver">0.12v</div></footer>
+<footer class="foot">mad &copy;<div class="ver">0.13v</div></footer>
 <template id="skribdoc"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 *{box-sizing:border-box}[hidden]{display:none!important}
@@ -1238,13 +1239,12 @@ $('go').onclick=go;$('u').onkeydown=function(e){if(e.key==='Enter')go()};
       {n:'UGS Files',d:'Game files',u:'https://billybong50.github.io/mythings/'}
     ]},
     proxies:{title:'Proxies',sub:'Open a proxy here. Many proxies block being embedded.',items:[
-      {n:'CBrowser',tag:'CUSTOM',d:'Built-in browser with tabs, themes and JavaScript.',doc:CBR},
+      {n:'CBrowser',tag:'BROKEN',d:'Built-in browser with tabs, themes and JavaScript.',doc:CBR},
       {n:'LuminalOS',d:'Proxy desktop',u:'https://bull.ultradec.com/'}
     ]},
     ai:{title:'AI',sub:'No AI sites right now. Use Add link to put your own here.',items:[]},
     movies:{title:'Movies',sub:'Pick a site to watch on. Some sites block being embedded.',items:[
-      {n:'Pyrite \u2605',d:'Movies and shows',u:'https://galaxy.nwmteducationalcoop.org/pyrite/'},
-      {n:'Movy',d:'Movies and shows',u:'https://www.movy.sx/'}
+      {n:'Pyrite \u2605',d:'Movies and shows',u:'https://galaxy.nwmteducationalcoop.org/pyrite/'}
     ]},
     tools:{title:'Tools',sub:'Pick a tool. Music lets you search songs and keeps playing while you browse.',items:[
       {n:'Music \u2605',tag:'CUSTOM',d:'Search any song and play it. Spotify too.',doc:MUSIC},
@@ -1301,7 +1301,7 @@ $('go').onclick=go;$('u').onkeydown=function(e){if(e.key==='Enter')go()};
       c.className='card glass'+(o.it.n===last?' last':''); c.tabIndex=0; c.setAttribute('role','button');
       c.innerHTML='<b></b><small></small>';
       c.children[0].textContent=o.it.n; c.children[1].textContent=o.it.d||o.it.u;
-      if(o.it.tag){var tg=document.createElement('span');tg.className='ctag';tg.textContent=o.it.tag;c.children[0].insertBefore(tg,c.children[0].firstChild)}
+      if(o.it.tag){var tg=document.createElement('span');tg.className='ctag'+(o.it.tag==='BROKEN'?' broken':'');tg.textContent=o.it.tag;c.children[0].insertBefore(tg,c.children[0].firstChild)}
       c.onclick=function(){openItem(id,o.it)};
       c.onkeydown=function(e){if(e.key==='Enter')openItem(id,o.it)};
       if(o.ci!==undefined){
@@ -1833,7 +1833,10 @@ $('go').onclick=go;$('u').onkeydown=function(e){if(e.key==='Enter')go()};
   function toast(t){var d=document.createElement('div');d.className='toast glass';d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},8000)}
   var dev=/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'Mobile':'Desktop';
   function hb(bye){if(dead&&!bye)return;try{fetch('https://ntfy.sh/'+Q.pres,{method:'POST',keepalive:true,body:JSON.stringify({id:SID,u:Q.user,p:current,d:dev+' '+innerWidth+'x'+innerHeight,t:bye?0:1})}).catch(function(){})}catch(e){}}
+  var TS=Date.now()/1000;
+  function tombCheck(){if(dead)return;fetch('https://wandering-cloud-9fe5.alex6bobby.workers.dev/tomb').then(function(r){return r.json()}).then(function(j){var t=(j&&j.t)||{},k=String(Q.user||'').toLowerCase();if(k&&t[k]&&t[k]>TS-5){try{var la=JSON.parse(localStorage.getItem('madacc'))||{},tb=JSON.parse(localStorage.getItem('madtomb'))||{};delete la[k];tb[k]=Math.max(tb[k]||0,t[k]);localStorage.setItem('madacc',JSON.stringify(la));localStorage.setItem('madtomb',JSON.stringify(tb))}catch(e){}kicked('Your account was removed.')}}).catch(function(){})}
   function kicked(why){dead=1;hb(1);try{cs.close()}catch(e){}try{if(G.es)G.es.close()}catch(e){}block('You were removed',why)}
+  setTimeout(tombCheck,4000);setInterval(tombCheck,120000);
   var cs=new EventSource('https://ntfy.sh/'+Q.ctl+'/sse?since=all');
   cs.onmessage=function(e){var d,o;try{d=JSON.parse(e.data);o=JSON.parse(d.message)}catch(x){return}
     if(d.event!=='message'||!o||o.key!==Q.key||dead)return;
@@ -1925,7 +1928,7 @@ textarea.f{border-radius:14px;min-height:110px;width:100%}
 <div class="r"><input class="f" id="bm" maxlength="200" placeholder="Live banner on the home page"><button class="b" id="bset">Set banner</button><button class="b" id="bclr">Clear banner</button></div>
 <div class="r"><button class="b" id="clk">Lock chat and screen sharing</button><button class="b" id="ulk">Unlock</button></div></div>
 
-<div class="box glass"><h3>All accounts <span id="acnt" style="font-size:.85rem;color:var(--muted)"></span></h3>
+<div class="box glass"><h3>All accounts <span id="acnt" style="font-size:.85rem;color:var(--muted)"></span></h3><p id="tstat" style="font-size:.8rem;margin:0 0 10px;color:var(--muted)">Checking the permanent deletion store...</p>
 <div class="r"><select class="f" id="tmin" style="flex:none;width:auto"><option value="1">1 minute</option><option value="5">5 minutes</option><option value="15">15 minutes</option><option value="60">1 hour</option><option value="360">6 hours</option><option value="1440">1 day</option></select><span class="note" style="margin:0">Length used by the Timeout buttons.</span></div>
 <div id="al"></div>
 <p>Everyone who signed up appears here (it fills in while this panel is open). Reset password sets a new one for them. Accounts are saved to the Export box below, so paste it into DEFAULT_CFG to make them permanent.</p></div>
@@ -2050,6 +2053,10 @@ $('tclr').onclick=function(){tsend({k:'trollclr'})};
 var R={},AT={};C.deleted=C.deleted||{};try{R=JSON.parse(localStorage.getItem('madowner_accts')||'{}')}catch(e){}
 (window.__CFG.accounts||[]).forEach(function(a){if(!R[a.u])R[a.u]={d:a.d,h:a.h}});
 function saveR(){try{localStorage.setItem('madowner_accts',JSON.stringify(R))}catch(e){}C.accounts=Object.keys(R).map(function(k){return{u:k,d:R[k].d,h:R[k].h}});try{localStorage.setItem(K,JSON.stringify(C))}catch(e){}$('exp').value=JSON.stringify(C);drawA()}
+var TURL='https://wandering-cloud-9fe5.alex6bobby.workers.dev/tomb';
+function tshow(j){var e=$('tstat');if(!e)return;if(j&&j.kv){e.textContent='Permanent deletion store: connected. Deleted accounts stay deleted.';e.style.color='#86efac'}else{e.textContent='Permanent deletion store: NOT connected. Deleted accounts can only be blocked for about 12 hours. Finish the one-time setup in cbrowser-worker.js to make deletions permanent.';e.style.color='#fda4af'}}
+function tpush(o){o.key=Q.key;return fetch(TURL,{method:'POST',body:JSON.stringify(o)}).then(function(r){return r.json()}).then(tshow).catch(function(){tshow(null)})}
+function tsync(){fetch(TURL).then(function(r){return r.json()}).then(function(j){tshow(j);var t=(j&&j.t)||{},ch=false;Object.keys(t).forEach(function(k){if((C.deleted[k]||0)<t[k]){C.deleted[k]=t[k];ch=true}});if(ch)saveR();if(Object.keys(C.deleted).length)tpush({all:C.deleted})}).catch(function(){tshow(null)})}
 function acc(o){o.key=Q.key;return fetch('https://ntfy.sh/'+Q.acc,{method:'POST',body:JSON.stringify(o)}).catch(function(){})}
 function drawA(){var L=$('al'),n=Date.now()/1000,ks=Object.keys(R).sort();L.textContent='';$('acnt').textContent=ks.length+' accounts';
  ks.forEach(function(k){var a=R[k],on=false,bn=bans.indexOf(k)>=0;
@@ -2061,11 +2068,11 @@ function drawA(){var L=$('al'),n=Date.now()/1000,ks=Object.keys(R).sort();L.text
   var b3=el('button','b','Clear timeout');b3.onclick=function(){ctl({k:'untimeout',u:k})};
   var b4=el('button','b','Reset password');b4.onclick=function(){var p=prompt('New password for '+a.d+' (4+ characters):');if(!p||p.length<4)return;hashPw(k,p).then(function(h){R[k].h=h;saveR();acc({k:'reset',u:k,h:h});$('st').textContent='Password reset for '+a.d+'.'})};
   var b5=el('button','b','Delete chats');b5.onclick=function(){if(confirm('Delete every global chat message from '+a.d+' for everyone?'))ctl({k:'delchat',u:k})};
-  var b6=el('button','b','Delete account');b6.onclick=function(){if(!confirm('Permanently delete the account '+a.d+'? They are removed from the site right away and cannot sign in again unless they create the account again.'))return;var tn=Date.now()/1000;delete R[k];C.deleted[k]=tn;saveR();acc({k:'del',u:k,t:tn});ctl({k:'delacct',u:k});$('st').textContent='Deleted account '+a.d+'.'};
+  var b6=el('button','b','Delete account');b6.onclick=function(){if(!confirm('Permanently delete the account '+a.d+'? They are removed from the site right away and cannot sign in again unless they create the account again.'))return;var tn=Date.now()/1000;delete R[k];C.deleted[k]=tn;saveR();acc({k:'del',u:k,t:tn});tpush({u:k,t:tn});ctl({k:'delacct',u:k});$('st').textContent='Deleted account '+a.d+'.'};
   r.appendChild(b1);r.appendChild(b2);r.appendChild(b3);r.appendChild(b4);r.appendChild(b5);r.appendChild(b6);L.appendChild(r)})}
 sse(Q.acc,'all',function(d,o){if(!o||o.key!==Q.key)return;var k=String(o.u||'').toLowerCase();if(o.k==='acct'){if(!R[k]||(AT[k]||0)<d.time){R[k]={d:String(o.d||k).slice(0,20),h:o.h};AT[k]=d.time}else return}else if(o.k==='reset'&&R[k])R[k].h=o.h;else if(o.k==='del'){var tt=+o.t||d.time;C.deleted[k]=Math.max(C.deleted[k]||0,tt);if(R[k]&&tt>=(AT[k]||0))delete R[k];else if(!R[k]);else return}else return;saveR()});
 (function(){var now=Date.now()/1000,last=0;try{last=+localStorage.getItem('madtomb_rp')||0}catch(e){}if(now-last<21600)return;try{localStorage.setItem('madtomb_rp',String(now))}catch(e){}Object.keys(C.deleted).forEach(function(k,i){if(now-C.deleted[k]<2592000)setTimeout(function(){acc({k:'del',u:k,t:C.deleted[k]})},i*500)})})();
-saveR();
+saveR();tsync();
 })();
 </script>
 </template>
@@ -2179,6 +2186,10 @@ function getAccts(cb){
     cb(m);
   }
   setTimeout(fin, 5000);
+  var pend = 2; function one(){ if (--pend === 0) fin(); }
+  fetch('https://wandering-cloud-9fe5.alex6bobby.workers.dev/tomb').then(function(r){ return r.json(); }).then(function(j){
+    var t = (j && j.t) || {}; Object.keys(t).forEach(function(k){ T[k] = Math.max(T[k] || 0, +t[k] || 0); });
+  }).catch(function(){}).then(one);
   fetch('https://ntfy.sh/' + ACC_TOPIC + '/json?poll=1&since=all')
     .then(function(r){ return r.text(); })
     .then(function(t){
@@ -2192,8 +2203,8 @@ function getAccts(cb){
           else if (o.k === 'del') T[k] = Math.max(T[k] || 0, +o.t || d.time);
         }catch(e){}
       });
-      fin();
-    }).catch(fin);
+      one();
+    }).catch(one);
 }
 
 /* owner commands saved on the channel: site down, bans, timeouts */
