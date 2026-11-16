@@ -111,7 +111,7 @@ svg.i{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.9;
     <label class="show"><input type="checkbox" id="showpw"> Show password</label>
     <button id="go">Let's go</button>
     <div class="err" id="err" role="alert"></div>
-    <div class="lockfoot">mad &middot; <span id="lver">0.13v</span></div>
+    <div class="lockfoot">mad &middot; <span id="lver">0.14v</span></div>
   </div>
 </main>
 
@@ -184,6 +184,16 @@ main.stage{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
 .mpc svg.i{width:20px;height:20px}
 .mpf{display:flex;gap:8px;justify-content:center}.mpf .btn{padding:8px 14px;font-size:.8rem}
 @media (max-width:600px){#mpLbl{display:none}.mpp{top:70px}}
+.fbbox{padding:22px;max-width:640px}
+.fbtype{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.fbl{display:block;color:var(--muted);font-size:.88rem;margin-bottom:8px}
+.fbta{width:100%;min-height:170px;resize:vertical;padding:14px 16px;border-radius:16px;border:1px solid var(--edge);background:rgba(255,255,255,.06);color:var(--text);font:inherit}
+.fbta:focus{outline:none;border-color:var(--a)}
+.fbrow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+.btn.go{background:linear-gradient(135deg,var(--a),var(--b));color:var(--on);border-color:transparent}
+.btn:disabled{opacity:.5;pointer-events:none}
+.fbok{margin-top:14px;color:#86efac;font-size:.9rem}.fbok.bad{color:#fda4af}
+@media (max-width:480px){#fbLbl,#homeBtn span{display:none}.btn{padding:10px 14px}}
 .lbtabs{display:flex;gap:8px;margin:0 0 16px;flex-wrap:wrap}
 .lbt{padding:10px 18px;border-radius:999px;border:1px solid var(--edge);background:rgba(255,255,255,.06);color:var(--text);font:inherit;font-weight:600;cursor:pointer;transition:background .2s,transform .2s}
 .lbt:active{transform:scale(.95)}.lbt.sel{background:linear-gradient(135deg,var(--a),var(--b));color:var(--on);border-color:transparent}
@@ -252,6 +262,7 @@ main.stage{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
   <symbol id="i-games" viewBox="0 0 24 24"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.98 3.59C2.6 9.42 2 14.46 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.41-1.41A2 2 0 0 1 9.83 16h4.34a2 2 0 0 1 1.41.59L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.55-.6-6.58-.69-7.26A4 4 0 0 0 17.32 5z"/></symbol>
   <symbol id="i-proxies" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
   <symbol id="i-notes" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h12l-2 4 2 4H5"/></symbol>
   <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></symbol>
   <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></symbol>
   <symbol id="i-movies" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18M3 7.5h4M3 12h18M3 16.5h4M17 3v18M17 7.5h4M17 16.5h4"/></symbol>
@@ -269,7 +280,8 @@ main.stage{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
 <header class="top glass">
   <button class="brand" id="brand" data-go="home">Home</button>
   <div class="topr"><button class="btn" id="homeBtn" data-go="home"><svg class="i"><use href="#i-home"/></svg><span>Home</span></button>
-  <button class="btn" id="mpBtn" aria-haspopup="true"><svg class="i"><use href="#i-music"/></svg><span id="mpLbl">Music</span><span class="eq"><i></i><i></i><i></i></span></button></div>
+  <button class="btn" id="mpBtn" aria-haspopup="true"><svg class="i"><use href="#i-music"/></svg><span id="mpLbl">Music</span><span class="eq"><i></i><i></i><i></i></span></button>
+  <button class="btn" id="fbBtn" data-go="feedback"><svg class="i"><use href="#i-flag"/></svg><span id="fbLbl">Feedback</span></button></div>
 </header>
 <div class="mpp glass" id="mpPanel" hidden>
   <div class="mpn"><img id="mpImg" alt="" hidden><div class="mpt"><b id="mpTitle">Nothing playing</b><span id="mpSub">Search for a song in Tools, then Music.</span></div></div>
@@ -291,6 +303,17 @@ main.stage{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
       <button class="tile glass" data-go="ai"><span class="ico"><svg class="i"><use href="#i-ai"/></svg></span><b>AI</b><span class="d">Open your favorite AI sites</span></button>
       <button class="tile glass" data-go="chat"><span class="ico"><svg class="i"><use href="#i-chat"/></svg></span><b>Chat</b><span class="d">Chat with a friend using a code</span></button>
       <button class="tile glass" data-go="settings"><span class="ico"><svg class="i"><use href="#i-settings"/></svg></span><b>Settings</b><span class="d">Themes and saved data</span></button>
+    </div>
+  </section>
+
+  <section class="page" id="feedback">
+    <h2>Feedback</h2><p class="sub">Found a bug or have an idea? Tell us. It goes straight to the owner.</p>
+    <div class="fbbox glass">
+      <div class="fbtype" id="fbType"><button class="lbt sel" data-t="bug">Report a bug</button><button class="lbt" data-t="idea">Suggest something</button></div>
+      <label class="fbl" for="fbMsg" id="fbHint">What went wrong? Say what you clicked and what you expected.</label>
+      <textarea id="fbMsg" class="fbta" maxlength="1000" placeholder="Type here..."></textarea>
+      <div class="fbrow"><span class="sub" id="fbCount" style="margin:0">0 / 1000</span><button class="btn go" id="fbSend">Send</button></div>
+      <p class="fbok" id="fbOk" role="status" hidden></p>
     </div>
   </section>
 
@@ -323,7 +346,7 @@ main.stage{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
   </section>
 </main>
 
-<footer class="foot">mad &copy;<div class="ver">0.13v</div></footer>
+<footer class="foot">mad &copy;<div class="ver">0.14v</div></footer>
 <template id="skribdoc"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 *{box-sizing:border-box}[hidden]{display:none!important}
@@ -1266,7 +1289,7 @@ $('go').onclick=go;$('u').onkeydown=function(e){if(e.key==='Enter')go()};
     ['candy','Candy','#ffa6e7','#8ae0ff'],
     ['rainbow','Rainbow','','','conic-gradient(#ff5f6d,#ffc371,#fff56d,#5dff8f,#5dc7ff,#b06dff,#ff5f6d)']
   ];
-  var NAMES={home:'Home',games:'Games',proxies:'Proxies',share:'Screen Sharing',leaderboard:'Leaderboard',movies:'Movies',tools:'Tools',ai:'AI',chat:'Chat',settings:'Settings'};
+  var NAMES={home:'Home',games:'Games',proxies:'Proxies',share:'Screen Sharing',leaderboard:'Leaderboard',feedback:'Feedback',movies:'Movies',tools:'Tools',ai:'AI',chat:'Chat',settings:'Settings'};
   function $(i){return document.getElementById(i)}
   var chatColor=S.get('chatcolor','');
   function okColor(c){
@@ -1374,6 +1397,7 @@ $('go').onclick=go;$('u').onkeydown=function(e){if(e.key==='Enter')go()};
     setTimeout(function(){
       from.classList.remove('leaving'); window.scrollTo(0,0);
       var to=document.getElementById(id); to.classList.add('active','entering'); setTimeout(function(){to.classList.remove('entering')},900);
+      if(id==='feedback'&&current!=='feedback')S.set('lastpage',current);
       current=id; busy=false; S.set('page',id); hb(); $('brand').textContent=NAMES[id]; if(id==='chat'){gStart();cnt()} if(id==='leaderboard'){lbStart();lbRender()} window.scrollTo({top:0});
     },160);
   }
@@ -1510,6 +1534,21 @@ $('go').onclick=go;$('u').onkeydown=function(e){if(e.key==='Enter')go()};
       window[cb]=function(j){end();res(map(j))};s.onerror=function(){end();rej()};s.src=u+'&callback='+cb;document.head.appendChild(s)})})}
   window.__mp={search:mpSearch,play:mpPlay,toggle:mpToggle,state:function(){var t=mpT();return{id:t?t.id:'',t:t?t.t:'',a:t?t.a:'',playing:!!t&&!MP.au.paused}}};
   mpUi();
+
+  /* ---- Feedback ---- */
+  var FBT='bug', FBHINT={bug:'What went wrong? Say what you clicked and what you expected.',idea:'What would you like to see added or changed?'}, fbLast=0;
+  [].forEach.call($('fbType').children,function(b){b.onclick=function(){FBT=b.dataset.t;[].forEach.call($('fbType').children,function(x){x.classList.toggle('sel',x===b)});$('fbHint').textContent=FBHINT[FBT]}});
+  $('fbMsg').addEventListener('input',function(){$('fbCount').textContent=this.value.length+' / 1000'});
+  function fbSay(t,bad){var e=$('fbOk');e.textContent=t;e.classList.toggle('bad',!!bad);e.hidden=false}
+  $('fbSend').onclick=function(){
+    var m=$('fbMsg').value.trim();
+    if(m.length<5)return fbSay('Please write a little more so we can understand.',true);
+    if(Date.now()-fbLast<20000)return fbSay('Please wait a few seconds before sending another.',true);
+    var b=$('fbSend');b.disabled=true;fbLast=Date.now();
+    fetch('https://ntfy.sh/'+Q.fb,{method:'POST',body:JSON.stringify({key:Q.key,k:'fb',u:UN,ty:FBT,m:m,p:S.get('lastpage','')||'home',d:dev+' '+innerWidth+'x'+innerHeight})})
+      .then(function(r){if(!r.ok)throw 0;$('fbMsg').value='';$('fbCount').textContent='0 / 1000';fbSay('Sent. Thank you! You can send more any time.')})
+      .catch(function(){fbLast=0;fbSay('Could not send that. Check your connection and try again.',true)})
+      .then(function(){b.disabled=false})};
 
   /* ---- Leaderboard (shared through a public topic, saved on this device too) ---- */
   var LTOPIC='mad-leaderboard-4t8w2k', LGAMES=[['fruit','Fruit Go'],['skrib','skribbl io']];
@@ -1964,6 +2003,9 @@ textarea.f{border-radius:14px;min-height:110px;width:100%}
 <div class="r"><input class="f" id="ot" maxlength="300" placeholder="Post as OWNER"><button class="b" id="say">Post</button></div>
 <div class="r"><button class="b" id="clr">Clear chat history on this device</button><button class="b" id="clrall">Delete ALL global chat for everyone</button><button class="b" id="clrlb">Clear leaderboard for everyone</button></div></div>
 
+<div class="box glass"><h3>Feedback <span id="fcnt" style="font-size:.85rem;color:var(--muted)"></span></h3>
+<div class="r"><button class="b" id="fclr">Clear all feedback</button></div><div id="fl"></div><p>Shows what was sent in the last 12 hours plus anything this device already saved.</p></div>
+
 <div class="box glass"><h3>Export config</h3>
 <textarea class="f" id="exp" readonly></textarea>
 <div class="r"><button class="b" id="cp">Copy</button><button class="b" id="rst">Reset owner config</button></div>
@@ -2073,6 +2115,19 @@ function drawA(){var L=$('al'),n=Date.now()/1000,ks=Object.keys(R).sort();L.text
 sse(Q.acc,'all',function(d,o){if(!o||o.key!==Q.key)return;var k=String(o.u||'').toLowerCase();if(o.k==='acct'){if(!R[k]||(AT[k]||0)<d.time){R[k]={d:String(o.d||k).slice(0,20),h:o.h};AT[k]=d.time}else return}else if(o.k==='reset'&&R[k])R[k].h=o.h;else if(o.k==='del'){var tt=+o.t||d.time;C.deleted[k]=Math.max(C.deleted[k]||0,tt);if(R[k]&&tt>=(AT[k]||0))delete R[k];else if(!R[k]);else return}else return;saveR()});
 (function(){var now=Date.now()/1000,last=0;try{last=+localStorage.getItem('madtomb_rp')||0}catch(e){}if(now-last<21600)return;try{localStorage.setItem('madtomb_rp',String(now))}catch(e){}Object.keys(C.deleted).forEach(function(k,i){if(now-C.deleted[k]<2592000)setTimeout(function(){acc({k:'del',u:k,t:C.deleted[k]})},i*500)})})();
 saveR();tsync();
+/* ---- feedback inbox ---- */
+var FB={};try{FB=JSON.parse(localStorage.getItem('madowner_fb')||'{}')}catch(e){}
+function saveFB(){try{localStorage.setItem('madowner_fb',JSON.stringify(FB))}catch(e){}drawF()}
+function drawF(){var L=$('fl'),ks=Object.keys(FB).sort(function(a,b){return FB[b].t-FB[a].t});L.textContent='';$('fcnt').textContent=ks.length?'('+ks.length+')':'';
+ if(!ks.length){L.appendChild(el('p','','No feedback yet.'));return}
+ ks.forEach(function(id){var f=FB[id],r=el('div','r');r.style.cssText='flex-direction:column;align-items:stretch;border:1px solid var(--edge);border-radius:14px;padding:12px;margin-bottom:8px';
+  var h=el('div','',(f.ty==='bug'?'BUG':'IDEA')+' from '+f.u+' on '+f.p+' ('+f.d+') '+new Date(f.t*1000).toLocaleString());h.style.cssText='font-size:.8rem;color:'+(f.ty==='bug'?'#fda4af':'#86efac')+';margin-bottom:6px';
+  var m=el('div','',f.m);m.style.cssText='white-space:pre-wrap;word-break:break-word';
+  var b=el('button','b','Delete');b.style.marginTop='8px';b.onclick=function(){delete FB[id];saveFB()};
+  r.appendChild(h);r.appendChild(m);r.appendChild(b);L.appendChild(r)})}
+$('fclr').onclick=function(){if(confirm('Delete all feedback from this list?')){FB={};saveFB()}};
+sse(Q.fb,'all',function(d,o){if(!o||o.key!==Q.key||o.k!=='fb'||typeof o.m!=='string')return;if(FB[d.id])return;FB[d.id]={u:String(o.u||'').slice(0,20),ty:o.ty==='idea'?'idea':'bug',m:o.m.slice(0,1000),p:String(o.p||'').slice(0,30),d:String(o.d||'').slice(0,30),t:d.time};saveFB()});
+drawF();
 })();
 </script>
 </template>
@@ -2084,7 +2139,7 @@ var OWNER_PASS  = "maddex2012";    // owner password (not case sensitive)
 var TAB_TITLE   = "Google Classroom"; // default tab name (people can change it in Settings)
 var DEFAULT_CFG = {};              // paste the Owner panel's exported config here to apply it to everyone
 /* shared channels between the owner panel and the site (keep these private) */
-var CTL_TOPIC = "mad-ctl-7h3k9w2pq", PRES_TOPIC = "mad-pres-7h3k9w2pq", ACC_TOPIC = "mad-acc-7h3k9w2pq", CTL_KEY = "mk_4f9a1c7e2b";
+var CTL_TOPIC = "mad-ctl-7h3k9w2pq", PRES_TOPIC = "mad-pres-7h3k9w2pq", ACC_TOPIC = "mad-acc-7h3k9w2pq", FB_TOPIC = "mad-fb-7h3k9w2pq", CTL_KEY = "mk_4f9a1c7e2b";
 var RESERVED = ['mad','owner','system','admin','host','guest'];
 
 /* ================= LOGIC ================= */
@@ -2148,7 +2203,7 @@ function hashPw(u, p){
 
 function buildSite(id, user){
   var cfg = getCfg();
-  var K = {ctl:CTL_TOPIC, pres:PRES_TOPIC, acc:ACC_TOPIC, key:CTL_KEY, user:user};
+  var K = {ctl:CTL_TOPIC, pres:PRES_TOPIC, acc:ACC_TOPIC, fb:FB_TOPIC, key:CTL_KEY, user:user};
   var esc = function(t){ return t.replace(/</g, '\\u003c'); };
   var inj = 'window.__CFG=' + esc(JSON.stringify(cfg)) + ';window.__K=' + esc(JSON.stringify(K)) + ';' + cyrb.toString() + ';' + hashPw.toString() + ';';
   return '<!DOCTYPE html><html lang="en" data-theme="' + savedTheme() + '" data-bg="' + savedBg() + '"><head><meta charset="UTF-8">' +
