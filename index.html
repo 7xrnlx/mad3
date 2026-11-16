@@ -111,7 +111,7 @@ svg.i{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.9;
     <label class="show"><input type="checkbox" id="showpw"> Show password</label>
     <button id="go">Let's go</button>
     <div class="err" id="err" role="alert"></div>
-    <div class="lockfoot">mad &middot; <span id="lver">0.10v</span></div>
+    <div class="lockfoot">mad &middot; <span id="lver">0.11v</span></div>
   </div>
 </main>
 
@@ -164,6 +164,22 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
 .sw.sel{border-color:var(--a);background:rgba(255,255,255,.12)}
 .sw.sel::after{content:"\2713";margin-left:auto;color:var(--a);font-weight:700}
 .foot{text-align:center;font-size:.7rem;color:var(--muted);opacity:.7;padding:0 0 16px}
+.topr{display:flex;align-items:center;gap:8px}
+#mpBtn.has{border-color:var(--a)}
+.eq{display:none;align-items:flex-end;gap:2px;height:12px}.live .eq{display:flex}.eq i{width:3px;height:4px;border-radius:2px;background:currentColor;animation:eqb .7s ease-in-out infinite alternate}.eq i:nth-child(2){animation-delay:-.3s}.eq i:nth-child(3){animation-delay:-.55s}
+@keyframes eqb{to{height:12px}}
+.mpp{position:fixed;z-index:40;top:84px;right:max(16px,calc((100% - 1040px)/2));width:min(340px,calc(100% - 32px));padding:18px;animation:pop .35s cubic-bezier(.22,1,.36,1) backwards}
+.mpp[hidden]{display:none}
+.mpn{display:flex;gap:12px;align-items:center;margin-bottom:14px}.mpn img{width:60px;height:60px;border-radius:12px;object-fit:cover;flex:none}
+.mpt{min-width:0;display:flex;flex-direction:column;gap:2px}.mpt b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mpt span{color:var(--muted);font-size:.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mpp input[type=range]{width:100%;accent-color:var(--a)}
+.mpts{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin:2px 0 8px}
+.mpc{display:flex;justify-content:center;align-items:center;gap:14px;margin-bottom:14px}
+.mpc button{width:44px;height:44px;border-radius:50%;border:1px solid var(--edge);background:rgba(255,255,255,.08);display:grid;place-items:center;transition:transform .15s}
+.mpc button:active{transform:scale(.92)}.mpc button.big{width:56px;height:56px;background:linear-gradient(135deg,var(--a),var(--b));color:var(--on);border-color:transparent}
+.mpc svg.i{width:20px;height:20px}
+.mpf{display:flex;gap:8px;justify-content:center}.mpf .btn{padding:8px 14px;font-size:.8rem}
+@media (max-width:600px){#mpLbl{display:none}.mpp{top:70px}}
 .lbtabs{display:flex;gap:8px;margin:0 0 16px;flex-wrap:wrap}
 .lbt{padding:10px 18px;border-radius:999px;border:1px solid var(--edge);background:rgba(255,255,255,.06);color:var(--text);font:inherit;font-weight:600;cursor:pointer;transition:background .2s,transform .2s}
 .lbt:active{transform:scale(.95)}.lbt.sel{background:linear-gradient(135deg,var(--a),var(--b));color:var(--on);border-color:transparent}
@@ -231,6 +247,7 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
   <symbol id="i-games" viewBox="0 0 24 24"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.98 3.59C2.6 9.42 2 14.46 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.41-1.41A2 2 0 0 1 9.83 16h4.34a2 2 0 0 1 1.41.59L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.55-.6-6.58-.69-7.26A4 4 0 0 0 17.32 5z"/></symbol>
   <symbol id="i-proxies" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
   <symbol id="i-notes" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></symbol>
   <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></symbol>
   <symbol id="i-movies" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18M3 7.5h4M3 12h18M3 16.5h4M17 3v18M17 7.5h4M17 16.5h4"/></symbol>
   <symbol id="i-tools" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></symbol>
@@ -246,8 +263,15 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
 
 <header class="top glass">
   <button class="brand" id="brand" data-go="home">Home</button>
-  <button class="btn hidden" id="homeBtn" data-go="home"><svg class="i"><use href="#i-home"/></svg>Home</button>
+  <div class="topr"><button class="btn" id="mpBtn" aria-haspopup="true"><svg class="i"><use href="#i-music"/></svg><span id="mpLbl">Music</span><span class="eq"><i></i><i></i><i></i></span></button>
+  <button class="btn hidden" id="homeBtn" data-go="home"><svg class="i"><use href="#i-home"/></svg>Home</button></div>
 </header>
+<div class="mpp glass" id="mpPanel" hidden>
+  <div class="mpn"><img id="mpImg" alt="" hidden><div class="mpt"><b id="mpTitle">Nothing playing</b><span id="mpSub">Search for a song in Tools, then Music.</span></div></div>
+  <input type="range" id="mpSeek" min="0" max="1000" value="0" aria-label="Seek"><div class="mpts"><span id="mpCur">0:00</span><span id="mpDur">0:00</span></div>
+  <div class="mpc"><button id="mpPrev" aria-label="Previous"><svg class="i" viewBox="0 0 24 24"><path d="M7 5v14M19 5v14l-10-7z"/></svg></button><button id="mpPP" class="big" aria-label="Play or pause"></button><button id="mpNext" aria-label="Next"><svg class="i" viewBox="0 0 24 24"><path d="M17 5v14M5 5v14l10-7z"/></svg></button></div>
+  <div class="mpf"><button class="btn" id="mpFind">Find music</button><button class="btn" id="mpStop">Close player</button></div>
+</div>
 
 <main class="stage" id="stage">
   <section class="page" id="home">
@@ -294,7 +318,7 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
   </section>
 </main>
 
-<footer class="foot">mad &copy;<div class="ver">0.10v</div></footer>
+<footer class="foot">mad &copy;<div class="ver">0.11v</div></footer>
 <template id="skribdoc"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 *{box-sizing:border-box}[hidden]{display:none!important}
@@ -1011,10 +1035,12 @@ function SHIM(WK){
  try{void document.cookie}catch(e){var ck='';try{Object.defineProperty(document,'cookie',{get:function(){return ck},set:function(v){ck+=String(v).split(';')[0]+'; '},configurable:true})}catch(x){}}
  function rw(u){try{var a=new URL(String(u),document.baseURI).href;return /^https?:/i.test(a)&&a.indexOf(WK)!==0?WK+encodeURIComponent(a):u}catch(e){return u}}
  var of=window.fetch;
- if(of)window.fetch=function(i,o){try{var m=((o&&o.method)||(i&&i.method)||'GET').toUpperCase();if(m!=='GET'&&m!=='HEAD')return Promise.reject(new TypeError('CBrowser cannot send '+m+' requests'));
-  if(typeof i==='string'||i instanceof URL)i=rw(i);else if(i&&i.url)i=new Request(rw(i.url),i)}catch(e){}
+ if(of)window.fetch=function(i,o){try{if(typeof i==='string'||i instanceof URL)i=rw(i);else if(i&&i.url)i=new Request(rw(i.url),i)}catch(e){}
   o=Object.assign({},o||{});o.credentials='omit';return of.call(window,i,o)};
  var oo=XMLHttpRequest.prototype.open;XMLHttpRequest.prototype.open=function(m,u){arguments[1]=rw(u);var r=oo.apply(this,arguments);try{this.withCredentials=false}catch(e){}return r};
+ try{var sd=Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype,'src');Object.defineProperty(HTMLScriptElement.prototype,'src',{get:sd.get,set:function(v){sd.set.call(this,this.type==='module'?v:rw(v))},configurable:true})}catch(e){}
+ try{var sa=Element.prototype.setAttribute;Element.prototype.setAttribute=function(n,v){if(this.tagName==='SCRIPT'&&String(n).toLowerCase()==='src'&&this.type!=='module')v=rw(v);return sa.call(this,n,v)}}catch(e){}
+ var JE=0;window.addEventListener('error',function(e){if(e&&e.message)JE++},true);window.addEventListener('unhandledrejection',function(){JE++});
  window.open=function(u){try{if(u)P({cb:1,t:'nav',u:new URL(String(u),document.baseURI).href})}catch(e){}return null};
  document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href]');if(!a||e.defaultPrevented)return;var raw=a.getAttribute('href')||'';if(raw.charAt(0)==='#'||/^(javascript|mailto|tel|data|blob):/i.test(raw))return;e.preventDefault();P({cb:1,t:'nav',u:a.href})},false);
  document.addEventListener('submit',function(e){var f=e.target;if(e.defaultPrevented)return;e.preventDefault();
@@ -1022,7 +1048,7 @@ function SHIM(WK){
   if((f.getAttribute('method')||'get').toLowerCase()!=='get'){P({cb:1,t:'post'});return}
   try{var u=new URL(f.action||document.baseURI),sp=new URLSearchParams();new FormData(f).forEach(function(v,k){if(typeof v==='string')sp.append(k,v)});u.search=sp.toString();P({cb:1,t:'nav',u:u.href})}catch(x){}},false);
  document.addEventListener('keydown',function(e){var t=e.target,g=t&&t.tagName;P({cb:1,t:'key',key:e.key,c:e.ctrlKey,a:e.altKey,m:e.metaKey,r:e.repeat,ty:!!(t&&(g==='INPUT'||g==='TEXTAREA'||g==='SELECT'||t.isContentEditable))})},true);
- window.addEventListener('load',function(){P({cb:1,t:'title',v:document.title})});
+ window.addEventListener('load',function(){P({cb:1,t:'title',v:document.title});setTimeout(function(){if(JE>2)P({cb:1,t:'jserr',n:JE})},2500)});
 }
 function ls(k,v){try{if(v===undefined)return localStorage.getItem(k)||'';if(v)localStorage.setItem(k,v);else localStorage.removeItem(k)}catch(e){return ''}}
 function vw(u){return WORKER+encodeURIComponent(u)}
@@ -1100,10 +1126,11 @@ function build(r,u){var ct=(r.ct||'').toLowerCase();
  if(!isHtml){if(/^text\/|json|xml|javascript/.test(ct))return Promise.resolve({title:u,srcdoc:'<!doctype html><meta charset="utf-8"><body style="margin:0;padding:18px;background:#0b0f1d;color:#e6e9ff;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace"><pre style="white-space:pre-wrap;word-break:break-word;margin:0">'+esc(txt.slice(0,400000))+'</pre>'});
   return Promise.reject(new Error('CBrowser cannot show this kind of file ('+(ct.split(';')[0]||'unknown')+').'))}
  return render(r.url,txt)}
-function render(base,html){var d=new DOMParser().parseFromString(html,'text/html'),hadJs=d.querySelectorAll('script').length>0,JS=jsOn;
+function render(base,html){function abs(s){try{return new URL(s,base).href}catch(e){return ''}}
+ var d=new DOMParser().parseFromString(html,'text/html'),hadJs=d.querySelectorAll('script').length>0,JS=jsOn;
  d.querySelectorAll((JS?'':'script,')+'iframe,frame,frameset,object,embed,applet,base,meta[http-equiv],link[rel~=preload],link[rel~=modulepreload],link[rel~=prefetch],link[rel~=preconnect],link[rel~=dns-prefetch],link[rel~=icon],link[rel~=manifest],picture source').forEach(function(n){n.remove()});
+ if(JS)d.querySelectorAll('script').forEach(function(s){s.removeAttribute('integrity');s.removeAttribute('crossorigin');s.removeAttribute('nonce');var a=s.getAttribute('src');if(a&&(s.getAttribute('type')||'')!=='module'){var x=abs(a);if(/^https?:/i.test(x)&&x.indexOf(WORKER)!==0)s.setAttribute('src',vw(x))}});
  var needJs=!JS&&hadJs&&((d.body&&d.body.textContent)||'').replace(/\s+/g,' ').trim().length<140;
- function abs(s){try{return new URL(s,base).href}catch(e){return ''}}
  d.querySelectorAll('img').forEach(function(im){var s=im.getAttribute('src'),lz=im.getAttribute('data-src')||im.getAttribute('data-lazy-src')||im.getAttribute('data-original');
   if(lz&&(!s||/^data:/i.test(s)))s=lz;
   if(!s){var ss=im.getAttribute('srcset');if(ss)s=ss.split(',')[0].trim().split(/\s+/)[0]}
@@ -1125,7 +1152,7 @@ function nav(t,u,push,cached){u=norm(u);if(!u)return;
  if(!/^https?:\/\//i.test(u))return fail(t,u,'CBrowser only opens web links (http or https).');
  var my=++t.tok;if(t.ctl){try{t.ctl.abort()}catch(e){}}t.url=u;if(t===T){$('u').value=u;toast('')}busy(t,1);
  var p=(cached&&cache[u])?Promise.resolve(cache[u]):fetchPage(t,u,my).then(function(r){return build(r,u)});
- p.then(function(pg){if(my!==t.tok)return;cache[u]=pg;t.title=pg.title||host(u)||u;t.mode='frame';t.em='';t.fr.classList.remove('ready');t.fr.setAttribute('sandbox',pg.scripts?'allow-scripts allow-forms':'allow-same-origin allow-forms');t.fr.srcdoc=pg.srcdoc;
+ p.then(function(pg){if(my!==t.tok)return;cache[u]=pg;t.title=pg.title||host(u)||u;t.mode='frame';t.em='';t.fr.classList.remove('ready');t.fr.setAttribute('sandbox',pg.scripts?'allow-scripts allow-forms allow-modals':'allow-same-origin allow-forms');t.fr.srcdoc=pg.srcdoc;
   if(push!==false&&t.hist[t.hi]!==u){t.hist=t.hist.slice(0,t.hi+1);t.hist.push(u);t.hi=t.hist.length-1}
   busy(t,0);if(t===T){view();toast('');if(pg.js)toast('This site needs JavaScript, so it may look empty here.',5500)}else renderTabs()}).catch(function(e){if(my!==t.tok)return;busy(t,0);fail(t,u,e&&e.message)})}
 function fail(t,u,why){t.mode='err';t.em=why||'Something went wrong while loading this page.';t.failU=u;t.url=u;if(t===T)view();else renderTabs()}
@@ -1141,6 +1168,7 @@ window.addEventListener('message',function(e){var d=e.data;if(!d||d.cb!==1)retur
  else if(d.t==='pw')fail(t,t.hist[t.hi]||'','For your safety, CBrowser will not send passwords through a relay.');
  else if(d.t==='post')toast('That page tried to send a form. CBrowser can only open pages and search forms.',4200);
  else if(d.t==='title'&&d.v&&typeof d.v==='string'){t.title=d.v.slice(0,120);renderTabs()}
+ else if(d.t==='jserr'){if(t===T&&!t.warned){t.warned=1;toast('Parts of this page may not work. Its scripts hit '+d.n+' errors, which some sites cause when they run through a relay.',6500)}}
  else if(d.t==='key'){pk({key:String(d.key),ctrlKey:!!d.c,altKey:!!d.a,metaKey:!!d.m,repeat:!!d.r,target:{tagName:d.ty?'INPUT':'DIV'},preventDefault:function(){},stopPropagation:function(){}})}});
 function jsUi(){var b=$('jsb');b.textContent=jsOn?'On':'Off';b.classList.toggle('on',jsOn)}
 $('jsb').onclick=function(){jsOn=!jsOn;ls('cb_js',jsOn?'1':'0');cache={};jsUi();if(T.mode==='frame'&&T.hist[T.hi]){nav(T,T.hist[T.hi],false)}};
@@ -1169,16 +1197,24 @@ jsOn=ls('cb_js')!=='0';jsUi();applyTheme(ls('cb_theme')||'midnight');renderQ();a
   var UN=(window.__K||{}).user||'';
 
   /* ---- EDIT ME: default links for each section ---- */
-  var MUSIC=`<!DOCTYPE html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 420px at 50% -10%,#1db95433,transparent),#0d1210;color:#fff;font-family:system-ui,sans-serif;padding:18px;min-height:100vh}h3{margin:0 0 4px;font-size:22px;letter-spacing:-.01em}h3 span{color:#1ed760}p{margin:0 0 14px;color:#9db3a6;font-size:13px}.r{display:flex;gap:8px;margin-bottom:12px}input{flex:1;min-width:0;padding:12px 14px;border-radius:12px;border:1px solid #ffffff2a;background:#ffffff10;color:#fff;font:inherit}input:focus{outline:0;border-color:#1ed760}button{padding:11px 16px;border-radius:12px;border:1px solid #ffffff2a;background:#ffffff12;color:#fff;font:600 13px system-ui;cursor:pointer;transition:transform .15s,background .2s}button:active{transform:scale(.96)}button.go{background:#1ed760;color:#07140b;border-color:transparent}.c{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}button.on{border-color:#1ed760;background:#1ed76026}iframe{width:100%;height:420px;border:0;border-radius:16px;background:#00000040;display:block}.m{color:#fda4af;font-size:13px;min-height:18px;margin-bottom:8px}.n{color:#7f9487;font-size:12px;margin-top:10px}</style><h3>Music <span>&#9733;</span></h3><p>Spotify player. Pick a playlist or paste any Spotify link.</p><div class=r><input id=u placeholder="Paste a Spotify link (playlist, album, song, artist)"><button class=go id=go>Play</button></div><div class=m id=m></div><div class=c id=c></div><iframe id=f allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading=lazy></iframe><div class=n>Sign in to Spotify inside the player to hear full songs. Without signing in you get previews.</div><script>
-var PL=[['Top Hits','playlist','37i9dQZF1DXcBWIGoYBM5M'],['RapCaviar','playlist','37i9dQZF1DX0XUsuxWHRQd'],['Lo-Fi Beats','playlist','37i9dQZF1DWWQRwui0ExPn'],['Chill Hits','playlist','37i9dQZF1DX4WYpdgoIcn6'],['Rock Classics','playlist','37i9dQZF1DWXRqgorJj26U'],['Peaceful Piano','playlist','37i9dQZF1DX4sWSpwq3LiO']];
-var $=function(i){return document.getElementById(i)},cur='';
-function st(k,v){try{if(v===undefined)return localStorage.getItem(k)||'';localStorage.setItem(k,v)}catch(e){return ''}}
-function play(t,id){$('f').src='https://open.spotify.com/embed/'+t+'/'+id+'?utm_source=generator&theme=0';cur=t+'/'+id;st('mu',cur);[].forEach.call($('c').children,function(b){b.classList.toggle('on',b.dataset.k===cur)})}
+  var MUSIC=`<!DOCTYPE html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 420px at 50% -10%,#1db95433,transparent),#0d1210;color:#fff;font-family:system-ui,sans-serif;padding:18px;min-height:100vh}h3{margin:0 0 4px;font-size:22px}h3 span{color:#1ed760}p{margin:0 0 14px;color:#9db3a6;font-size:13px}.tb{display:flex;gap:8px;margin-bottom:14px}.r{display:flex;gap:8px;margin-bottom:12px}input{flex:1;min-width:0;padding:12px 14px;border-radius:12px;border:1px solid #ffffff2a;background:#ffffff10;color:#fff;font:inherit}input:focus{outline:0;border-color:#1ed760}button{padding:11px 16px;border-radius:12px;border:1px solid #ffffff2a;background:#ffffff12;color:#fff;font:600 13px system-ui;cursor:pointer;transition:transform .15s,background .2s}button:active{transform:scale(.96)}button.go,button.on{background:#1ed760;color:#07140b;border-color:transparent}.c{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}#res{display:grid;gap:8px}.row{display:flex;align-items:center;gap:12px;padding:8px 12px 8px 8px;border-radius:14px;background:#ffffff0d;border:1px solid #ffffff14;cursor:pointer;transition:background .2s}.row:hover{background:#ffffff1a}.row.cur{border-color:#1ed760;background:#1ed7601f}.row img{width:48px;height:48px;border-radius:8px;object-fit:cover;background:#ffffff14;flex:none}.row .x{flex:1;min-width:0}.row b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.row small{color:#9db3a6;font-size:12px}.row i{font-style:normal;color:#1ed760;font-size:18px;width:24px;text-align:center}.m{color:#9db3a6;font-size:13px;min-height:18px;margin-bottom:8px}.n{color:#7f9487;font-size:12px;margin-top:12px}iframe{width:100%;height:420px;border:0;border-radius:16px;background:#00000040;display:block}.np{position:sticky;bottom:0;margin-top:12px;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:#0d1210ee;border:1px solid #1ed76066}.np span{flex:1;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}</style><h3>Music <span>&#9733;</span></h3><p>Search any song and play it. Your music keeps playing when you leave this page. Use the Music button at the top to pause or close it.</p><div class=tb><button class=on id=t1>Search</button><button id=t2>Spotify</button></div>
+<div id=v1><div class=r><input id=q placeholder="Search a song or artist" autocomplete=off><button class=go id=sb>Search</button></div><div class=c id=c></div><div class=m id=m></div><div id=res></div><div class=n>Search plays 30 second previews from the Apple Music catalog. For full songs use the Spotify tab and sign in to Spotify.</div></div>
+<div id=v2 hidden><div class=r><input id=u placeholder="Paste a Spotify link (playlist, album, song, artist)"><button class=go id=go>Play</button></div><div class=m id=m2></div><iframe id=f allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe><div class=n>Sign in to Spotify inside the player to hear full songs.</div></div>
+<div class=np id=np hidden><span id=nt></span><button id=pp>Pause</button></div><script>
+var $=function(i){return document.getElementById(i)},P=null,rows=[],sp=false;try{P=parent.__mp}catch(e){}
+['Top hits','Pop','Hip hop','Lo-fi','Rock','Country','EDM','Throwbacks'].forEach(function(s){var b=document.createElement('button');b.textContent=s;b.onclick=function(){$('q').value=s;run()};$('c').appendChild(b)});
+function run(){var q=$('q').value.trim();if(!q)return;if(!P){$('m').textContent='Player not available here.';return}$('m').textContent='Searching...';
+ P.search(q).then(function(r){rows=r;$('m').textContent=r.length?'':'No songs found. Try different words.';draw()},function(){$('m').textContent='Could not search right now. Check your connection and try again.'})}
+function draw(){var el=$('res');el.textContent='';rows.forEach(function(r,i){var d=document.createElement('div');d.className='row';d.dataset.id=r.id;var im=document.createElement('img');im.alt='';im.src=r.img;var x=document.createElement('div');x.className='x';var b=document.createElement('b');b.textContent=r.t;var s=document.createElement('small');s.textContent=r.a;x.appendChild(b);x.appendChild(s);var p=document.createElement('i');p.textContent='▶';d.appendChild(im);d.appendChild(x);d.appendChild(p);d.onclick=function(){P.play(rows,i)};el.appendChild(d)});sync()}
+function sync(){if(!P)return;var s=P.state();[].forEach.call($('res').children,function(d){d.classList.toggle('cur',!!s.id&&d.dataset.id===s.id)});$('np').hidden=!s.id;if(s.id){$('nt').textContent=s.t+' - '+s.a;$('pp').textContent=s.playing?'Pause':'Play'}}
+$('pp').onclick=function(){P.toggle();setTimeout(sync,50)};setInterval(sync,500);
+$('sb').onclick=run;$('q').onkeydown=function(e){if(e.key==='Enter')run()};
+function tab(n){$('v1').hidden=n!==1;$('v2').hidden=n!==2;$('t1').classList.toggle('on',n===1);$('t2').classList.toggle('on',n===2);if(n===2&&!sp){sp=true;play('playlist','37i9dQZF1DXcBWIGoYBM5M')}}
+$('t1').onclick=function(){tab(1)};$('t2').onclick=function(){tab(2)};
+function play(t,id){$('f').src='https://open.spotify.com/embed/'+t+'/'+id+'?utm_source=generator&theme=0'}
 function parse(s){s=s.trim();var m=/open[.]spotify[.]com[/](?:intl-[a-z]+[/])?(playlist|album|track|artist|show|episode)[/]([A-Za-z0-9]+)/.exec(s)||/^spotify:(playlist|album|track|artist|show|episode):([A-Za-z0-9]+)/.exec(s);return m?[m[1],m[2]]:null}
-PL.forEach(function(p){var b=document.createElement('button');b.textContent=p[0];b.dataset.k=p[1]+'/'+p[2];b.onclick=function(){$('m').textContent='';play(p[1],p[2])};$('c').appendChild(b)});
-function go(){var r=parse($('u').value);if(!r){$('m').textContent='That does not look like a Spotify link. Copy it from Spotify with Share, then Copy link.';return}$('m').textContent='';play(r[0],r[1]);$('u').value=''}
+function go(){var r=parse($('u').value);if(!r){$('m2').textContent='That does not look like a Spotify link.';return}$('m2').textContent='';play(r[0],r[1]);$('u').value=''}
 $('go').onclick=go;$('u').onkeydown=function(e){if(e.key==='Enter')go()};
-var last=st('mu').split('/');if(last.length===2&&/^[a-z]+$/.test(last[0])&&/^[A-Za-z0-9]+$/.test(last[1]))play(last[0],last[1]);else play('playlist',PL[0][2]);
 <\/script>`;
   var SKRIB=document.getElementById('skribdoc').innerHTML,WMG=document.getElementById('wmdoc').innerHTML,GPH=document.getElementById('gpdoc').innerHTML,CBR=document.getElementById('cbdoc').innerHTML;
   var SECTIONS={
@@ -1203,8 +1239,8 @@ var last=st('mu').split('/');if(last.length===2&&/^[a-z]+$/.test(last[0])&&/^[A-
     movies:{title:'Movies',sub:'Pick a site to watch on. Some sites block being embedded.',items:[
       {n:'Pyrite',d:'Movies and shows',u:'https://galaxy.nwmteducationalcoop.org/pyrite/'}
     ]},
-    tools:{title:'Tools',sub:'Pick a tool. Music has a built-in Spotify player.',items:[
-      {n:'Music \u2605',tag:'CUSTOM',d:'Spotify player. Pick a playlist or paste a link.',doc:MUSIC},
+    tools:{title:'Tools',sub:'Pick a tool. Music lets you search songs and keeps playing while you browse.',items:[
+      {n:'Music \u2605',tag:'CUSTOM',d:'Search any song and play it. Spotify too.',doc:MUSIC},
       {n:'Myinstants',d:'Placeholder: online soundboard',u:'https://www.myinstants.com/'},
       {n:'101 Soundboards',d:'Placeholder: online soundboards',u:'https://www.101soundboards.com/'}
     ]}
@@ -1434,6 +1470,40 @@ var last=st('mu').split('/');if(last.length===2&&/^[a-z]+$/.test(last[0])&&/^[A-
   document.addEventListener('keydown',window.__panicKey,true);
   document.addEventListener('load',function(e){var f=e.target;if(f&&f.tagName==='IFRAME'){try{f.contentDocument.addEventListener('keydown',window.__panicKey,true)}catch(x){}}},true);
   pkShow();
+
+  /* ---- Music player (keeps playing while you browse) ---- */
+  var MP={q:[],i:-1,au:new Audio(),drag:false}, MPI={play:'<svg class="i" viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><path d="M8 5v14l11-7z"/></svg>',pause:'<svg class="i" viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>'};
+  function mpT(){return MP.q[MP.i]||null}
+  function mpFmt(s){s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+':'+('0'+s%60).slice(-2)}
+  function mpUi(){var t=mpT(),pl=!!t&&!MP.au.paused;
+    $('mpBtn').classList.toggle('live',pl);$('mpBtn').classList.toggle('has',!!t);
+    $('mpTitle').textContent=t?t.t:'Nothing playing';$('mpSub').textContent=t?t.a:'Search for a song in Tools, then Music.';
+    var im=$('mpImg');if(t&&t.img){if(im.getAttribute('src')!==t.img)im.src=t.img;im.hidden=false}else im.hidden=true;
+    $('mpPP').innerHTML=pl?MPI.pause:MPI.play;
+    if(!t){$('mpSeek').value=0;$('mpCur').textContent='0:00';$('mpDur').textContent='0:00'}}
+  function mpPlay(rows,i){if(!rows||!rows[i])return;MP.q=rows.slice();MP.i=i;MP.au.src=rows[i].u;var p=MP.au.play();if(p&&p.catch)p.catch(function(){});mpUi()}
+  function mpToggle(){if(!mpT())return;if(MP.au.paused){var p=MP.au.play();if(p&&p.catch)p.catch(function(){})}else MP.au.pause()}
+  function mpNext(){if(MP.i<MP.q.length-1)mpPlay(MP.q,MP.i+1);else{MP.au.pause();MP.au.currentTime=0;mpUi()}}
+  function mpPrev(){if(MP.au.currentTime>3||MP.i<=0){MP.au.currentTime=0}else mpPlay(MP.q,MP.i-1)}
+  function mpClose(){MP.au.pause();MP.au.removeAttribute('src');try{MP.au.load()}catch(e){}MP.q=[];MP.i=-1;$('mpPanel').hidden=true;mpUi()}
+  MP.au.addEventListener('play',mpUi);MP.au.addEventListener('pause',mpUi);MP.au.addEventListener('ended',mpNext);
+  MP.au.addEventListener('error',function(){if(mpT()&&MP.i<MP.q.length-1)mpPlay(MP.q,MP.i+1);else mpUi()});
+  MP.au.addEventListener('timeupdate',function(){var d=MP.au.duration||0;$('mpCur').textContent=mpFmt(MP.au.currentTime);$('mpDur').textContent=mpFmt(d);if(!MP.drag&&d)$('mpSeek').value=Math.round(MP.au.currentTime/d*1000)});
+  $('mpSeek').addEventListener('input',function(){MP.drag=true;var d=MP.au.duration||0;if(d)MP.au.currentTime=this.value/1000*d});
+  $('mpSeek').addEventListener('change',function(){MP.drag=false});
+  $('mpPP').onclick=mpToggle;$('mpNext').onclick=mpNext;$('mpPrev').onclick=mpPrev;$('mpStop').onclick=mpClose;
+  $('mpBtn').onclick=function(e){e.stopPropagation();$('mpPanel').hidden=!$('mpPanel').hidden};
+  $('mpPanel').addEventListener('click',function(e){e.stopPropagation()});
+  document.addEventListener('click',function(){$('mpPanel').hidden=true});
+  $('mpFind').onclick=function(){$('mpPanel').hidden=true;go('tools');setTimeout(function(){var c=[].filter.call(document.querySelectorAll('#tools .cards .card'),function(x){return /Music/.test(x.textContent)})[0];if(c)c.click()},400)};
+  function mpSearch(q){var u='https://itunes.apple.com/search?media=music&entity=song&limit=30&term='+encodeURIComponent(q);
+    function map(j){return((j&&j.results)||[]).filter(function(r){return r.previewUrl}).map(function(r){return{id:String(r.trackId),t:r.trackName,a:r.artistName,img:(r.artworkUrl100||'').replace('100x100','200x200'),u:r.previewUrl}})}
+    return fetch(u).then(function(r){return r.json()}).then(map).catch(function(){return new Promise(function(res,rej){
+      var cb='__mpj'+Date.now(),s=document.createElement('script'),to=setTimeout(function(){end();rej()},9000);
+      function end(){clearTimeout(to);try{delete window[cb]}catch(e){window[cb]=undefined}s.remove()}
+      window[cb]=function(j){end();res(map(j))};s.onerror=function(){end();rej()};s.src=u+'&callback='+cb;document.head.appendChild(s)})})}
+  window.__mp={search:mpSearch,play:mpPlay,toggle:mpToggle,state:function(){var t=mpT();return{id:t?t.id:'',t:t?t.t:'',a:t?t.a:'',playing:!!t&&!MP.au.paused}}};
+  mpUi();
 
   /* ---- Leaderboard (shared through a public topic, saved on this device too) ---- */
   var LTOPIC='mad-leaderboard-4t8w2k', LGAMES=[['fruit','Fruit Go'],['skrib','skribbl io']];
