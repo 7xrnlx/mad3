@@ -111,7 +111,7 @@ svg.i{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.9;
     <label class="show"><input type="checkbox" id="showpw"> Show password</label>
     <button id="go">Let's go</button>
     <div class="err" id="err" role="alert"></div>
-    <div class="lockfoot">mad &middot; <span id="lver">0.11v</span></div>
+    <div class="lockfoot">mad &middot; <span id="lver">0.12v</span></div>
   </div>
 </main>
 
@@ -157,7 +157,11 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
 .card .rm{position:absolute;top:8px;right:12px;background:none;border:0;color:var(--muted);font-size:1.2rem}
 .notes{width:100%;min-height:50vh;padding:20px;resize:vertical;font:inherit;line-height:1.6;color:var(--text)}
 .notes:focus{outline:none;border-color:var(--a)}
-.themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:24px}
+.themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(170px,100%),1fr));gap:12px;margin-bottom:24px}
+.sw{min-width:0}.sw>span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis}
+html,body{max-width:100%;overflow-x:clip}
+main.stage{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
+@media (max-height:480px){.lock{align-items:start;padding:12px}.lock .glass{padding:22px 22px}}
 .sw{display:flex;align-items:center;gap:12px;padding:14px 16px;text-align:left;font-size:.9rem;border-radius:16px;border:1px solid var(--edge);background:rgba(255,255,255,.06);transition:border-color .2s,background .2s}
 .sw:hover{background:rgba(255,255,255,.12)}
 .sw i{width:28px;height:28px;border-radius:50%;flex:none;border:1px solid rgba(255,255,255,.3)}
@@ -263,8 +267,8 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
 
 <header class="top glass">
   <button class="brand" id="brand" data-go="home">Home</button>
-  <div class="topr"><button class="btn" id="mpBtn" aria-haspopup="true"><svg class="i"><use href="#i-music"/></svg><span id="mpLbl">Music</span><span class="eq"><i></i><i></i><i></i></span></button>
-  <button class="btn hidden" id="homeBtn" data-go="home"><svg class="i"><use href="#i-home"/></svg>Home</button></div>
+  <div class="topr"><button class="btn" id="homeBtn" data-go="home"><svg class="i"><use href="#i-home"/></svg><span>Home</span></button>
+  <button class="btn" id="mpBtn" aria-haspopup="true"><svg class="i"><use href="#i-music"/></svg><span id="mpLbl">Music</span><span class="eq"><i></i><i></i><i></i></span></button></div>
 </header>
 <div class="mpp glass" id="mpPanel" hidden>
   <div class="mpn"><img id="mpImg" alt="" hidden><div class="mpt"><b id="mpTitle">Nothing playing</b><span id="mpSub">Search for a song in Tools, then Music.</span></div></div>
@@ -318,7 +322,7 @@ main.stage{flex:1;width:min(1040px,calc(100% - 32px));margin:0 auto;padding:44px
   </section>
 </main>
 
-<footer class="foot">mad &copy;<div class="ver">0.11v</div></footer>
+<footer class="foot">mad &copy;<div class="ver">0.12v</div></footer>
 <template id="skribdoc"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 *{box-sizing:border-box}[hidden]{display:none!important}
@@ -1027,7 +1031,7 @@ var TH={midnight:['Midnight','#0b0f1d','#182040','#121830','#0f1428','#0a0e1c','
  slate:['Slate','#0d0f12','#23272e','#1b1f25','#15181d','#0b0d10','#2b313b','#e2e8f0','#94a3b8'],
  neon:['Neon','#0a0612','#241036','#1b0b2a','#140822','#090410','#3a1060','#a3ff12','#ff2bd6'],
  light:['Light','#eef1f8','#ffffff','#f4f6fb','#e6eaf4','#ffffff','#dbe4ff','#0d9488','#6366f1']};
-var tabs=[],T=null,tid=0,cache={},tzT=null,ldT=null,setOpen=false,jsOn=true;
+var tabs=[],T=null,tid=0,cache={},tzT=null,ldT=null,setOpen=false,jsOn=true,NJ=false;
 function SHIM(WK){
  var P=function(m){try{parent.postMessage(m,'*')}catch(e){}};
  function mem(){var d={};return{getItem:function(k){return k in d?d[k]:null},setItem:function(k,v){d[k]=String(v)},removeItem:function(k){delete d[k]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}}
@@ -1048,7 +1052,7 @@ function SHIM(WK){
   if((f.getAttribute('method')||'get').toLowerCase()!=='get'){P({cb:1,t:'post'});return}
   try{var u=new URL(f.action||document.baseURI),sp=new URLSearchParams();new FormData(f).forEach(function(v,k){if(typeof v==='string')sp.append(k,v)});u.search=sp.toString();P({cb:1,t:'nav',u:u.href})}catch(x){}},false);
  document.addEventListener('keydown',function(e){var t=e.target,g=t&&t.tagName;P({cb:1,t:'key',key:e.key,c:e.ctrlKey,a:e.altKey,m:e.metaKey,r:e.repeat,ty:!!(t&&(g==='INPUT'||g==='TEXTAREA'||g==='SELECT'||t.isContentEditable))})},true);
- window.addEventListener('load',function(){P({cb:1,t:'title',v:document.title});setTimeout(function(){if(JE>2)P({cb:1,t:'jserr',n:JE})},2500)});
+ window.addEventListener('load',function(){P({cb:1,t:'title',v:document.title});setTimeout(function(){var b=document.body;P({cb:1,t:'health',len:b?(b.innerText||'').trim().length:0,vis:document.querySelectorAll('img,canvas,video,svg').length,n:JE})},2500)});
 }
 function ls(k,v){try{if(v===undefined)return localStorage.getItem(k)||'';if(v)localStorage.setItem(k,v);else localStorage.removeItem(k)}catch(e){return ''}}
 function vw(u){return WORKER+encodeURIComponent(u)}
@@ -1127,7 +1131,7 @@ function build(r,u){var ct=(r.ct||'').toLowerCase();
   return Promise.reject(new Error('CBrowser cannot show this kind of file ('+(ct.split(';')[0]||'unknown')+').'))}
  return render(r.url,txt)}
 function render(base,html){function abs(s){try{return new URL(s,base).href}catch(e){return ''}}
- var d=new DOMParser().parseFromString(html,'text/html'),hadJs=d.querySelectorAll('script').length>0,JS=jsOn;
+ var d=new DOMParser().parseFromString(html,'text/html'),hadJs=d.querySelectorAll('script').length>0,JS=jsOn&&!NJ;
  d.querySelectorAll((JS?'':'script,')+'iframe,frame,frameset,object,embed,applet,base,meta[http-equiv],link[rel~=preload],link[rel~=modulepreload],link[rel~=prefetch],link[rel~=preconnect],link[rel~=dns-prefetch],link[rel~=icon],link[rel~=manifest],picture source').forEach(function(n){n.remove()});
  if(JS)d.querySelectorAll('script').forEach(function(s){s.removeAttribute('integrity');s.removeAttribute('crossorigin');s.removeAttribute('nonce');var a=s.getAttribute('src');if(a&&(s.getAttribute('type')||'')!=='module'){var x=abs(a);if(/^https?:/i.test(x)&&x.indexOf(WORKER)!==0)s.setAttribute('src',vw(x))}});
  var needJs=!JS&&hadJs&&((d.body&&d.body.textContent)||'').replace(/\s+/g,' ').trim().length<140;
@@ -1151,7 +1155,7 @@ function render(base,html){function abs(s){try{return new URL(s,base).href}catch
 function nav(t,u,push,cached){u=norm(u);if(!u)return;
  if(!/^https?:\/\//i.test(u))return fail(t,u,'CBrowser only opens web links (http or https).');
  var my=++t.tok;if(t.ctl){try{t.ctl.abort()}catch(e){}}t.url=u;if(t===T){$('u').value=u;toast('')}busy(t,1);
- var p=(cached&&cache[u])?Promise.resolve(cache[u]):fetchPage(t,u,my).then(function(r){return build(r,u)});
+ var p=(cached&&cache[u])?Promise.resolve(cache[u]):fetchPage(t,u,my).then(function(r){NJ=(t.nj===u);try{return build(r,u)}finally{NJ=false}});
  p.then(function(pg){if(my!==t.tok)return;cache[u]=pg;t.title=pg.title||host(u)||u;t.mode='frame';t.em='';t.fr.classList.remove('ready');t.fr.setAttribute('sandbox',pg.scripts?'allow-scripts allow-forms allow-modals':'allow-same-origin allow-forms');t.fr.srcdoc=pg.srcdoc;
   if(push!==false&&t.hist[t.hi]!==u){t.hist=t.hist.slice(0,t.hi+1);t.hist.push(u);t.hi=t.hist.length-1}
   busy(t,0);if(t===T){view();toast('');if(pg.js)toast('This site needs JavaScript, so it may look empty here.',5500)}else renderTabs()}).catch(function(e){if(my!==t.tok)return;busy(t,0);fail(t,u,e&&e.message)})}
@@ -1168,7 +1172,9 @@ window.addEventListener('message',function(e){var d=e.data;if(!d||d.cb!==1)retur
  else if(d.t==='pw')fail(t,t.hist[t.hi]||'','For your safety, CBrowser will not send passwords through a relay.');
  else if(d.t==='post')toast('That page tried to send a form. CBrowser can only open pages and search forms.',4200);
  else if(d.t==='title'&&d.v&&typeof d.v==='string'){t.title=d.v.slice(0,120);renderTabs()}
- else if(d.t==='jserr'){if(t===T&&!t.warned){t.warned=1;toast('Parts of this page may not work. Its scripts hit '+d.n+' errors, which some sites cause when they run through a relay.',6500)}}
+ else if(d.t==='health'){var u=t.hist[t.hi];
+  if(d.len<40&&(d.n>0||d.vis<3)&&u&&t.nj!==u&&t.mode==='frame'){t.nj=u;delete cache[u];toast('That page came up empty with JavaScript, so CBrowser is trying it without.',5000);nav(t,u,false)}
+  else if(d.n>2&&t===T&&!t.warned){t.warned=1;toast('Parts of this page may not work. Its scripts hit '+d.n+' errors, which some sites cause when they run through a relay.',6500)}}
  else if(d.t==='key'){pk({key:String(d.key),ctrlKey:!!d.c,altKey:!!d.a,metaKey:!!d.m,repeat:!!d.r,target:{tagName:d.ty?'INPUT':'DIV'},preventDefault:function(){},stopPropagation:function(){}})}});
 function jsUi(){var b=$('jsb');b.textContent=jsOn?'On':'Off';b.classList.toggle('on',jsOn)}
 $('jsb').onclick=function(){jsOn=!jsOn;ls('cb_js',jsOn?'1':'0');cache={};jsUi();if(T.mode==='frame'&&T.hist[T.hi]){nav(T,T.hist[T.hi],false)}};
@@ -1237,7 +1243,8 @@ $('go').onclick=go;$('u').onkeydown=function(e){if(e.key==='Enter')go()};
     ]},
     ai:{title:'AI',sub:'No AI sites right now. Use Add link to put your own here.',items:[]},
     movies:{title:'Movies',sub:'Pick a site to watch on. Some sites block being embedded.',items:[
-      {n:'Pyrite',d:'Movies and shows',u:'https://galaxy.nwmteducationalcoop.org/pyrite/'}
+      {n:'Pyrite \u2605',d:'Movies and shows',u:'https://galaxy.nwmteducationalcoop.org/pyrite/'},
+      {n:'Movy',d:'Movies and shows',u:'https://www.movy.sx/'}
     ]},
     tools:{title:'Tools',sub:'Pick a tool. Music lets you search songs and keeps playing while you browse.',items:[
       {n:'Music \u2605',tag:'CUSTOM',d:'Search any song and play it. Spotify too.',doc:MUSIC},
@@ -1358,13 +1365,12 @@ $('go').onclick=go;$('u').onkeydown=function(e){if(e.key==='Enter')go()};
   function show(id){
     document.getElementById(current).classList.remove('active');
     var to0=document.getElementById(id); to0.classList.add('active','entering'); setTimeout(function(){to0.classList.remove('entering')},900);
-    homeBtn.classList.toggle('hidden',id==='home'); current=id; $('brand').textContent=NAMES[id]; if(id==='chat'){gStart();cnt()}
+    current=id; $('brand').textContent=NAMES[id]; if(id==='chat'){gStart();cnt()}
   }
   function go(id){
     if(busy||id===current)return; busy=true;
     var from=document.getElementById(current);
     from.classList.remove('active'); from.classList.add('leaving');
-    homeBtn.classList.toggle('hidden',id==='home');
     setTimeout(function(){
       from.classList.remove('leaving'); window.scrollTo(0,0);
       var to=document.getElementById(id); to.classList.add('active','entering'); setTimeout(function(){to.classList.remove('entering')},900);
@@ -1838,7 +1844,7 @@ $('go').onclick=go;$('u').onkeydown=function(e){if(e.key==='Enter')go()};
     else if(k==='clrchat'){G.clr=Math.max(G.clr,d.time);gPrune()}
     else if(k==='clrlb'){LB.clr=Math.max(LB.clr,d.time);S.set('lbclr',LB.clr);LB.d={};S.set('lb',LB.d);if(current==='leaderboard')lbRender()}
     else if(k==='delchat'){var cu=String(o.u||'').toLowerCase();G.clru[cu]=Math.max(G.clru[cu]||0,d.time);gPrune()}
-    else if(live&&k==='delacct'){if(String(o.u)===me){clearTimeout(bt);bt=setTimeout(function(){kicked('Your account was removed.')},700)}}
+    else if(live&&k==='delacct'){if(String(o.u)===me){try{var la=JSON.parse(localStorage.getItem('madacc'))||{},tb=JSON.parse(localStorage.getItem('madtomb'))||{};delete la[me.toLowerCase()];tb[me.toLowerCase()]=Date.now()/1000;localStorage.setItem('madacc',JSON.stringify(la));localStorage.setItem('madtomb',JSON.stringify(tb))}catch(e){}clearTimeout(bt);bt=setTimeout(function(){kicked('Your account was removed.')},700)}}
     else if(live&&k==='troll')trollFx(o,d);
     else if(live&&k==='trollclr'){if(tHit(o))trollClear()}
     else if(k==='lock'||k==='unlock')document.body.classList.toggle('chatoff',k==='lock');
@@ -2041,7 +2047,7 @@ $('tpa').onclick=function(){var f=$('taf').files[0],u=$('tau').value.trim(),o={k
 $('tclr').onclick=function(){tsend({k:'trollclr'})};
 
 /* ---- accounts ---- */
-var R={};try{R=JSON.parse(localStorage.getItem('madowner_accts')||'{}')}catch(e){}
+var R={},AT={};C.deleted=C.deleted||{};try{R=JSON.parse(localStorage.getItem('madowner_accts')||'{}')}catch(e){}
 (window.__CFG.accounts||[]).forEach(function(a){if(!R[a.u])R[a.u]={d:a.d,h:a.h}});
 function saveR(){try{localStorage.setItem('madowner_accts',JSON.stringify(R))}catch(e){}C.accounts=Object.keys(R).map(function(k){return{u:k,d:R[k].d,h:R[k].h}});try{localStorage.setItem(K,JSON.stringify(C))}catch(e){}$('exp').value=JSON.stringify(C);drawA()}
 function acc(o){o.key=Q.key;return fetch('https://ntfy.sh/'+Q.acc,{method:'POST',body:JSON.stringify(o)}).catch(function(){})}
@@ -2055,9 +2061,10 @@ function drawA(){var L=$('al'),n=Date.now()/1000,ks=Object.keys(R).sort();L.text
   var b3=el('button','b','Clear timeout');b3.onclick=function(){ctl({k:'untimeout',u:k})};
   var b4=el('button','b','Reset password');b4.onclick=function(){var p=prompt('New password for '+a.d+' (4+ characters):');if(!p||p.length<4)return;hashPw(k,p).then(function(h){R[k].h=h;saveR();acc({k:'reset',u:k,h:h});$('st').textContent='Password reset for '+a.d+'.'})};
   var b5=el('button','b','Delete chats');b5.onclick=function(){if(confirm('Delete every global chat message from '+a.d+' for everyone?'))ctl({k:'delchat',u:k})};
-  var b6=el('button','b','Delete account');b6.onclick=function(){if(!confirm('Permanently delete the account '+a.d+'? They are removed from the site right away and can sign up again.'))return;delete R[k];saveR();acc({k:'del',u:k});ctl({k:'delacct',u:k});$('st').textContent='Deleted account '+a.d+'.'};
+  var b6=el('button','b','Delete account');b6.onclick=function(){if(!confirm('Permanently delete the account '+a.d+'? They are removed from the site right away and cannot sign in again unless they create the account again.'))return;var tn=Date.now()/1000;delete R[k];C.deleted[k]=tn;saveR();acc({k:'del',u:k,t:tn});ctl({k:'delacct',u:k});$('st').textContent='Deleted account '+a.d+'.'};
   r.appendChild(b1);r.appendChild(b2);r.appendChild(b3);r.appendChild(b4);r.appendChild(b5);r.appendChild(b6);L.appendChild(r)})}
-sse(Q.acc,'all',function(d,o){if(!o||o.key!==Q.key)return;var k=String(o.u||'').toLowerCase();if(o.k==='acct'&&!R[k])R[k]={d:String(o.d||k).slice(0,20),h:o.h};else if(o.k==='reset'&&R[k])R[k].h=o.h;else if(o.k==='del'&&R[k])delete R[k];else return;saveR()});
+sse(Q.acc,'all',function(d,o){if(!o||o.key!==Q.key)return;var k=String(o.u||'').toLowerCase();if(o.k==='acct'){if(!R[k]||(AT[k]||0)<d.time){R[k]={d:String(o.d||k).slice(0,20),h:o.h};AT[k]=d.time}else return}else if(o.k==='reset'&&R[k])R[k].h=o.h;else if(o.k==='del'){var tt=+o.t||d.time;C.deleted[k]=Math.max(C.deleted[k]||0,tt);if(R[k]&&tt>=(AT[k]||0))delete R[k];else if(!R[k]);else return}else return;saveR()});
+(function(){var now=Date.now()/1000,last=0;try{last=+localStorage.getItem('madtomb_rp')||0}catch(e){}if(now-last<21600)return;try{localStorage.setItem('madtomb_rp',String(now))}catch(e){}Object.keys(C.deleted).forEach(function(k,i){if(now-C.deleted[k]<2592000)setTimeout(function(){acc({k:'del',u:k,t:C.deleted[k]})},i*500)})})();
 saveR();
 })();
 </script>
@@ -2146,14 +2153,31 @@ function buildSite(id, user){
     '</body></html>';
 }
 
+function tombs(){
+  var t = {}, c = (getCfg().deleted || {});
+  Object.keys(c).forEach(function(k){ t[k] = +c[k] || 0; });
+  try{ var l = JSON.parse(localStorage.getItem('madtomb')) || {}; Object.keys(l).forEach(function(k){ t[k] = Math.max(t[k] || 0, +l[k] || 0); }); }catch(e){}
+  return t;
+}
+function saveTombs(t){ try{ localStorage.setItem('madtomb', JSON.stringify(t)); }catch(e){} }
 function localAcc(){ try{ return JSON.parse(localStorage.getItem('madacc')) || {}; }catch(e){ return {}; } }
 
 /* all known accounts: this device, the owner's exported list, and the shared sign-up channel */
 function getAccts(cb){
   var m = {}, L = localAcc(), done = false;
-  Object.keys(L).forEach(function(k){ m[k] = L[k]; });
-  (getCfg().accounts || []).forEach(function(a){ m[a.u] = {d:a.d, h:a.h}; });
-  function fin(){ if(!done){ done = true; cb(m); } }
+  var T = tombs();
+  Object.keys(L).forEach(function(k){ m[k] = {d:L[k].d, h:L[k].h, at:+L[k].t || 0}; });
+  (getCfg().accounts || []).forEach(function(a){ m[a.u] = {d:a.d, h:a.h, at:0}; });
+  function fin(){
+    if(done) return; done = true;
+    var changed = false, LL = localAcc();
+    Object.keys(T).forEach(function(k){
+      if (m[k] && (m[k].at || 0) <= T[k]){ delete m[k]; if (LL[k]){ delete LL[k]; changed = true; } }
+    });
+    saveTombs(T);
+    if (changed){ try{ localStorage.setItem('madacc', JSON.stringify(LL)); }catch(e){} }
+    cb(m);
+  }
   setTimeout(fin, 5000);
   fetch('https://ntfy.sh/' + ACC_TOPIC + '/json?poll=1&since=all')
     .then(function(r){ return r.text(); })
@@ -2163,9 +2187,9 @@ function getAccts(cb){
           var d = JSON.parse(l), o = JSON.parse(d.message);
           if (d.event !== 'message' || !o || o.key !== CTL_KEY) return;
           var k = String(o.u || '').toLowerCase();
-          if (o.k === 'acct' && !m[k]) m[k] = {d:String(o.d || k).slice(0, 20), h:o.h};
+          if (o.k === 'acct'){ if (!m[k] || (m[k].at || 0) < d.time) m[k] = {d:String(o.d || k).slice(0, 20), h:o.h, at:d.time}; }
           else if (o.k === 'reset' && m[k]) m[k].h = o.h;
-          else if (o.k === 'del') delete m[k];
+          else if (o.k === 'del') T[k] = Math.max(T[k] || 0, +o.t || d.time);
         }catch(e){}
       });
       fin();
@@ -2231,7 +2255,7 @@ function signUp(){
   getAccts(function(m){
     if (m[k]) return msg('That username is taken. Try another one.');
     hashPw(k, p).then(function(h){
-      var L = localAcc(); L[k] = {d:u, h:h};
+      var L = localAcc(); L[k] = {d:u, h:h, t:Math.max(Date.now() / 1000, (tombs()[k] || 0) + 1)};
       try{ localStorage.setItem('madacc', JSON.stringify(L)); }catch(e){}
       try{ fetch('https://ntfy.sh/' + ACC_TOPIC, {method:'POST', body:JSON.stringify({key:CTL_KEY, k:'acct', u:k, d:u, h:h})}).catch(function(){}); }catch(e){}
       setMode('in'); userIn.value = u; input.value = ''; input.focus();
