@@ -132,7 +132,7 @@ svg.i{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.9;
     <label class="show"><input type="checkbox" id="showpw"> Show password</label>
     <button id="go">Let's go</button>
     <div class="err" id="err" role="alert"></div>
-    <div class="lockfoot">mad &middot; <span id="lver">0.17v</span></div>
+    <div class="lockfoot">mad &middot; <span id="lver">0.18v</span></div>
   </div>
 </main>
 
@@ -367,7 +367,7 @@ main.stage{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
   </section>
 </main>
 
-<footer class="foot">mad &copy;<div class="ver">0.17v</div></footer>
+<footer class="foot">mad &copy;<div class="ver">0.18v</div></footer>
 <template id="skribdoc"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 *{box-sizing:border-box}[hidden]{display:none!important}
@@ -1544,6 +1544,8 @@ $('go').onclick=go;$('u').onkeydown=function(e){if(e.key==='Enter')go()};
       {n:'8 Ball',tag:'CUSTOM',d:'Pool against a bot or an online player. Keeps your wins, losses and ties.',doc:POOL},
       {n:'UNO',tag:'CUSTOM',d:'Card game for 2 to 8 players. Play with friends or against bots.',doc:UNO},
       {n:'Roblox',d:'This only works at home, not at school.',bold:1,u:'https://ixl.asia/embed-wrapper.html'},
+      {n:'Chess AI Coach',d:'Play chess with an AI coach.',u:'https://iamsdt.github.io/chess/'},
+      {n:'Chess Analyzer',d:'Analyze chess positions.',u:'https://univercee.github.io/chess-evaluate/'},
       {n:'UBG Hyper',d:'Game hub',u:'https://ubghyper.github.io/'},
       {n:'Clumsy Bird',d:'Placeholder: flappy-style arcade',u:'https://ellisonleao.github.io/clumsy-bird/'},
       {n:'Doodle Jump Online',d:'Jump game',u:'https://doodlejumponline.github.io/'},
@@ -2207,9 +2209,49 @@ $('go').onclick=go;$('u').onkeydown=function(e){if(e.key==='Enter')go()};
    'Applause':function(){tnoise(1.6,.35,2500)},
    'Ding':function(){ttone('sine',[1568],1,.4)},
    'Siren':function(){[0,1,2].forEach(function(i){ttone('sine',[500,1000],.5,.4,i);ttone('sine',[1000,500],.5,.4,i+.5)})},
-   'Alarm':function(){[0,1,2,3,4,5].forEach(function(i){ttone('square',[880],.18,.25,i*.3)})}
+   'Alarm':function(){[0,1,2,3,4,5].forEach(function(i){ttone('square',[880],.18,.25,i*.3)})},
+   'Doorbell':function(){ttone('sine',[659],.5,.4);ttone('sine',[523],.9,.4,.5)},
+   'Phone ring':function(){[0,.6,1.2].forEach(function(s){for(var i=0;i<6;i++)ttone('square',[i%2?1400:1100],.05,.14,s+i*.06)})},
+   'Quack':function(){ttone('sawtooth',[500,250],.18,.3);ttone('sawtooth',[480,230],.18,.3,.22)},
+   'Meow':function(){ttone('triangle',[500,900],.25,.35);ttone('triangle',[900,450],.35,.35,.25)},
+   'Explosion':function(){tnoise(1.3,.8,80);ttone('sine',[140,30],1.2,.7)},
+   'Heartbeat':function(){[0,.5,1,1.5].forEach(function(s){ttone('sine',[70,40],.12,.7,s);ttone('sine',[60,35],.12,.6,s+.16)})},
+   'Sparkle':function(){[0,1,2,3,4,5,6].forEach(function(i){ttone('sine',[1200+i*220],.18,.2,i*.07)})},
+   'UFO':function(){ttone('sine',[300,900],.5,.3);ttone('sine',[900,300],.5,.3,.5);ttone('sine',[300,900],.5,.3,1)},
+   'Ghost':function(){ttone('sine',[400,200],1.2,.3);ttone('triangle',[405,205],1.2,.25)},
+   'Cuckoo':function(){ttone('sine',[880],.18,.4);ttone('sine',[698],.28,.4,.22);ttone('sine',[880],.18,.4,.7);ttone('sine',[698],.28,.4,.92)},
+   'Dial-up':function(){tnoise(.4,.2,1500);[0,1,2,3,4,5].forEach(function(i){ttone('square',[1200+(i%3)*500],.12,.14,.4+i*.14)});tnoise(1.2,.25,2200)}
   };
-  function trollClear(){[].forEach.call(document.querySelectorAll('.trl'),function(e){e.remove()});tAud.forEach(function(a){try{a.pause()}catch(e){}});tAud=[]}
+  var trFxT=null,trRainT=null,trCssOn=0;
+  function trollCss(){if(trCssOn)return;trCssOn=1;var s=document.createElement('style');s.id='trollcss';s.textContent=[
+   'html.fx-flip{transform:rotate(180deg)}','html.fx-mirror{transform:scaleX(-1)}','html.fx-blur{filter:blur(4px)}',
+   'html.fx-invert{filter:invert(1) hue-rotate(180deg)}','html.fx-gray{filter:grayscale(1)}','html.fx-sepia{filter:sepia(1) contrast(1.1)}',
+   'html.fx-big{zoom:1.8}','html.fx-tiny{zoom:.5}',
+   'html.fx-shake body{animation:trShake .12s infinite}','html.fx-rainbow{animation:trHue 3s linear infinite}',
+   'html.fx-spin body{animation:trSpin 5s linear infinite}','html.fx-wobble body{animation:trWob 1.2s ease-in-out infinite}',
+   'html.fx-glitch{animation:trGl .4s steps(2) infinite}',
+   '@keyframes trShake{25%{transform:translate(7px,-5px)}50%{transform:translate(-6px,6px)}75%{transform:translate(5px,5px)}}',
+   '@keyframes trHue{to{filter:hue-rotate(360deg)}}','@keyframes trSpin{to{transform:rotate(360deg)}}',
+   '@keyframes trWob{0%,100%{transform:skew(0,0) rotate(0)}25%{transform:skew(4deg,2deg) rotate(1deg)}75%{transform:skew(-4deg,-2deg) rotate(-1deg)}}',
+   '@keyframes trGl{0%{filter:hue-rotate(0) saturate(2);transform:translateX(-3px)}100%{filter:hue-rotate(90deg) saturate(3);transform:translateX(3px)}}',
+   '.trbig{font-weight:900;font-size:clamp(2rem,11vw,7rem);line-height:1.05;text-align:center;padding:10px;text-shadow:0 6px 30px rgba(0,0,0,.6)}',
+   '.trrain{position:fixed;inset:0;z-index:149;pointer-events:none}'].join('');document.head.appendChild(s)}
+  function fxClear(){clearTimeout(trFxT);var h=document.documentElement;h.className=h.className.replace(/(^|\s)fx-\S+/g,' ').replace(/\s+/g,' ').trim()}
+  function fxRun(o){var nm=String(o.name||'').replace(/[^a-z]/g,'').slice(0,12),sec=Math.min(60,Math.max(2,+o.sec||10));if(!nm)return;trollCss();fxClear();document.documentElement.classList.add('fx-'+nm);trFxT=setTimeout(fxClear,sec*1000)}
+  function speakT(o){try{var t=String(o.text||'').slice(0,160);if(!t||!window.speechSynthesis)return;var u=new SpeechSynthesisUtterance(t);u.rate=Math.min(2,Math.max(.5,+o.rate||1));u.pitch=Math.min(2,Math.max(0,+o.pitch||1));window.speechSynthesis.cancel();window.speechSynthesis.speak(u)}catch(e){}}
+  var RAIN={confetti:['\ud83c\udf89','\ud83c\udf8a','\u2728','\ud83c\udf88'],hearts:['\ud83d\udc96','\ud83d\udc97','\ud83d\udc95','\ud83d\ude0d'],money:['\ud83d\udcb8','\ud83d\udcb0','\ud83e\udd11','\ud83d\udcb5'],food:['\ud83c\udf55','\ud83c\udf54','\ud83c\udf5f','\ud83c\udf2e','\ud83c\udf69'],cats:['\ud83d\udc31','\ud83d\ude39','\ud83d\ude3b','\ud83d\ude40'],space:['\ud83d\ude80','\ud83d\udc7d','\ud83c\udf1f','\ud83d\udef8'],snow:['\u2744\ufe0f','\u26c4','\ud83c\udf28\ufe0f'],silly:['\ud83d\udca9','\ud83e\udd21','\ud83d\ude02','\ud83e\udd2a']};
+  function rainFx(o){trollCss();clearInterval(trRainT);[].forEach.call(document.querySelectorAll('.trrain'),function(e){e.remove()});
+   var set=RAIN[String(o.set||'confetti')]||RAIN.confetti,sec=Math.min(30,Math.max(3,+o.sec||8)),cv=document.createElement('canvas');
+   cv.className='trrain';cv.width=innerWidth;cv.height=innerHeight;document.body.appendChild(cv);
+   var c=cv.getContext('2d'),P=[],t0=Date.now();
+   for(var i=0;i<50;i++)P.push({x:Math.random()*cv.width,y:-Math.random()*cv.height,v:2+Math.random()*4,s:20+Math.random()*28,e:set[Math.floor(Math.random()*set.length)],r:Math.random()*6.28,w:(Math.random()-.5)*.1});
+   trRainT=setInterval(function(){c.clearRect(0,0,cv.width,cv.height);var live=Date.now()-t0<sec*1000;
+    P.forEach(function(p){p.y+=p.v;p.r+=p.w;if(p.y>cv.height+40&&live){p.y=-40;p.x=Math.random()*cv.width}c.save();c.translate(p.x,p.y);c.rotate(p.r);c.font=p.s+'px serif';c.fillText(p.e,0,0);c.restore()});
+    if(!live&&P.every(function(p){return p.y>cv.height+40})){clearInterval(trRainT);cv.remove()}},33)}
+  function bigFx(o){trollCss();var t=String(o.text||'').slice(0,80);if(!t)return;[].forEach.call(document.querySelectorAll('.trl'),function(e){e.remove()});
+   var v=document.createElement('div');v.className='trl';var h=document.createElement('div');h.className='trbig';h.textContent=(o.emoji?String(o.emoji).slice(0,4)+' ':'')+t;
+   v.appendChild(h);v.onclick=function(){v.remove()};document.body.appendChild(v);var sc=+o.sec||0;if(sc>0)setTimeout(function(){v.remove()},Math.min(60,sc)*1000)}
+  function trollClear(){[].forEach.call(document.querySelectorAll('.trl,.trrain'),function(e){e.remove()});clearInterval(trRainT);fxClear();try{window.speechSynthesis&&window.speechSynthesis.cancel()}catch(e){}tAud.forEach(function(a){try{a.pause()}catch(e){}});tAud=[]}
   function trollFx(o,d){
     if(!tHit(o))return;
     var att=(d.attachment&&String(d.attachment.url).indexOf('https://ntfy.sh/file/')===0)?d.attachment.url:'';
@@ -2224,7 +2266,7 @@ $('go').onclick=go;$('u').onkeydown=function(e){if(e.key==='Enter')go()};
       var sc=+o.sec||0;if(sc>0)setTimeout(function(){v.remove()},sc*1000);
     }else if(o.type==='preset'){
       TV=Math.min(1,Math.max(.05,+o.vol||.8));var f=PRE[o.name];if(f)f();
-    }else if(o.type==='audio'){
+    }else if(o.type==='fx'){fxRun(o)}else if(o.type==='speak'){speakT(o)}else if(o.type==='rain'){rainFx(o)}else if(o.type==='big'){bigFx(o)}else if(o.type==='audio'){
       if(!src)return;var a=new Audio(src);a.volume=Math.min(1,Math.max(0,+o.vol||.8));tAud.push(a);a.play().catch(function(){});
     }
   }
@@ -2299,6 +2341,15 @@ textarea.f{border-radius:14px;min-height:110px;width:100%}
 <div class="r"><input class="f" id="tau" placeholder="Audio link https://... (mp3, wav)"><input class="f" type="file" id="taf" accept="audio/*"><button class="b" id="tpa">Play audio</button></div>
 <div class="r"><button class="b" id="tclr">Stop sounds and clear screens</button></div>
 <p>Images show full screen on the target's site; clicking it dismisses it. Uploaded files go through the public chat server and expire after about 12 hours. Sounds only play for people who have clicked on the site tab at least once (a browser rule).</p></div>
+
+<div class="box glass"><h3>More pranks</h3>
+<p style="margin-top:0">These use the target box above (leave it blank for everyone). Every effect ends by itself, and Stop clears them all.</p>
+<div class="r"><select class="f" id="pfx" style="flex:none;width:auto"><option value="flip">Flip upside down</option><option value="mirror">Mirror</option><option value="shake">Shake</option><option value="rainbow">Rainbow colors</option><option value="spin">Slow spin</option><option value="wobble">Wobble</option><option value="glitch">Glitch</option><option value="invert">Invert colors</option><option value="blur">Blur</option><option value="gray">Black and white</option><option value="sepia">Old photo</option><option value="big">Giant everything</option><option value="tiny">Tiny everything</option></select>
+<select class="f" id="psec" style="flex:none;width:auto"><option value="5">5 sec</option><option value="10" selected>10 sec</option><option value="20">20 sec</option><option value="40">40 sec</option><option value="60">60 sec</option></select><button class="b" id="pgo">Start effect</button></div>
+<div class="r"><input class="f" id="psay" maxlength="160" placeholder="Make their computer say..."><select class="f" id="pvoice" style="flex:none;width:auto"><option value="1,1">Normal</option><option value="1.4,1.9">Chipmunk</option><option value="0.7,0.2">Deep</option><option value="1.9,1">Fast</option></select><button class="b" id="psp">Speak</button></div>
+<div class="r"><select class="f" id="prain" style="flex:none;width:auto"><option value="confetti">Confetti</option><option value="hearts">Hearts</option><option value="money">Money</option><option value="food">Food</option><option value="cats">Cats</option><option value="space">Space</option><option value="snow">Snow</option><option value="silly">Silly faces</option></select><button class="b" id="prg">Emoji rain</button></div>
+<div class="r"><input class="f" id="pbig" maxlength="80" placeholder="Giant message on screen"><input class="f" id="pem" maxlength="4" placeholder="Emoji" style="flex:none;width:100px"><button class="b" id="pbg">Show giant message</button></div>
+<div class="r"><button class="b" id="pch">Chaos (random mix)</button><button class="b" id="pst">Stop everything</button></div></div>
 
 <div class="box glass"><h3>Global chat</h3>
 <div class="r"><input class="f" id="ot" maxlength="300" placeholder="Post as OWNER"><button class="b" id="say">Post</button></div>
@@ -2391,6 +2442,16 @@ $('tpa').onclick=function(){var f=$('taf').files[0],u=$('tau').value.trim(),o={k
  else if(u){if(!/^https:\/\//i.test(u)){$('st').textContent='Audio link must start with https://';return}o.src=u;tsend(o)}
  else $('st').textContent='Pick an audio file or paste a link first.'};
 $('tclr').onclick=function(){tsend({k:'trollclr'})};
+/* ---- more pranks ---- */
+['Doorbell','Phone ring','Quack','Meow','Explosion','Heartbeat','Sparkle','UFO','Ghost','Cuckoo','Dial-up'].forEach(function(nm){var o=el('option','',nm);o.value=nm;$('ts').appendChild(o)});
+$('pgo').onclick=function(){tsend({k:'troll',type:'fx',name:$('pfx').value,sec:+$('psec').value})};
+$('psp').onclick=function(){var t=$('psay').value.trim();if(!t)return;var v=$('pvoice').value.split(',');tsend({k:'troll',type:'speak',text:t.slice(0,160),rate:+v[0],pitch:+v[1]})};
+$('prg').onclick=function(){tsend({k:'troll',type:'rain',set:$('prain').value,sec:+$('psec').value})};
+$('pbg').onclick=function(){var t=$('pbig').value.trim();if(!t)return;tsend({k:'troll',type:'big',text:t.slice(0,80),emoji:$('pem').value.trim().slice(0,4),sec:+$('psec').value})};
+$('pch').onclick=function(){var fx=['flip','shake','rainbow','spin','wobble','glitch','invert','blur'],sd=['Air horn','Siren','Boing','Quack','Explosion','UFO','Sad trombone','Cuckoo'],rn=['confetti','hearts','money','food','cats','space'];
+ function pick(a){return a[Math.floor(Math.random()*a.length)]}
+ tsend({k:'troll',type:'fx',name:pick(fx),sec:10});tsend({k:'troll',type:'preset',name:pick(sd),vol:.8});tsend({k:'troll',type:'rain',set:pick(rn),sec:8})};
+$('pst').onclick=function(){tsend({k:'trollclr'})};
 
 /* ---- accounts ---- */
 var R={},AT={};C.deleted=C.deleted||{};try{R=JSON.parse(localStorage.getItem('madowner_accts')||'{}')}catch(e){}
